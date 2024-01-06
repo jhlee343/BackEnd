@@ -6,9 +6,12 @@ import jakarta.persistence.EntityManager;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.QText;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
+import shootingstar.typing.repository.dto.FindDesTextByIdDto;
 import shootingstar.typing.repository.dto.QFindAllTextsByLangDto;
+import shootingstar.typing.repository.dto.QFindDesTextByIdDto;
 
 import java.util.List;
+import java.util.Optional;
 
 import static shootingstar.typing.entity.QText.*;
 
@@ -29,6 +32,18 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .from(text)
                 .where(langEq(language))
                 .fetch();
+    }
+
+    @Override
+    public FindDesTextByIdDto findDesTextById(Long id) {
+        return queryFactory
+                .select(new QFindDesTextByIdDto(
+                        text.title,
+                        text.description,
+                        text.desText))
+                .from(text)
+                .where(text.id.eq(id))
+                .fetchOne();
     }
 
     private BooleanExpression langEq(CodeLanguage language) {

@@ -9,6 +9,7 @@ import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
+import shootingstar.typing.repository.dto.FindDesTextByIdDto;
 import shootingstar.typing.service.dto.SaveTextDto;
 
 import java.io.BufferedReader;
@@ -25,10 +26,13 @@ public class TypingService {
 
     private final TextRepository textRepository;
 
+    /**
+     * 지문 저장
+     */
     @Transactional
     public Text save(SaveTextDto saveTextDto) throws JsonProcessingException {
-        String desText = convertJSON(convert(saveTextDto.getText()));
-        String typingText = convertJSON(convertRemoveAnno(saveTextDto.getText()));
+        String desText = convertJSON(convert(saveTextDto.getText())); // 전달 받은 지문을 JSON 으로 변환
+        String typingText = convertJSON(convertRemoveAnno(saveTextDto.getText())); // 전달 받은 지문의 주석을 제거하고 JSON 으로 변환
 
         Text text = new Text(
                 saveTextDto.getLang(),
@@ -42,12 +46,9 @@ public class TypingService {
         return text;
     }
 
-    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
-        return convertJSON(texts);
-    }
-
-
+    /**
+     * 타이핑용 지문 조회
+     */
     public String getTypingText(Long id) {
         Optional<Text> optionalText = textRepository.findById(id);
         if (optionalText.isEmpty()) {
@@ -57,6 +58,24 @@ public class TypingService {
         return text.getTypingText();
     }
 
+    /**
+     * 설명 페이지를 위한 {제목, 설명, 주석 코드} 조회
+     */
+    public FindDesTextByIdDto getDesText(Long id) throws JsonProcessingException {
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
+        if (desTextDto == null) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
+        return desTextDto;
+    }
+
+    /**
+     * 언어별 지문들 조회
+     */
+    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
+        return convertJSON(texts);
+    }
 
     /**
      * 전달 받은 텍스트를 주석 제거하지 않고 리스트로 반환
