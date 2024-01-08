@@ -5,6 +5,12 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### QueryDsl ###
+**/src/main/generated/
+
+### config ###
+**/src/main/resources/application-database.yml
+
 ### STS ###
 .apt_generated
 .classpath
