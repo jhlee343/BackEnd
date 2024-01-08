@@ -11,11 +11,11 @@ import shootingstar.typing.service.PagingService;
 @RequiredArgsConstructor
 @Slf4j
 public class PagingController {
-    private final PagingService service;
-    @GetMapping("/{lang}/texts")
-    public String pageLoad(Pageable pageable){
-        service.findAll();
-        return "{lang}/texts";
-    }
+//    private final PagingService service;
+//    @GetMapping("/{lang}/texts")
+//    public String pageLoad(Pageable pageable){
+//        service.findAll();
+//        return "{lang}/texts";
+//    }
 
 }
