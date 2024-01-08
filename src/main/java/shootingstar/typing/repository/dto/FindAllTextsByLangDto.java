@@ -15,4 +15,6 @@ public class FindAllTextsByLangDto {
         this.title = title;
         this.description = description;
     }
+
+
 }
