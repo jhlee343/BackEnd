@@ -17,3 +17,4 @@ public class SelectController {
 
     }
 }
+//주소 겹치면 안되고, 컴파일러 에러난거 올리면 안됨.. generated 파일도 올리지말고

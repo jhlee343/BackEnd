@@ -14,7 +14,7 @@ import shootingstar.typing.service.RandomService;
 public class RandomSelectController {
     private final RandomService service;
 
-    @GetMapping("/{lang}/landom")
+    @GetMapping("/api/{lang}/random")
     public long randomSelect(@PathVariable("lang") CodeLanguage lang){
         //textId 값 반환 //
         return service.getLangdomCount(lang);

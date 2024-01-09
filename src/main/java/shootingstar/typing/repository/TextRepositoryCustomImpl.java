@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import shootingstar.typing.entity.CodeLanguage;
-import shootingstar.typing.entity.QText;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.QFindAllTextsByLangDto;
 
@@ -30,6 +29,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .where(langEq(language))
                 .fetch();
     }
+
+
 
     private BooleanExpression langEq(CodeLanguage language) {
         return language != null ? text.lang.eq(language) : null;
