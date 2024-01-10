@@ -27,7 +27,52 @@ public class TypingService {
     private final TextRepository textRepository;
 
     /**
-     * 지문 저장
+     * P1 : 언어별 랜덤 지문 선택
+     * 랜덤 id 반환
+     */
+    public long getRandomId(CodeLanguage lang){
+        List<FindAllTextsByLangDto> langDtos = textRepository.findAllByLang(lang);
+        int randomIndex = (int) ((Math.random()) * langDtos.size());
+        long id = langDtos.get(randomIndex).getId();
+        return id;
+    }
+
+    /**
+     * P2 : 언어별 페이지 리스트
+     * {id, title, description} 조회
+     */
+    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
+        return convertJSON(texts);
+    }
+
+    /**
+     * P3 : 설명 페이지
+     * {title, description, desText} 조회
+     */
+    public FindDesTextByIdDto getDesText(Long id) throws JsonProcessingException {
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
+        if (desTextDto == null) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
+        return desTextDto;
+    }
+
+    /**
+     * P4 : 타이핑 페이지
+     * typingText 조회
+     */
+    public String getTypingText(Long id) {
+        Optional<Text> optionalText = textRepository.findById(id);
+        if (optionalText.isEmpty()) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
+        Text text = optionalText.get();
+        return text.getTypingText();
+    }
+
+    /**
+     * 데이터베이스 지문 추가
      */
     @Transactional
     public Text save(SaveTextDto saveTextDto) throws JsonProcessingException {
@@ -44,37 +89,6 @@ public class TypingService {
         textRepository.save(text);
 
         return text;
-    }
-
-    /**
-     * 타이핑용 지문 조회
-     */
-    public String getTypingText(Long id) {
-        Optional<Text> optionalText = textRepository.findById(id);
-        if (optionalText.isEmpty()) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-        Text text = optionalText.get();
-        return text.getTypingText();
-    }
-
-    /**
-     * 설명 페이지를 위한 {제목, 설명, 주석 코드} 조회
-     */
-    public FindDesTextByIdDto getDesText(Long id) throws JsonProcessingException {
-        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
-        if (desTextDto == null) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-        return desTextDto;
-    }
-
-    /**
-     * 언어별 지문들 조회
-     */
-    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
-        return convertJSON(texts);
     }
 
     /**
