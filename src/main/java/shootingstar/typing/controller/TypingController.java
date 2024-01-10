@@ -29,9 +29,9 @@ public class TypingController {
      * @return id : 랜덤 선택된 id 전송
      */
     @GetMapping("/{lang}/random")
-    public long randomSelect(@PathVariable("lang") CodeLanguage lang){
-        //textId 값 반환 //
-        return service.getRandomId(lang);
+    public ResponseEntity<Long> randomSelect(@PathVariable("lang") CodeLanguage lang){
+        long randomId = service.getRandomId(lang);
+        return ResponseEntity.ok().body(randomId);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TypingController {
      * @return OK : FindDesTextByIdDto 객체 전송
      */
     @GetMapping("/description/{textId}")
-    public ResponseEntity<FindDesTextByIdDto> get(@PathVariable("textId") Long id) throws JsonProcessingException {
+    public ResponseEntity<FindDesTextByIdDto> get(@PathVariable("textId") Long id) {
         FindDesTextByIdDto desTextDto = service.getDesText(id);
         return ResponseEntity.ok().body(desTextDto);
     }

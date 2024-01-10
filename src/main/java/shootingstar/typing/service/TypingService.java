@@ -32,6 +32,9 @@ public class TypingService {
      */
     public long getRandomId(CodeLanguage lang){
         List<FindAllTextsByLangDto> langDtos = textRepository.findAllByLang(lang);
+        if (langDtos == null) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
         int randomIndex = (int) ((Math.random()) * langDtos.size());
         long id = langDtos.get(randomIndex).getId();
         return id;
@@ -43,6 +46,9 @@ public class TypingService {
      */
     public String getLangText(CodeLanguage lang) throws JsonProcessingException {
         List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
+        if (texts == null) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
         return convertJSON(texts);
     }
 
@@ -50,7 +56,7 @@ public class TypingService {
      * P3 : 설명 페이지
      * {title, description, desText} 조회
      */
-    public FindDesTextByIdDto getDesText(Long id) throws JsonProcessingException {
+    public FindDesTextByIdDto getDesText(Long id) {
         FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
         if (desTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
