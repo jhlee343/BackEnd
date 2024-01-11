@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shootingstar.typing.entity.CodeLanguage;
+import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
 import shootingstar.typing.service.TypingService;
 import shootingstar.typing.service.dto.SaveTextDto;
@@ -40,9 +41,9 @@ public class TypingController {
      * @param lang 선택한 코드 언어
      * @return OK : JSON 으로 변환한 객체 리스트 전송
      */
-    @GetMapping("/{lang}") // api 주소 추가 수정 필요
-    public ResponseEntity<String> getLangTexts(@PathVariable("lang") CodeLanguage lang) throws JsonProcessingException {
-        String langTexts = service.getLangText(lang);
+    @GetMapping("/{lang}/list") // api 주소 추가 수정 필요
+    public ResponseEntity<String> getLangTexts(@PathVariable("lang") CodeLanguage lang, @RequestParam int page, SortingType order) throws JsonProcessingException {
+        String langTexts = service.getLangText(lang, page, order);
         return ResponseEntity.ok().body(langTexts);
     }
 

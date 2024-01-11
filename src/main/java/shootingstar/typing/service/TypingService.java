@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shootingstar.typing.entity.CodeLanguage;
+import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
@@ -44,8 +45,8 @@ public class TypingService {
      * P2 : 언어별 페이지 리스트
      * {id, title, description} 조회
      */
-    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
+    public String getLangText(CodeLanguage lang, int pageNumber, SortingType sortingType) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(lang, pageNumber, sortingType);
         if (texts == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
