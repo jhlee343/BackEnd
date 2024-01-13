@@ -43,7 +43,8 @@ public class TypingController {
      */
     @GetMapping("/{lang}/list") // api 주소 추가 수정 필요
     public ResponseEntity<String> getLangTexts(@PathVariable("lang") CodeLanguage lang, @RequestParam int page, SortingType order) throws JsonProcessingException {
-        String langTexts = service.getLangText(lang, page, order);
+        String langTexts = service.getCountByLangText(lang);
+        langTexts += service.getLangText(lang, page, order);
         return ResponseEntity.ok().body(langTexts);
     }
 

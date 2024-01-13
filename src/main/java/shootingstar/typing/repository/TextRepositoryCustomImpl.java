@@ -6,7 +6,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import shootingstar.typing.entity.CodeLanguage;
-import shootingstar.typing.entity.QText;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
@@ -14,7 +13,6 @@ import shootingstar.typing.repository.dto.QFindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.QFindDesTextByIdDto;
 
 import java.util.List;
-import java.util.Optional;
 
 import static shootingstar.typing.entity.QText.*;
 
@@ -32,7 +30,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .select(new QFindAllTextsByLangDto(
                         text.id,
                         text.title,
-                        text.description))
+                        text.description,
+                        text.createDate))
                 .from(text)
                 .where(langEq(language))
                 .fetch();
@@ -47,7 +46,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .select(new QFindAllTextsByLangDto(
                         text.id,
                         text.title,
-                        text.description))
+                        text.description,
+                        text.createDate))
                 .from(text)
                 .where(langEq(language))
                 .orderBy(orderSpecifier)
@@ -60,8 +60,18 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
         return switch (sortingType) {
             case TITLE_ASC -> new OrderSpecifier<>(Order.ASC, text.title);
             case TITLE_DESC -> new OrderSpecifier<>(Order.DESC, text.title);
-            case ID_DESC -> new OrderSpecifier<>(Order.DESC, text.id);
+            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.createDate);
+            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.createDate);
         };
+    }
+
+    @Override
+    public long countAllByLang(CodeLanguage language) {
+        return queryFactory
+                .select(text.count())
+                .from(text)
+                .where(langEq(language))
+                .fetchFirst();
     }
 
     @Override

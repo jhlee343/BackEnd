@@ -1,9 +1,15 @@
 package shootingstar.typing.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -25,6 +31,8 @@ public class Text {
     @NotNull
     @Column(columnDefinition="LONGTEXT")
     private String typingText;
+    @NotNull
+    private LocalDate createDate;
 
     public Text(CodeLanguage lang, String title, String description, String desText, String typingText) {
         this.lang = lang;
@@ -32,5 +40,6 @@ public class Text {
         this.description = description;
         this.desText = desText;
         this.typingText = typingText;
+        this.createDate = LocalDate.now();
     }
 }

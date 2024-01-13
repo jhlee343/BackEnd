@@ -13,5 +13,7 @@ public interface TextRepositoryCustom {
 
     List<FindAllTextsByLangDto> findAllByLangWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType);
 
+    long countAllByLang(CodeLanguage language);
+
     FindDesTextByIdDto findDesTextById(Long id);
 }

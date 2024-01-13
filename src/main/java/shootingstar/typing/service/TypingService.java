@@ -2,6 +2,7 @@ package shootingstar.typing.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,11 @@ public class TypingService {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
         return convertJSON(texts);
+    }
+
+    public String getCountByLangText(CodeLanguage language) {
+        String allCount = String.valueOf(textRepository.countAllByLang(language));
+        return allCount;
     }
 
     /**
@@ -166,7 +172,7 @@ public class TypingService {
      * object 를 JSON string 으로 반환
      */
     private String convertJSON(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         return objectMapper.writeValueAsString(object);
     }
 }
