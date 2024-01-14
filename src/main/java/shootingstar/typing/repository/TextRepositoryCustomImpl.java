@@ -31,7 +31,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.id,
                         text.title,
                         text.description,
-                        text.createDate))
+                        text.createDate,
+                        text.author))
                 .from(text)
                 .where(langEq(language))
                 .fetch();
@@ -47,7 +48,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.id,
                         text.title,
                         text.description,
-                        text.createDate))
+                        text.createDate,
+                        text.author))
                 .from(text)
                 .where(langEq(language))
                 .orderBy(orderSpecifier)
@@ -80,7 +82,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .select(new QFindDesTextByIdDto(
                         text.title,
                         text.description,
-                        text.desText))
+                        text.desText,
+                        text.author))
                 .from(text)
                 .where(text.id.eq(id))
                 .fetchOne();

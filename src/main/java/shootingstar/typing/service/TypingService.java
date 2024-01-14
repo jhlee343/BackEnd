@@ -54,6 +54,10 @@ public class TypingService {
         return convertJSON(texts);
     }
 
+    /**
+     * P2 : 언어별 페이지 리스트
+     * 언어별 전체 레코드 개수 조회
+     */
     public String getCountByLangText(CodeLanguage language) {
         String allCount = String.valueOf(textRepository.countAllByLang(language));
         return allCount;
@@ -97,7 +101,8 @@ public class TypingService {
                 saveTextDto.getTitle(),
                 saveTextDto.getDescription(),
                 desText,
-                typingText);
+                typingText,
+                saveTextDto.getAuthor());
 
         textRepository.save(text);
 

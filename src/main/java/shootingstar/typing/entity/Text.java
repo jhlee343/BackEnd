@@ -33,13 +33,16 @@ public class Text {
     private String typingText;
     @NotNull
     private LocalDate createDate;
+    @NotNull
+    private String author;
 
-    public Text(CodeLanguage lang, String title, String description, String desText, String typingText) {
+    public Text(CodeLanguage lang, String title, String description, String desText, String typingText, String author) {
         this.lang = lang;
         this.title = title;
         this.description = description;
         this.desText = desText;
         this.typingText = typingText;
         this.createDate = LocalDate.now();
+        this.author = author;
     }
 }
