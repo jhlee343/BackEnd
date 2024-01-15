@@ -39,12 +39,30 @@ public class TypingController {
      * P2 : 언어별 페이지 리스트
      * lang 의 {id, title, description} 리스트 전달
      * @param lang 선택한 코드 언어
+     * @param page 선택한 페이지 번호
+     * @param sortingType 선택한 정렬 방법
      * @return OK : JSON 으로 변환한 객체 리스트 전송
      */
-    @GetMapping("/{lang}/list") // api 주소 추가 수정 필요
-    public ResponseEntity<String> getLangTexts(@PathVariable("lang") CodeLanguage lang, @RequestParam int page, SortingType order) throws JsonProcessingException {
+    @GetMapping("/{lang}/list")
+    public ResponseEntity<String> getLangListPage(@PathVariable("lang") CodeLanguage lang, @RequestParam int page, SortingType sortingType) throws JsonProcessingException {
         String langTexts = service.getCountByLangText(lang);
-        langTexts += service.getLangText(lang, page, order);
+        langTexts += service.getLangText(lang, page, sortingType);
+        return ResponseEntity.ok().body(langTexts);
+    }
+
+    /**
+     * P2 : 언어별 검색 페이지 리스트
+     * lang 의 {id, title, description} 리스트 전달
+     * @param lang 선택한 코드 언어
+     * @param page 선택한 페이지 번호
+     * @param sortingType 선택한 정렬 방법
+     * @param target 검색어
+     * @return OK : JSON 으로 변환한 객체 리스트 전송
+     */
+    @GetMapping("/{lang}/list/search")
+    public ResponseEntity<String> getSearchListPage(@PathVariable("lang") CodeLanguage lang, @RequestParam int page, SortingType sortingType, String target) throws JsonProcessingException {
+        String langTexts = service.getCountSearchText(lang, target);
+        langTexts += service.getSearchText(lang, page, sortingType, target);
         return ResponseEntity.ok().body(langTexts);
     }
 
@@ -56,7 +74,7 @@ public class TypingController {
      * @return OK : FindDesTextByIdDto 객체 전송
      */
     @GetMapping("/description/{textId}")
-    public ResponseEntity<FindDesTextByIdDto> get(@PathVariable("textId") Long id) {
+    public ResponseEntity<FindDesTextByIdDto> getDescriptionText(@PathVariable("textId") Long id) {
         FindDesTextByIdDto desTextDto = service.getDesText(id);
         return ResponseEntity.ok().body(desTextDto);
     }

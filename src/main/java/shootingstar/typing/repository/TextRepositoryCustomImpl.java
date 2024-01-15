@@ -5,6 +5,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.util.StringUtils;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
@@ -58,15 +59,6 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .fetch();
     }
 
-    private OrderSpecifier createOrderSpecifier(SortingType sortingType) {
-        return switch (sortingType) {
-            case TITLE_ASC -> new OrderSpecifier<>(Order.ASC, text.title);
-            case TITLE_DESC -> new OrderSpecifier<>(Order.DESC, text.title);
-            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.createDate);
-            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.createDate);
-        };
-    }
-
     @Override
     public long countAllByLang(CodeLanguage language) {
         return queryFactory
@@ -74,6 +66,44 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .from(text)
                 .where(langEq(language))
                 .fetchFirst();
+    }
+
+    @Override
+    public List<FindAllTextsByLangDto> findAllSearchWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType, String target) {
+        int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
+        OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
+
+        return queryFactory
+                .select(new QFindAllTextsByLangDto(
+                        text.id,
+                        text.title,
+                        text.description,
+                        text.createDate,
+                        text.author))
+                .from(text)
+                .where(langEq(language), containTitle(target))
+                .orderBy(orderSpecifier)
+                .offset(firstIndex)
+                .limit(RECORD_PER_PAGE)
+                .fetch();
+    }
+
+    @Override
+    public long countAllSearch(CodeLanguage language, String target) {
+        return queryFactory
+                .select(text.count())
+                .from(text)
+                .where(langEq(language), containTitle(target))
+                .fetchFirst();
+    }
+
+    private OrderSpecifier createOrderSpecifier(SortingType sortingType) {
+        return switch (sortingType) {
+            case TITLE_ASC -> new OrderSpecifier<>(Order.ASC, text.title);
+            case TITLE_DESC -> new OrderSpecifier<>(Order.DESC, text.title);
+            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.createDate);
+            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.createDate);
+        };
     }
 
     @Override
@@ -92,4 +122,5 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     private BooleanExpression langEq(CodeLanguage language) {
         return language != null ? text.lang.eq(language) : null;
     }
+    private BooleanExpression containTitle(String target) { return StringUtils.hasText(target) ? text.title.contains(target) : null; }
 }

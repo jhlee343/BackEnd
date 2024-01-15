@@ -46,8 +46,8 @@ public class TypingService {
      * P2 : 언어별 페이지 리스트
      * {id, title, description} 조회
      */
-    public String getLangText(CodeLanguage lang, int pageNumber, SortingType sortingType) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(lang, pageNumber, sortingType);
+    public String getLangText(CodeLanguage language, int pageNumber, SortingType sortingType) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(language, pageNumber, sortingType);
         if (texts.size() == 0) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
@@ -60,6 +60,19 @@ public class TypingService {
      */
     public String getCountByLangText(CodeLanguage language) {
         String allCount = String.valueOf(textRepository.countAllByLang(language));
+        return allCount;
+    }
+
+    public String getSearchText(CodeLanguage language, int pageNumber, SortingType sortingType, String target) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllSearchWithSorting(language, pageNumber, sortingType, target);
+        if (texts.size() == 0) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
+        return convertJSON(texts);
+    }
+
+    public String getCountSearchText(CodeLanguage language, String target) {
+        String allCount = String.valueOf(textRepository.countAllSearch(language, target));
         return allCount;
     }
 
