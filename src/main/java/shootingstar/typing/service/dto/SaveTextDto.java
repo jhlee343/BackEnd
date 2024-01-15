@@ -15,4 +15,6 @@ public class SaveTextDto {
     private String description;
     @NotBlank(message = "본문 필수")
     private String text;
+    @NotBlank(message = "작성자 필수")
+    private String author;
 }
