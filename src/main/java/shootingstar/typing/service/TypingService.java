@@ -2,10 +2,12 @@ package shootingstar.typing.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shootingstar.typing.entity.CodeLanguage;
+import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
@@ -32,7 +34,7 @@ public class TypingService {
      */
     public long getRandomId(CodeLanguage lang){
         List<FindAllTextsByLangDto> langDtos = textRepository.findAllByLang(lang);
-        if (langDtos == null) {
+        if (langDtos.size() == 0) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
         int randomIndex = (int) ((Math.random()) * langDtos.size());
@@ -44,12 +46,34 @@ public class TypingService {
      * P2 : 언어별 페이지 리스트
      * {id, title, description} 조회
      */
-    public String getLangText(CodeLanguage lang) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLang(lang);
-        if (texts == null) {
+    public String getLangText(CodeLanguage language, int pageNumber, SortingType sortingType) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(language, pageNumber, sortingType);
+        if (texts.size() == 0) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
         return convertJSON(texts);
+    }
+
+    /**
+     * P2 : 언어별 페이지 리스트
+     * 언어별 전체 레코드 개수 조회
+     */
+    public String getCountByLangText(CodeLanguage language) {
+        String allCount = String.valueOf(textRepository.countAllByLang(language));
+        return allCount;
+    }
+
+    public String getSearchText(CodeLanguage language, int pageNumber, SortingType sortingType, String target) throws JsonProcessingException {
+        List<FindAllTextsByLangDto> texts = textRepository.findAllSearchWithSorting(language, pageNumber, sortingType, target);
+        if (texts.size() == 0) {
+            throw new NoSuchElementException("등록된 지문이 없습니다.");
+        }
+        return convertJSON(texts);
+    }
+
+    public String getCountSearchText(CodeLanguage language, String target) {
+        String allCount = String.valueOf(textRepository.countAllSearch(language, target));
+        return allCount;
     }
 
     /**
@@ -90,7 +114,8 @@ public class TypingService {
                 saveTextDto.getTitle(),
                 saveTextDto.getDescription(),
                 desText,
-                typingText);
+                typingText,
+                saveTextDto.getAuthor());
 
         textRepository.save(text);
 
@@ -165,7 +190,7 @@ public class TypingService {
      * object 를 JSON string 으로 반환
      */
     private String convertJSON(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         return objectMapper.writeValueAsString(object);
     }
 }
