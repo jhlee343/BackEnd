@@ -114,5 +114,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     private BooleanExpression langEq(CodeLanguage language) {
         return language != null ? text.lang.eq(language) : null;
     }
-    private BooleanExpression containTitle(String target) { return StringUtils.hasText(target) ? text.title.contains(target) : null; }
+    private BooleanExpression containTitle(String search) {
+        return StringUtils.hasText(search) ? text.title.contains(search) : null;
+    }
 }
