@@ -12,6 +12,8 @@ import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
+import shootingstar.typing.repository.dto.PageInformationDto;
+import shootingstar.typing.repository.dto.PageListByLangDto;
 import shootingstar.typing.service.dto.SaveTextDto;
 
 import java.io.BufferedReader;
@@ -44,36 +46,19 @@ public class TypingService {
 
     /**
      * P2 : 언어별 페이지 리스트
+     * {totalRecord, currentPage, totalPage} 및
      * {id, title, description} 조회
      */
-    public String getLangText(CodeLanguage language, int pageNumber, SortingType sortingType) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(language, pageNumber, sortingType);
+    public String getLangPage(CodeLanguage language, int pageNumber, SortingType sortingType, String search) throws JsonProcessingException {
+        PageInformationDto pageInformationDto = textRepository.findPageInformation(language, pageNumber, search);
+        List<FindAllTextsByLangDto> texts = textRepository.findAllTextsByLang(language, pageNumber, sortingType, search);
+
         if (texts.size() == 0) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        return convertJSON(texts);
-    }
 
-    /**
-     * P2 : 언어별 페이지 리스트
-     * 언어별 전체 레코드 개수 조회
-     */
-    public String getCountByLangText(CodeLanguage language) {
-        String allCount = String.valueOf(textRepository.countAllByLang(language));
-        return allCount;
-    }
-
-    public String getSearchText(CodeLanguage language, int pageNumber, SortingType sortingType, String target) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllSearchWithSorting(language, pageNumber, sortingType, target);
-        if (texts.size() == 0) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-        return convertJSON(texts);
-    }
-
-    public String getCountSearchText(CodeLanguage language, String target) {
-        String allCount = String.valueOf(textRepository.countAllSearch(language, target));
-        return allCount;
+        PageListByLangDto pageListByLangDto = new PageListByLangDto(pageInformationDto, texts);
+        return convertJSON(pageListByLangDto);
     }
 
     /**
@@ -107,7 +92,7 @@ public class TypingService {
     @Transactional
     public Text save(SaveTextDto saveTextDto) throws JsonProcessingException {
         String desText = convertJSON(convert(saveTextDto.getText())); // 전달 받은 지문을 JSON 으로 변환
-        String typingText = convertJSON(convertRemoveAnno(saveTextDto.getText())); // 전달 받은 지문의 주석을 제거하고 JSON 으로 변환
+        String typingText = convertJSON(convertRemoveAnno(saveTextDto.getText(), saveTextDto.getLang())); // 전달 받은 지문의 주석을 제거하고 JSON 으로 변환
 
         Text text = new Text(
                 saveTextDto.getLang(),
@@ -156,7 +141,7 @@ public class TypingService {
     /**
      * 전달 받은 텍스트를 주석 제거 후 리스트로 반환
      */
-    public List<String> convertRemoveAnno(String text) {
+    public List<String> convertRemoveAnno(String text, CodeLanguage language) {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
             String line;
