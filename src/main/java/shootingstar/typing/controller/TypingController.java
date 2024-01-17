@@ -67,8 +67,8 @@ public class TypingController {
                                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                     @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType,
                                                     @RequestParam(value = "target", required = true) String target) throws JsonProcessingException {
-        String langTexts = service.getSearchPage(lang, page, sortingType, target);
-        return ResponseEntity.ok().body(langTexts);
+        String langPage = service.getSearchPage(lang, page, sortingType, target);
+        return ResponseEntity.ok().body(langPage);
     }
 
     /**

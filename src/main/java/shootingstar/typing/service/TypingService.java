@@ -75,7 +75,7 @@ public class TypingService {
         }
 
         PageListByLangDto pageListByLangDto = new PageListByLangDto(pageInformationDto, texts);
-        return convertJSON(texts);
+        return convertJSON(pageListByLangDto);
     }
 
     /**

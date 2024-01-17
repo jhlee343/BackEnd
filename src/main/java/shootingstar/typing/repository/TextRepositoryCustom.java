@@ -18,7 +18,7 @@ public interface TextRepositoryCustom {
 
     List<FindAllTextsByLangDto> findAllSearchWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType, String target);
 
-    public PageInformationDto findSearchPageInformation(CodeLanguage language, long currentPage, String target);
+    PageInformationDto findSearchPageInformation(CodeLanguage language, long currentPage, String target);
 
     FindDesTextByIdDto findDesTextById(Long id);
 }
