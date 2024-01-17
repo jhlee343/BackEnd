@@ -12,13 +12,9 @@ import java.util.Optional;
 public interface TextRepositoryCustom {
     List<FindAllTextsByLangDto> findAllByLang(CodeLanguage language);
 
-    List<FindAllTextsByLangDto> findAllByLangWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType);
+    List<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, int pageNumber, SortingType sortingType, String search);
 
-    PageInformationDto findPageInformation(CodeLanguage language, long currentPage);
-
-    List<FindAllTextsByLangDto> findAllSearchWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType, String target);
-
-    PageInformationDto findSearchPageInformation(CodeLanguage language, long currentPage, String target);
+    PageInformationDto findPageInformation(CodeLanguage language, long currentPage, String search);
 
     FindDesTextByIdDto findDesTextById(Long id);
 }

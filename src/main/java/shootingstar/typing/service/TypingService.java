@@ -49,26 +49,9 @@ public class TypingService {
      * {totalRecord, currentPage, totalPage} 및
      * {id, title, description} 조회
      */
-    public String getLangPage(CodeLanguage language, int pageNumber, SortingType sortingType) throws JsonProcessingException {
-        PageInformationDto pageInformationDto = textRepository.findPageInformation(language, pageNumber);
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(language, pageNumber, sortingType);
-
-        if (texts.size() == 0) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-
-        PageListByLangDto pageListByLangDto = new PageListByLangDto(pageInformationDto, texts);
-        return convertJSON(pageListByLangDto);
-    }
-
-    /**
-     * P2 : 언어별 검색 페이지 리스트
-     * {totalRecord, currentPage, totalPage} 및
-     * {id, title, description} 조회
-     */
-    public String getSearchPage(CodeLanguage language, int pageNumber, SortingType sortingType, String target) throws JsonProcessingException {
-        PageInformationDto pageInformationDto = textRepository.findSearchPageInformation(language, pageNumber, target);
-        List<FindAllTextsByLangDto> texts = textRepository.findAllSearchWithSorting(language, pageNumber, sortingType, target);
+    public String getLangPage(CodeLanguage language, int pageNumber, SortingType sortingType, String search) throws JsonProcessingException {
+        PageInformationDto pageInformationDto = textRepository.findPageInformation(language, pageNumber, search);
+        List<FindAllTextsByLangDto> texts = textRepository.findAllTextsByLang(language, pageNumber, sortingType, search);
 
         if (texts.size() == 0) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");

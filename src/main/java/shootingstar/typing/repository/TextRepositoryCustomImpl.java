@@ -41,10 +41,10 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     }
 
     /**
-     * P2: 언어별 정렬 페이지
+     * P2: 언어별 페이지
      */
     @Override
-    public List<FindAllTextsByLangDto> findAllByLangWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType) {
+    public List<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, int pageNumber, SortingType sortingType, String search) {
         int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
         OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
 
@@ -56,7 +56,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.createDate,
                         text.author))
                 .from(text)
-                .where(langEq(language))
+                .where(langEq(language), containTitle(search))
                 .orderBy(orderSpecifier)
                 .offset(firstIndex)
                 .limit(RECORD_PER_PAGE)
@@ -64,55 +64,14 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     }
 
     /**
-     * P2: 언어별 정렬 페이지 정보
+     * P2: 언어별 페이지 정보
      */
     @Override
-    public PageInformationDto findPageInformation(CodeLanguage language, long currentPage) {
-        long totalRecord =  queryFactory
-                .select(text.count())
-                .from(text)
-                .where(langEq(language))
-                .fetchFirst();
-
-        long totalPage = totalRecord / RECORD_PER_PAGE + 1;
-
-        PageInformationDto pageInformationDto = new PageInformationDto(totalRecord, currentPage, totalPage);
-
-        return pageInformationDto;
-    }
-
-    /**
-     * P2: 언어별 검색 페이지
-     */
-    @Override
-    public List<FindAllTextsByLangDto> findAllSearchWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType, String target) {
-        int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
-        OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
-
-        return queryFactory
-                .select(new QFindAllTextsByLangDto(
-                        text.id,
-                        text.title,
-                        text.description,
-                        text.createDate,
-                        text.author))
-                .from(text)
-                .where(langEq(language), containTitle(target))
-                .orderBy(orderSpecifier)
-                .offset(firstIndex)
-                .limit(RECORD_PER_PAGE)
-                .fetch();
-    }
-
-    /**
-     * P2: 언어별 검색 페이지 정보
-     */
-    @Override
-    public PageInformationDto findSearchPageInformation(CodeLanguage language, long currentPage, String target) {
+    public PageInformationDto findPageInformation(CodeLanguage language, long currentPage, String search) {
         long totalRecord = queryFactory
                 .select(text.count())
                 .from(text)
-                .where(langEq(language), containTitle(target))
+                .where(langEq(language), containTitle(search))
                 .fetchFirst();
 
         long totalPage = totalRecord / RECORD_PER_PAGE + 1;

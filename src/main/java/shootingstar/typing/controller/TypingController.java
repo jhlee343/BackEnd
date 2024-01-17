@@ -42,32 +42,15 @@ public class TypingController {
      * @param lang 선택한 코드 언어
      * @param page 선택한 페이지 번호
      * @param sortingType 선택한 정렬 방법
+     * @param search 검색어
      * @return OK : JSON 으로 변환한 객체 리스트 전송
      */
     @GetMapping("/{lang}/list")
     public ResponseEntity<String> getLangListPage(@PathVariable("lang") CodeLanguage lang,
-                                                  @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                                  @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType) throws JsonProcessingException {
-        String langPage = service.getLangPage(lang, page, sortingType);
-        return ResponseEntity.ok().body(langPage);
-    }
-
-    /**
-     * P2 : 언어별 검색 페이지 리스트
-     * lang 에 대한 {totalRecord, currentPage, totalPage} 및
-     * lang 의 {id, title, description} 리스트 전달
-     * @param lang 선택한 코드 언어
-     * @param page 선택한 페이지 번호
-     * @param sortingType 선택한 정렬 방법
-     * @param target 검색어
-     * @return OK : JSON 으로 변환한 객체 리스트 전송
-     */
-    @GetMapping("/{lang}/list/search")
-    public ResponseEntity<String> getSearchListPage(@PathVariable("lang") CodeLanguage lang,
                                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                     @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType,
-                                                    @RequestParam(value = "target", required = true) String target) throws JsonProcessingException {
-        String langPage = service.getSearchPage(lang, page, sortingType, target);
+                                                    @RequestParam(value = "search", required = false, defaultValue = "") String search) throws JsonProcessingException {
+        String langPage = service.getLangPage(lang, page, sortingType, search);
         return ResponseEntity.ok().body(langPage);
     }
 
