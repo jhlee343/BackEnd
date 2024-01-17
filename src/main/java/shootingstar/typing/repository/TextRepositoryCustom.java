@@ -4,6 +4,7 @@ import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
+import shootingstar.typing.repository.dto.PageInformationDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,11 +14,11 @@ public interface TextRepositoryCustom {
 
     List<FindAllTextsByLangDto> findAllByLangWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType);
 
-    long countAllByLang(CodeLanguage language);
+    PageInformationDto findPageInformation(CodeLanguage language, long currentPage);
 
     List<FindAllTextsByLangDto> findAllSearchWithSorting(CodeLanguage language, int pageNumber, SortingType sortingType, String target);
 
-    long countAllSearch(CodeLanguage language, String target);
+    public PageInformationDto findSearchPageInformation(CodeLanguage language, long currentPage, String target);
 
     FindDesTextByIdDto findDesTextById(Long id);
 }
