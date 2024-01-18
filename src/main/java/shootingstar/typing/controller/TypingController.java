@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
+import shootingstar.typing.repository.dto.FindTypingTextDtd;
 import shootingstar.typing.service.TypingService;
 import shootingstar.typing.service.dto.SaveTextDto;
 
@@ -57,25 +58,28 @@ public class TypingController {
     /**
      * P3 : 설명 페이지
      * id의 {title, description, desText} 조회
-     * @FindDesTextByIdDto {title, description, desText} 를 가진 객체
+     * @FindDesTextByIdDto {title, description, desText, author} 를 가진 객체
+     * @param lang 선택한 코드 언어
      * @param id 선택한 지문 id
      * @return OK : FindDesTextByIdDto 객체 전송
      */
     @GetMapping("/{lang}/description/{textId}")
-    public ResponseEntity<FindDesTextByIdDto> getDescriptionText(@PathVariable("lang") CodeLanguage language, @PathVariable("textId") Long id) {
-        FindDesTextByIdDto desTextDto = service.getDesText(id);
+    public ResponseEntity<FindDesTextByIdDto> getDescriptionText(@PathVariable("lang") CodeLanguage lang, @PathVariable("textId") Long id) {
+        FindDesTextByIdDto desTextDto = service.getDesText(lang, id);
         return ResponseEntity.ok().body(desTextDto);
     }
 
     /**
      * P4 : 타이핑 페이지
-     * id의 typingText 조회
+     * id의 {typingText, author} 조회
+     * @FindTypingTextDtd {typingText, author} 를 가진 객체
+     * @param lang 선택한 코드 언어
      * @param id 선택한 지문 id
-     * @return OK : JSON 으로 변환한 typingText 전송
+     * @return OK : FindTypingTextDtd 객체 전송
      */
-    @GetMapping("/typingText/{textId}")
-    public ResponseEntity<String> getTypingText(@PathVariable("textId") Long id) {
-        String typingText = service.getTypingText(id);
+    @GetMapping("/{lang}/typingText/{textId}")
+    public ResponseEntity<FindTypingTextDtd> getTypingText(@PathVariable("lang") CodeLanguage lang, @PathVariable("textId") Long id) {
+        FindTypingTextDtd typingText = service.getTypingText(lang, id);
         return ResponseEntity.ok().body(typingText);
     }
 

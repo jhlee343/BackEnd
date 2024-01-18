@@ -10,10 +10,7 @@ import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
-import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
-import shootingstar.typing.repository.dto.FindDesTextByIdDto;
-import shootingstar.typing.repository.dto.PageInformationDto;
-import shootingstar.typing.repository.dto.PageListByLangDto;
+import shootingstar.typing.repository.dto.*;
 import shootingstar.typing.service.dto.SaveTextDto;
 
 import java.io.BufferedReader;
@@ -65,8 +62,8 @@ public class TypingService {
      * P3 : 설명 페이지
      * {title, description, desText} 조회
      */
-    public FindDesTextByIdDto getDesText(Long id) {
-        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
+    public FindDesTextByIdDto getDesText(CodeLanguage language, Long id) {
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(language, id);
         if (desTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
@@ -77,13 +74,12 @@ public class TypingService {
      * P4 : 타이핑 페이지
      * typingText 조회
      */
-    public String getTypingText(Long id) {
-        Optional<Text> optionalText = textRepository.findById(id);
-        if (optionalText.isEmpty()) {
+    public FindTypingTextDtd getTypingText(CodeLanguage language, Long id) {
+        FindTypingTextDtd findTypingTextDtd = textRepository.findTypingTextById(language, id);
+        if (findTypingTextDtd == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        Text text = optionalText.get();
-        return text.getTypingText();
+        return findTypingTextDtd;
     }
 
     /**

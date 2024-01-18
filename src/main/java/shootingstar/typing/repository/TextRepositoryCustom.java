@@ -4,6 +4,7 @@ import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
+import shootingstar.typing.repository.dto.FindTypingTextDtd;
 import shootingstar.typing.repository.dto.PageInformationDto;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface TextRepositoryCustom {
 
     PageInformationDto findPageInformation(CodeLanguage language, long currentPage, String search);
 
-    FindDesTextByIdDto findDesTextById(Long id);
+    FindDesTextByIdDto findDesTextById(CodeLanguage language, Long id);
+
+    FindTypingTextDtd findTypingTextById(CodeLanguage language, Long id);
 }

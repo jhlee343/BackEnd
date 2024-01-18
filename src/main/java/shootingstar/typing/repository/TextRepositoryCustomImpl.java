@@ -99,7 +99,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
      * P3: 설명 페이지
      */
     @Override
-    public FindDesTextByIdDto findDesTextById(Long id) {
+    public FindDesTextByIdDto findDesTextById(CodeLanguage language, Long id) {
         return queryFactory
                 .select(new QFindDesTextByIdDto(
                         text.title,
@@ -107,7 +107,18 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.desText,
                         text.author))
                 .from(text)
-                .where(text.id.eq(id))
+                .where(langEq(language), text.id.eq(id))
+                .fetchOne();
+    }
+
+    @Override
+    public FindTypingTextDtd findTypingTextById(CodeLanguage language, Long id) {
+        return queryFactory
+                .select(new QFindTypingTextDtd(
+                        text.typingText,
+                        text.author))
+                .from(text)
+                .where(langEq(language), text.id.eq(id))
                 .fetchOne();
     }
 
