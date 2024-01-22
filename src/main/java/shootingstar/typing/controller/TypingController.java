@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
-import shootingstar.typing.repository.dto.FindTypingTextDtd;
+import shootingstar.typing.repository.dto.FindTypingTextDto;
 import shootingstar.typing.service.TypingService;
 import shootingstar.typing.service.dto.SaveTextDto;
 
@@ -49,7 +49,7 @@ public class TypingController {
     @GetMapping("/{lang}/list")
     public ResponseEntity<String> getLangListPage(@PathVariable("lang") CodeLanguage lang,
                                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                                    @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType,
+                                                    @RequestParam(value = "sortingType", required = false, defaultValue = "DATE_ASC") SortingType sortingType,
                                                     @RequestParam(value = "search", required = false, defaultValue = "") String search) throws JsonProcessingException {
         String langPage = service.getLangPage(lang, page, sortingType, search);
         return ResponseEntity.ok().body(langPage);
@@ -78,8 +78,8 @@ public class TypingController {
      * @return OK : FindTypingTextDtd 객체 전송
      */
     @GetMapping("/{lang}/typingText/{textId}")
-    public ResponseEntity<FindTypingTextDtd> getTypingText(@PathVariable("lang") CodeLanguage lang, @PathVariable("textId") Long id) {
-        FindTypingTextDtd typingText = service.getTypingText(lang, id);
+    public ResponseEntity<FindTypingTextDto> getTypingText(@PathVariable("lang") CodeLanguage lang, @PathVariable("textId") Long id) {
+        FindTypingTextDto typingText = service.getTypingText(lang, id);
         return ResponseEntity.ok().body(typingText);
     }
 

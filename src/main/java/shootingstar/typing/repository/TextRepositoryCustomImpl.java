@@ -47,7 +47,6 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     public List<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, int pageNumber, SortingType sortingType, String search) {
         int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
         OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
-        OrderSpecifier orderSpecifierDate = createOrderSpecifier(sortingType);
 
         return queryFactory
                 .select(new QFindAllTextsByLangDto(
@@ -87,12 +86,10 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
      */
     private OrderSpecifier createOrderSpecifier(SortingType sortingType) {
         return switch (sortingType) {
-            case ID_ASC -> new OrderSpecifier<>(Order.ASC, text.id);
-            case ID_DESC -> new OrderSpecifier<>(Order.DESC, text.id);
             case TITLE_ASC -> new OrderSpecifier<>(Order.ASC, text.title);
             case TITLE_DESC -> new OrderSpecifier<>(Order.DESC, text.title);
-            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.createDate);
-            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.createDate);
+            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.id);
+            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.id);
         };
     }
 
@@ -113,9 +110,9 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     }
 
     @Override
-    public FindTypingTextDtd findTypingTextById(CodeLanguage language, Long id) {
+    public FindTypingTextDto findTypingTextById(CodeLanguage language, Long id) {
         return queryFactory
-                .select(new QFindTypingTextDtd(
+                .select(new QFindTypingTextDto(
                         text.typingText,
                         text.author))
                 .from(text)
