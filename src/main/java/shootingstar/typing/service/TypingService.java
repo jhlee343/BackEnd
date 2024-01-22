@@ -10,10 +10,7 @@ import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
-import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
-import shootingstar.typing.repository.dto.FindDesTextByIdDto;
-import shootingstar.typing.repository.dto.PageInformationDto;
-import shootingstar.typing.repository.dto.PageListByLangDto;
+import shootingstar.typing.repository.dto.*;
 import shootingstar.typing.service.dto.SaveTextDto;
 
 import java.io.BufferedReader;
@@ -23,12 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class TypingService {
 
     private final TextRepository textRepository;
+    private boolean isComment = false;
 
     /**
      * P1 : 언어별 랜덤 지문 선택
@@ -53,10 +53,6 @@ public class TypingService {
         PageInformationDto pageInformationDto = textRepository.findPageInformation(language, pageNumber, search);
         List<FindAllTextsByLangDto> texts = textRepository.findAllTextsByLang(language, pageNumber, sortingType, search);
 
-//        if (texts.size() == 0) {
-//            throw new NoSuchElementException("등록된 지문이 없습니다.");
-//        }
-
         PageListByLangDto pageListByLangDto = new PageListByLangDto(pageInformationDto, texts);
         return convertJSON(pageListByLangDto);
     }
@@ -65,8 +61,8 @@ public class TypingService {
      * P3 : 설명 페이지
      * {title, description, desText} 조회
      */
-    public FindDesTextByIdDto getDesText(Long id) {
-        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
+    public FindDesTextByIdDto getDesText(CodeLanguage language, Long id) {
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(language, id);
         if (desTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
@@ -77,13 +73,12 @@ public class TypingService {
      * P4 : 타이핑 페이지
      * typingText 조회
      */
-    public String getTypingText(Long id) {
-        Optional<Text> optionalText = textRepository.findById(id);
-        if (optionalText.isEmpty()) {
+    public FindTypingTextDtd getTypingText(CodeLanguage language, Long id) {
+        FindTypingTextDtd findTypingTextDtd = textRepository.findTypingTextById(language, id);
+        if (findTypingTextDtd == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        Text text = optionalText.get();
-        return text.getTypingText();
+        return findTypingTextDtd;
     }
 
     /**
@@ -148,8 +143,15 @@ public class TypingService {
             boolean previousLineEmpty = false;
 
             while ((line = reader.readLine()) != null) {
-                // 주석 제거
-                String cleanedLine = line.replaceAll("//.*", "");
+                String cleanedLine = "";
+
+                if (language.equals(CodeLanguage.PYTHON)) {
+                    cleanedLine = removeAnnoByPYTHON(line);
+                }
+                else {
+                    cleanedLine = removeAnnoByLang(line);
+                }
+
                 if (cleanedLine.trim().isEmpty()) {
                     if (!previousLineEmpty) {
                         lines.add(cleanedLine);
@@ -169,6 +171,82 @@ public class TypingService {
         }
 
         return lines;
+    }
+
+    /**
+     * PYTHON 주석 제거
+     * #, """, '''
+     */
+    private String removeAnnoByPYTHON(String line) {
+        String cleanedLine = line.replaceAll("#.*", "");
+
+        Pattern blockAnno = Pattern.compile("(\"\"\"|\'\'\')");
+        Matcher matchBlock = blockAnno.matcher(line);
+
+        Pattern lineBlockAnno = Pattern.compile("(\"\"\"|\'\'\').*(\"\"\"|\'\'\')");
+        Matcher matchLineBlock = lineBlockAnno.matcher(line);
+
+        // 블록 주석 시작
+        if (!isComment && matchBlock.find()) {
+            if (matchLineBlock.find()) {
+                cleanedLine = line.replaceAll("(\"\"\"|\'\'\').*(\"\"\"|\'\'\')", "");
+            }
+            else {
+                this.isComment = true;
+                cleanedLine = line.replaceAll("(\"\"\"|\'\'\').*", "");
+            }
+        }
+        // 블록 주석 끝
+        else if (matchBlock.find()) {
+            this.isComment = false;
+            cleanedLine = line.replaceAll(".*(\"\"\"|\'\'\')", "");
+        }
+        // 블록 주석 내용
+        else {
+            if (this.isComment) {
+                cleanedLine = "";
+            }
+        }
+
+        return cleanedLine;
+    }
+
+    /**
+     * JAVA, CPP, JS 주석 제거
+     * //, /* *\/
+     */
+    public String removeAnnoByLang(String line) {
+        String cleanedLine = line.replaceAll("//.*", "");
+
+        Pattern blockAnnoBegin = Pattern.compile("/\\*.*");
+        Matcher matchBlockBegin = blockAnnoBegin.matcher(line);
+
+        Pattern blockAnnoEnd = Pattern.compile(".*\\*/");
+        Matcher matchBlockEnd = blockAnnoEnd.matcher(line);
+
+        // 블록 주석 시작
+        if (matchBlockBegin.find()) {
+            if (matchBlockEnd.find()) {
+                cleanedLine = line.replaceAll("/\\*.*\\*/", "");
+            }
+            else {
+                this.isComment = true;
+                cleanedLine = line.replaceAll("/\\*.*", "");
+            }
+        }
+        // 블록 주석 끝
+        else if (matchBlockEnd.find()) {
+            this.isComment = false;
+            cleanedLine = line.replaceAll(".*\\*/", "");
+        }
+        // 블록 주석 내용
+        else {
+            if (this.isComment) {
+                cleanedLine = "";
+            }
+        }
+
+        return cleanedLine;
     }
 
     /**

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Data
 @Slf4j
@@ -39,6 +41,8 @@ public class TextDto {
 
         return new Text(language, this.title, this.description, desText, typingText, this.author);
     }
+
+    private boolean isComment = false;
 
     public List<String> convert(String text) {
         List<String> lines = new ArrayList<>();
@@ -68,9 +72,6 @@ public class TextDto {
         return lines;
     }
 
-    /**
-     * 전달 받은 텍스트를 주석 제거 후 리스트로 반환
-     */
     public List<String> convertRemoveAnno(String text, CodeLanguage language) {
         List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
@@ -78,8 +79,15 @@ public class TextDto {
             boolean previousLineEmpty = false;
 
             while ((line = reader.readLine()) != null) {
-                // 주석 제거
-                String cleanedLine = line.replaceAll("//.*", "");
+                String cleanedLine = "";
+
+                if (language.equals(CodeLanguage.PYTHON)) {
+                    cleanedLine = removeAnnoByPYTHON(line);
+                }
+                else {
+                    cleanedLine = removeAnnoByLang(line);
+                }
+
                 if (cleanedLine.trim().isEmpty()) {
                     if (!previousLineEmpty) {
                         lines.add(cleanedLine);
@@ -99,6 +107,82 @@ public class TextDto {
         }
 
         return lines;
+    }
+
+    /**
+     * PYTHON 주석 제거
+     * #, """, '''
+     */
+    private String removeAnnoByPYTHON(String line) {
+        String cleanedLine = line.replaceAll("#.*", "");
+
+        Pattern blockAnno = Pattern.compile("(\"\"\"|\'\'\')");
+        Matcher matchBlock = blockAnno.matcher(line);
+
+        Pattern lineBlockAnno = Pattern.compile("(\"\"\"|\'\'\').*(\"\"\"|\'\'\')");
+        Matcher matchLineBlock = lineBlockAnno.matcher(line);
+
+        // 블록 주석 시작
+        if (!isComment && matchBlock.find()) {
+            if (matchLineBlock.find()) {
+                cleanedLine = line.replaceAll("(\"\"\"|\'\'\').*(\"\"\"|\'\'\')", "");
+            }
+            else {
+                this.isComment = true;
+                cleanedLine = line.replaceAll("(\"\"\"|\'\'\').*", "");
+            }
+        }
+        // 블록 주석 끝
+        else if (matchBlock.find()) {
+            this.isComment = false;
+            cleanedLine = line.replaceAll(".*(\"\"\"|\'\'\')", "");
+        }
+        // 블록 주석 내용
+        else {
+            if (this.isComment) {
+                cleanedLine = "";
+            }
+        }
+
+        return cleanedLine;
+    }
+
+    /**
+     * JAVA, CPP, JS 주석 제거
+     * //, /* *\/
+     */
+    public String removeAnnoByLang(String line) {
+        String cleanedLine = line.replaceAll("//.*", "");
+
+        Pattern blockAnnoBegin = Pattern.compile("/\\*.*");
+        Matcher matchBlockBegin = blockAnnoBegin.matcher(line);
+
+        Pattern blockAnnoEnd = Pattern.compile(".*\\*/");
+        Matcher matchBlockEnd = blockAnnoEnd.matcher(line);
+
+        // 블록 주석 시작
+        if (matchBlockBegin.find()) {
+            if (matchBlockEnd.find()) {
+                cleanedLine = line.replaceAll("/\\*.*\\*/", "");
+            }
+            else {
+                this.isComment = true;
+                cleanedLine = line.replaceAll("/\\*.*", "");
+            }
+        }
+        // 블록 주석 끝
+        else if (matchBlockEnd.find()) {
+            this.isComment = false;
+            cleanedLine = line.replaceAll(".*\\*/", "");
+        }
+        // 블록 주석 내용
+        else {
+            if (this.isComment) {
+                cleanedLine = "";
+            }
+        }
+
+        return cleanedLine;
     }
 
     /**
