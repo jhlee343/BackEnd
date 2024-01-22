@@ -4,12 +4,12 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class FindTypingTextDtd {
+public class FindTypingTextDto {
     private String typingText;
     private String author;
 
     @QueryProjection
-    public FindTypingTextDtd(String typingText, String author) {
+    public FindTypingTextDto(String typingText, String author) {
         this.typingText = typingText;
         this.author = author;
     }

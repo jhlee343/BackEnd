@@ -19,7 +19,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,12 +72,12 @@ public class TypingService {
      * P4 : 타이핑 페이지
      * typingText 조회
      */
-    public FindTypingTextDtd getTypingText(CodeLanguage language, Long id) {
-        FindTypingTextDtd findTypingTextDtd = textRepository.findTypingTextById(language, id);
-        if (findTypingTextDtd == null) {
+    public FindTypingTextDto getTypingText(CodeLanguage language, Long id) {
+        FindTypingTextDto findTypingTextDto = textRepository.findTypingTextById(language, id);
+        if (findTypingTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        return findTypingTextDtd;
+        return findTypingTextDto;
     }
 
     /**

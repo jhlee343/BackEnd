@@ -110,9 +110,9 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     }
 
     @Override
-    public FindTypingTextDtd findTypingTextById(CodeLanguage language, Long id) {
+    public FindTypingTextDto findTypingTextById(CodeLanguage language, Long id) {
         return queryFactory
-                .select(new QFindTypingTextDtd(
+                .select(new QFindTypingTextDto(
                         text.typingText,
                         text.author))
                 .from(text)
