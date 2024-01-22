@@ -49,7 +49,7 @@ public class TypingController {
     @GetMapping("/{lang}/list")
     public ResponseEntity<String> getLangListPage(@PathVariable("lang") CodeLanguage lang,
                                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                                                    @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType,
+                                                    @RequestParam(value = "sortingType", required = false, defaultValue = "DATE_ASC") SortingType sortingType,
                                                     @RequestParam(value = "search", required = false, defaultValue = "") String search) throws JsonProcessingException {
         String langPage = service.getLangPage(lang, page, sortingType, search);
         return ResponseEntity.ok().body(langPage);
