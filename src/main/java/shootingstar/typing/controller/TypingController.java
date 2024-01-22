@@ -31,6 +31,7 @@ public class TypingController {
      */
     @GetMapping("/{lang}/random")
     public ResponseEntity<Long> randomSelect(@PathVariable("lang") CodeLanguage lang){
+        log.info("API {}", "randomSelect");
         long randomId = service.getRandomId(lang);
         return ResponseEntity.ok().body(randomId);
     }
@@ -50,6 +51,7 @@ public class TypingController {
                                                     @RequestParam(value = "page", required = false, defaultValue = "1") int page,
                                                     @RequestParam(value = "sortingType", required = false, defaultValue = "ID_ASC") SortingType sortingType,
                                                     @RequestParam(value = "search", required = false, defaultValue = "") String search) throws JsonProcessingException {
+        log.info("API {}", "getLangListPage");
         String langPage = service.getLangPage(lang, page, sortingType, search);
         return ResponseEntity.ok().body(langPage);
     }
@@ -63,6 +65,7 @@ public class TypingController {
      */
     @GetMapping("/{lang}/description/{textId}")
     public ResponseEntity<FindDesTextByIdDto> getDescriptionText(@PathVariable("lang") CodeLanguage language, @PathVariable("textId") Long id) {
+        log.info("API {}", "getDescriptionText");
         FindDesTextByIdDto desTextDto = service.getDesText(id);
         return ResponseEntity.ok().body(desTextDto);
     }
@@ -75,12 +78,14 @@ public class TypingController {
      */
     @GetMapping("/typingText/{textId}")
     public ResponseEntity<String> getTypingText(@PathVariable("textId") Long id) {
+        log.info("API {}", "getTypingText");
         String typingText = service.getTypingText(id);
         return ResponseEntity.ok().body(typingText);
     }
 
     @PostMapping("/save")
     public Object saveText(@Validated @ModelAttribute SaveTextDto saveTextDto, BindingResult bindingResult) throws JsonProcessingException {
+        log.info("API {}", "saveText");
         if (bindingResult.hasErrors()) {
             return bindingResult.getAllErrors();
         }

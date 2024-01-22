@@ -16,7 +16,7 @@ import static shootingstar.typing.entity.QText.*;
 
 public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     private final JPAQueryFactory queryFactory;
-    private final int RECORD_PER_PAGE = 5;
+    private final int RECORD_PER_PAGE = 6;
 
     public TextRepositoryCustomImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
@@ -74,7 +74,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                 .where(langEq(language), containTitle(search))
                 .fetchFirst();
 
-        long totalPage = totalRecord / RECORD_PER_PAGE + 1;
+        long totalPage = totalRecord / RECORD_PER_PAGE;
+        if (totalRecord % RECORD_PER_PAGE != 0) totalPage += 1;
 
         PageInformationDto pageInformationDto = new PageInformationDto(totalRecord, currentPage, totalPage);
 

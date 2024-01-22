@@ -53,9 +53,9 @@ public class TypingService {
         PageInformationDto pageInformationDto = textRepository.findPageInformation(language, pageNumber, search);
         List<FindAllTextsByLangDto> texts = textRepository.findAllTextsByLang(language, pageNumber, sortingType, search);
 
-        if (texts.size() == 0) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
+//        if (texts.size() == 0) {
+//            throw new NoSuchElementException("등록된 지문이 없습니다.");
+//        }
 
         PageListByLangDto pageListByLangDto = new PageListByLangDto(pageInformationDto, texts);
         return convertJSON(pageListByLangDto);
