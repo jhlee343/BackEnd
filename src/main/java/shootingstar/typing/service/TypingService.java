@@ -173,6 +173,10 @@ public class TypingService {
         return lines;
     }
 
+    /**
+     * PYTHON 주석 제거
+     * #, """, '''
+     */
     private String removeAnnoByPYTHON(String line) {
         String cleanedLine = line.replaceAll("#.*", "");
 
@@ -207,6 +211,10 @@ public class TypingService {
         return cleanedLine;
     }
 
+    /**
+     * JAVA, CPP, JS 주석 제거
+     * //, /* *\/
+     */
     public String removeAnnoByLang(String line) {
         String cleanedLine = line.replaceAll("//.*", "");
 
