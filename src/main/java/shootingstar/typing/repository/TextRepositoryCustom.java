@@ -16,7 +16,7 @@ public interface TextRepositoryCustom {
 
     PageInformationDto findPageInformation(CodeLanguage language, long currentPage, String search);
 
-    FindDesTextByIdDto findDesTextById(CodeLanguage language, Long id);
+    FindDesTextByIdDto findDesTextByLangAndId(CodeLanguage language, Long id);
 
-    FindTypingTextDto findTypingTextById(CodeLanguage language, Long id);
+    FindTypingTextDto findTypingTextByLangAndId(CodeLanguage language, Long id);
 }

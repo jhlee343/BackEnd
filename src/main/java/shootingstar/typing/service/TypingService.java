@@ -61,7 +61,7 @@ public class TypingService {
      * {title, description, desText} 조회
      */
     public FindDesTextByIdDto getDesText(CodeLanguage language, Long id) {
-        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(language, id);
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextByLangAndId(language, id);
         if (desTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
@@ -73,7 +73,7 @@ public class TypingService {
      * typingText 조회
      */
     public FindTypingTextDto getTypingText(CodeLanguage language, Long id) {
-        FindTypingTextDto findTypingTextDto = textRepository.findTypingTextById(language, id);
+        FindTypingTextDto findTypingTextDto = textRepository.findTypingTextByLangAndId(language, id);
         if (findTypingTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
