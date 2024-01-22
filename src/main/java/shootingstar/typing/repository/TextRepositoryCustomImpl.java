@@ -47,6 +47,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     public List<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, int pageNumber, SortingType sortingType, String search) {
         int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
         OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
+        OrderSpecifier orderSpecifierDate = createOrderSpecifier(sortingType);
 
         return queryFactory
                 .select(new QFindAllTextsByLangDto(
