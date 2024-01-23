@@ -3,8 +3,12 @@ package shootingstar.typing.repository;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
@@ -16,16 +20,11 @@ import static shootingstar.typing.entity.QText.*;
 
 public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     private final JPAQueryFactory queryFactory;
-    private final int RECORD_PER_PAGE = 5;
 
     public TextRepositoryCustomImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    /**
-     * P1: 언어별 랜덤 지문 선택
-     * 정렬없이 언어별 모든 지문 리스트 반환
-     */
     @Override
     public List<FindAllTextsByLangDto> findAllByLang(CodeLanguage language) {
         return queryFactory
@@ -37,6 +36,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.author))
                 .from(text)
                 .where(langEq(language))
+                .orderBy()
                 .fetch();
     }
 
@@ -44,11 +44,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
      * P2: 언어별 페이지
      */
     @Override
-    public List<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, int pageNumber, SortingType sortingType, String search) {
-        int firstIndex = (pageNumber - 1) * RECORD_PER_PAGE;
-        OrderSpecifier orderSpecifier = createOrderSpecifier(sortingType);
-
-        return queryFactory
+    public Page<FindAllTextsByLangDto> findAllTextsByLang(CodeLanguage language, SortingType sortingType, String search, Pageable pageable) {
+        List<FindAllTextsByLangDto> content = queryFactory
                 .select(new QFindAllTextsByLangDto(
                         text.id,
                         text.title,
@@ -57,28 +54,17 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
                         text.author))
                 .from(text)
                 .where(langEq(language), containTitle(search))
-                .orderBy(orderSpecifier)
-                .offset(firstIndex)
-                .limit(RECORD_PER_PAGE)
+                .orderBy(createOrderSpecifier(sortingType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
-    }
 
-    /**
-     * P2: 언어별 페이지 정보
-     */
-    @Override
-    public PageInformationDto findPageInformation(CodeLanguage language, long currentPage, String search) {
-        long totalRecord = queryFactory
+        JPAQuery<Long> countQuery = queryFactory
                 .select(text.count())
                 .from(text)
-                .where(langEq(language), containTitle(search))
-                .fetchFirst();
+                .where(langEq(language), containTitle(search));
 
-        long totalPage = totalRecord / RECORD_PER_PAGE + 1;
-
-        PageInformationDto pageInformationDto = new PageInformationDto(totalRecord, currentPage, totalPage);
-
-        return pageInformationDto;
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     /**
@@ -88,8 +74,8 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
         return switch (sortingType) {
             case TITLE_ASC -> new OrderSpecifier<>(Order.ASC, text.title);
             case TITLE_DESC -> new OrderSpecifier<>(Order.DESC, text.title);
-            case DATE_ASC -> new OrderSpecifier<>(Order.ASC, text.id);
-            case DATE_DESC -> new OrderSpecifier<>(Order.DESC, text.id);
+            case DATE_ASC -> new OrderSpecifier<>(Order.DESC, text.id);
+            case DATE_DESC -> new OrderSpecifier<>(Order.ASC, text.id);
         };
     }
 
@@ -97,7 +83,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
      * P3: 설명 페이지
      */
     @Override
-    public FindDesTextByIdDto findDesTextById(CodeLanguage language, Long id) {
+    public FindDesTextByIdDto findDesTextByLangAndId(CodeLanguage language, Long id) {
         return queryFactory
                 .select(new QFindDesTextByIdDto(
                         text.title,
@@ -110,7 +96,7 @@ public class TextRepositoryCustomImpl implements TextRepositoryCustom{
     }
 
     @Override
-    public FindTypingTextDto findTypingTextById(CodeLanguage language, Long id) {
+    public FindTypingTextDto findTypingTextByLangAndId(CodeLanguage language, Long id) {
         return queryFactory
                 .select(new QFindTypingTextDto(
                         text.typingText,
