@@ -1,6 +1,5 @@
 package shootingstar.typing.batch;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -8,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +17,15 @@ public class CsvScheduleWriter implements ItemWriter<TextDto> {
     private final TextRepository textRepository;
 
     @Override
-    public void write(Chunk<? extends TextDto> chunk) throws Exception {
+    public void write(Chunk<? extends TextDto> chunk) {
         List<Text> scheduleList = new ArrayList<>();
 
         chunk.forEach(getScheduleDto -> {
             try {
                 Text text = getScheduleDto.toEntity();
                 scheduleList.add(text);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException("텍스트 변환 중 오류가 발생했습니다." + e.getMessage());
             }
         });
 

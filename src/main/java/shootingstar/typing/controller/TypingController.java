@@ -1,21 +1,23 @@
 package shootingstar.typing.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
+import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
 import shootingstar.typing.repository.dto.FindDesTextByIdDto;
 import shootingstar.typing.repository.dto.FindTypingTextDto;
 import shootingstar.typing.service.TypingService;
 import shootingstar.typing.service.dto.SaveTextDto;
 
-import java.util.NoSuchElementException;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api")
@@ -39,21 +41,25 @@ public class TypingController {
 
     /**
      * P2 : 언어별 페이지 리스트
-     * lang 에 대한 {totalRecord, currentPage, totalPage} 및
-     * lang 의 {id, title, description} 리스트 전달
+     * lang 에 대한 {totalElements, number, totalPages} 및
+     * lang 에 대한 content 리스트 전달
+     * content : Array{id, title, description, createDate, author}
+     * totalElements : 총 개수
+     * totalPages : 총 페이지 수
+     * number : 현재 페이지
      * @param lang 선택한 코드 언어
-     * @param page 선택한 페이지 번호
      * @param sortingType 선택한 정렬 방법
      * @param search 검색어
-     * @return OK : JSON 으로 변환한 객체 리스트 전송
+     * @param pageable (page, pageSize) ?page=으로 전달, pageSize 기본 6개로 지정
+     * @return OK : Page 객체 전달
      */
     @GetMapping("/{lang}/list")
-    public ResponseEntity<String> getLangListPage(@PathVariable("lang") CodeLanguage lang,
-                                                    @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+    public ResponseEntity<?> getLangListPage(@PathVariable("lang") CodeLanguage lang,
                                                     @RequestParam(value = "sortingType", required = false, defaultValue = "DATE_ASC") SortingType sortingType,
-                                                    @RequestParam(value = "search", required = false, defaultValue = "") String search) throws JsonProcessingException {
+                                                    @RequestParam(value = "search", required = false, defaultValue = "") String search,
+                                                    @PageableDefault(size = 6) Pageable pageable) {
         log.info("API {}", "getLangListPage");
-        String langPage = service.getLangPage(lang, page, sortingType, search);
+        Page<FindAllTextsByLangDto> langPage = service.getLangPage(lang, sortingType, search, pageable);
         return ResponseEntity.ok().body(langPage);
     }
 
@@ -88,16 +94,11 @@ public class TypingController {
     }
 
     @PostMapping("/save")
-    public Object saveText(@Validated @ModelAttribute SaveTextDto saveTextDto, BindingResult bindingResult) throws JsonProcessingException {
+    public ResponseEntity<Object> saveText(@Validated @ModelAttribute SaveTextDto saveTextDto, BindingResult bindingResult) throws Exception {
         log.info("API {}", "saveText");
         if (bindingResult.hasErrors()) {
-            return bindingResult.getAllErrors();
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        return service.save(saveTextDto);
-    }
-
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        return ResponseEntity.ok().body(service.save(saveTextDto));
     }
 }

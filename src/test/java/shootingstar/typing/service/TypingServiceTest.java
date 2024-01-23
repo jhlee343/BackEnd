@@ -1,19 +1,14 @@
 package shootingstar.typing.service;
 
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.repository.TextRepository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@EnableBatchProcessing
 class TypingServiceTest {
     @Autowired
     private TextRepository textRepository;
