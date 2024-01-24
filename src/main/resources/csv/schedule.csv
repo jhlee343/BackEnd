@@ -1,0 +1,4498 @@
+﻿JAVA,비밀지도,집합과 맵/,"class Solution {
+    public String[] solution(int n, int[] arr1, int[] arr2) {
+        
+        String[] Map = new String[n];
+        
+        for (int i = 0; i < n; i++) {
+            String binaryRow = Integer.toBinaryString(arr1[i] | arr2[i]); // 두 배열의 원소를 OR 연산하고, 이진수로 변환 (Integer.toBinaryString: 10->2진수 변환)
+            binaryRow = String.format(""%"" + n + ""s"", binaryRow).replace(' ', '0'); // 필요한 경우 앞부분을 0으로 채우기 (5칸이 되도록 공백을 만들고 공백을 0으로 변환)
+            binaryRow = binaryRow.replace('1', '#').replace('0', ' '); // 1은 #으로, 0은 공백으로 변환
+            Map[i] = binaryRow;
+        }
+
+        return Map;
+    }
+}",bingo4xg
+JAVA,시저암호,구현/,"class Solution {
+    public String solution(String s, int n) {
+        
+        StringBuilder result = new StringBuilder();
+        
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i); // i번째 문자 분리
+
+            if (Character.isLetter(ch)) {
+                char base = Character.isLowerCase(ch) ? 'a' : 'A'; // 문자 대소문자 구별(a=97, A=65)
+                int offset = (ch - base + n) % 26; // 알파벳의 개수=26 으로 나눠 순환되게 함
+                ch = (char) (base + offset); // 뺐던 base를 다시 더해 문자로 변환
+            }
+
+            result.append(ch); // result에 문자 추가
+        }
+
+        return result.toString();
+    }
+}",bingo4xg
+JAVA,과일장수,배열/,"import java.util.Arrays;
+import java.util.Collections;
+
+class Solution {
+    public int solution(int k, int m, int[] score) {
+        
+        // int[] 배열을 Integer[] 배열로 변환하고 내림차순 정렬
+        Integer[] scoreObjects = Arrays.stream(score).boxed().toArray(Integer[]::new);
+        Arrays.sort(scoreObjects, Collections.reverseOrder());
+
+        int lowAppleSum = 0;
+        int result = 0;
+
+        for(int i = 1; i*m <= scoreObjects.length; i++) {
+            lowAppleSum += scoreObjects[i*m-1];
+        }
+
+        result = lowAppleSum * m;
+        return result;
+    }
+}",bingo4xg
+JAVA,바탕화면 정리,구현/,"class Solution {
+    public int[] solution(String[] wallpaper) {
+        
+        // wallpaper 최대값이 50이므로 luy 초기값을 51로 두어 파일이 0좌표에 있을 때도 식별하게 한다
+        // lux 초기값을 바탕화면 최대값인 50보다 큰 수로 설정(51)
+        int lux = 51, luy = 51, rdx = 0, rdy = 0; 
+        
+        // 모든 격자 순회
+        for(int i = 0; i < wallpaper.length; i++) {
+            for(int j = 0; j < wallpaper[i].length(); j++) {
+                if(wallpaper[i].charAt(j) == '#') {         // 파일이 발견되면
+                    if(luy != 51) {                          // 마지막에 나온 파일의 y좌표+1값을 rdy에 저장
+                        rdy = i+1;
+                    } 
+                    else {                                  // 처음 나온 파일이면 y값을 luy에 저장 (파일이 1개인 경우를 대비해 rdy값에 i+1)
+                        luy = i;
+                        rdy = i+1;
+                    }
+
+                    // 파일의 x값 최소값을 lux에, 최대값을 rdx에 저장
+                    // 파일의 x값이 lux보다 작으면 lux에, rdx보다 크면 x값에 1을 더해 rdx에 저장
+                    // 파일이 1개 또는 왼쪽 방향으로만 업데이트될 경우를 대비해 if문 2개를 사용 
+                    if(j < lux) lux = j; 
+                    if(j > rdx) rdx = j; 
+                }
+            }
+        }
+        
+        int[] result = {luy, lux, rdy, rdx+1}; // rdx의 값이 가장 오른쪽에 있는 파일의 좌표를 결정하므로 마지막에 rdx+1 해준다
+        return result;
+    }
+}",bingo4xg
+JAVA,명예의 전당(1),스택/큐/덱/,"import java.util.PriorityQueue;
+
+public class Solution {
+    public int[] solution(int k, int[] score) {
+        PriorityQueue<Integer> hallOfFame = new PriorityQueue<>(); // 자동으로 정렬되는 큐
+        int[] result = new int[score.length]; // 발표 점수 배열 크기 = score 배열 크기
+
+        for (int i = 0; i < score.length; i++) {
+            if (hallOfFame.size() < k) { // score 원소가 명예의 전당 자리를 모두 못 채웠을 때
+                hallOfFame.add(score[i]); // 새로운 점수 추가
+            } else {
+                if (score[i] > hallOfFame.peek()) { // score 원소가 명예의 전당 최고 우선순위(첫번째) 값보다 클 때
+                    hallOfFame.remove(); // 가장 낮은 점수(첫번째 값) 제거하고
+                    hallOfFame.add(score[i]); // 새로운 점수 추가
+                }
+            }
+            result[i] = hallOfFame.peek(); // 해당 날짜의 최하위 점수 기록
+        }
+
+        return result;
+    }
+}",bingo4xg
+JAVA,폰켓몬,집합과 맵/,"import java.util.HashSet;
+
+class Solution {
+    public int solution(int[] nums) {
+        
+        /* 
+        1. 포켓몬 종류 파악
+        2. nums 배열의 절반과 포켓몬 종류 중 더 작은 값 출력 
+        */
+        HashSet<Integer> types = new HashSet<>();
+        for (int num : nums) {
+            types.add(num);
+        }
+        
+        return Math.min(nums.length / 2, types.size());
+    }
+}",bingo4xg
+JAVA,모의고사,배열/,"import java.util.ArrayList;
+
+class Solution {
+    public int[] solution(int[] answers) {
+        // 1,2,3번 수포자 패턴
+        int[] supo1 = {1, 2, 3, 4, 5};
+        int[] supo2 = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] supo3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        // 수포자들의 점수
+        int score1 = 0, score2 = 0, score3 = 0;
+        
+        for (int i = 0; i < answers.length; i++) {
+            if (answers[i] == supo1[i % supo1.length]) score1++;
+            if (answers[i] == supo2[i % supo2.length]) score2++;
+            if (answers[i] == supo3[i % supo3.length]) score3++;
+        }
+        
+        int maxScore = Math.max(score1, Math.max(score2, score3));
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        if (score1 == maxScore) list.add(1);
+        if (score2 == maxScore) list.add(2);
+        if (score3 == maxScore) list.add(3);
+        // 배열로 변환
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+
+        return result;
+    }
+}",bingo4xg
+JAVA,기사단원의 무기,배열/,"import java.util.ArrayList;
+
+class Solution {
+    public int solution(int number, int limit, int power) {
+        /*
+        1. 기사 배열 만들기
+        2. 1부터 number값까지 차례로 나눈 몫의 값(약수의 개수)을 knight에 기록
+        3. 기록된 배열 중 limit을 넘는 값은 power값으로 치환
+        4. knight 원소 전부 더하기
+        */
+        
+        int[] knight = new int[number]; // 각 기사의 약수개수를 저장할 배열
+        for(int i = 1; i <= number; i++) {
+            // 1~number의 배수인 knight 원소들의 값을 1씩 올리기(약수의 개수 1씩 올리기)
+            for(int j = 1; i*j <= number; j++) {
+                knight[i*j-1]++;
+            }
+        }
+        
+        int sum = 0; // 철의 합
+        for(int k = 0; k < number; k++) {
+            // 약수개수가 limit값보다 클 경우 power로 조정 후 더하기
+            if(knight[k] > limit) {
+                knight[k] = power;
+            }
+            sum += knight[k];
+        }
+        
+        return sum;
+    }
+}",bingo4xg
+JAVA,크레인 인형뽑기 게임,배열/,"import java.util.ArrayList;
+
+class Solution {
+    public int solution(int[][] board, int[] moves) {
+        
+        ArrayList<Integer> bucket = new ArrayList<Integer>();
+        int count = 0;
+        
+        for(int i = 0; i < moves.length; i++) {
+            int move = moves[i] - 1;
+            
+            for(int j = 0; j < board.length; j++) {
+                if(board[j][move] != 0) {
+                    int doll = board[j][move];
+                    board[j][move] = 0;
+                    
+                    bucket.add(doll); // 인형 먼저 추가
+            
+                    if(bucket.size() >= 2 && bucket.get(bucket.size() - 1).equals(bucket.get(bucket.size() - 2))) {
+                        bucket.remove(bucket.size() - 1); // 마지막 인형 제거(size값과 index값은 서로 다른 개념이다)
+                        bucket.remove(bucket.size() - 1); // 이전에 추가된 인형 제거
+                        count += 2;
+                    }
+                    break;
+                } 
+            }
+        }
+        
+        return count;
+    }
+}",bingo4xg
+JAVA,콜라즈 추측,연산/,"class Solution {
+    public int solution(int num) {
+        
+        long n = num;
+        int count = 0;
+        if(num == 1) { return 0; }
+        
+        for(int i=0; i<500; i++) {
+            if(n %2 == 0) { n /= 2; } 
+            else { n = n * 3 + 1; }
+            count++;
+                
+            if(n == 1) { return count; }
+        }
+        return -1;
+    }
+}",bingo4xg
+JAVA,없는 숫자 더하기,연산/,"class Solution {
+    public int solution(int[] numbers) {
+        
+        int sum = 0;
+
+        for(int i : numbers)
+	        sum += i;
+        
+        return (45 - sum);
+    }
+}",bingo4xg
+JAVA,두 수의 차,연산/,"class Solution {
+    public int solution(int num1, int num2) {
+        return num1-num2;
+    }
+}",bingo4xg
+JAVA,추억 점수,연산/,"class Solution {
+    public int[] solution(String[] name, int[] yearning, String[][] photo) {
+        
+        // int 배열 answer를 photo의 길이만큼 초기화
+        int[] answer = new int[photo.length]; //int[] answer = {};
+        for(int i=0; i<photo.length; i++) {
+            for(int j=0; j<photo[i].length; j++) {
+                for(int k=0; k<name.length; k++) {
+                    if(name[k].equals(photo[i][j])) { // if(name[k] == photo[i][j])
+                        answer[i] += yearning[k];
+                    } 
+                }
+            }
+        }
+        return answer;
+    }
+}",bingo4xg
+JAVA,문자열 섞기,연산/ 문자열/,"class Solution {
+    public String solution(String str1, String str2) {
+        String answer = """";
+
+        for(int i = 0; i < str1.length(); i++)
+        {
+            answer+= str1.charAt(i);
+            answer+= str2.charAt(i);
+        }
+
+        return answer;
+    }
+}",bingo4xg
+JAVA,중복된 숫자 개수,연산/,"class Solution {
+    public int solution(int[] array, int n) {
+        
+        int result = 0;
+        
+        for(int i = 0; i < array.length; i++)
+        {
+            if (array[i] == n)
+                result++;
+        }
+        
+        return result;
+    }
+}",bingo4xg
+JAVA,두 수의 합,연산/,"class Solution {
+    public int solution(int num1, int num2) {
+        return num1 + num2;
+    }
+}",bingo4xg
+JAVA,달리기 경주,집합과 맵/,"import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    
+    public String[] solution(String[] players, String[] callings) {
+        // 각 선수의 이름과 위치를 매핑하는 해시맵
+        Map<String, Integer> playerPositions = new HashMap<>();
+        
+        for (int i = 0; i < players.length; i++) 
+        {
+            playerPositions.put(players[i], i);
+        }
+
+        for (String calling : callings) // 첫번째 반복: calling = kai
+        {
+            // 호출된 선수의 현재 위치
+            int currentPosition = playerPositions.get(calling); // currentPosition = kai의 등수 = 3
+            
+            // 앞선 선수와 위치를 교환
+            String playerInFront = players[currentPosition - 1]; // playerInFront = poe
+            players[currentPosition - 1] = calling;
+            players[currentPosition] = playerInFront;
+
+            // 위치가 교환된 두 선수의 새 위치를 업데이트
+            playerPositions.put(calling, currentPosition - 1);
+            playerPositions.put(playerInFront, currentPosition);
+        }
+
+        return players;
+    }
+}",bingo4xg
+JAVA,옹알이(1),배열/,"class Solution {
+    public int solution(String[] babbling) {
+        int answer = 0;
+        
+        for(int i=0; i<babbling.length; i++)
+        {
+            babbling[i] = babbling[i].replace(""aya"", "" "");
+            babbling[i] = babbling[i].replace(""ye"", "" "");
+            babbling[i] = babbling[i].replace(""woo"", "" "");
+            babbling[i] = babbling[i].replace(""ma"", "" "");
+            
+            babbling[i] = babbling[i].replace("" "", """");
+            
+            if(babbling[i].equals(""""))
+            {
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+}
+```",bingo4xg
+JAVA,문자열 겹쳐쓰기,구현/,"class Solution {
+    public String solution(String my_string, String overwrite_string, int s) {
+        
+        StringBuilder sb = new StringBuilder(my_string);
+        
+        for (int i = 0; i < overwrite_string.length(); i++) 
+        {
+            sb.setCharAt(s + i, overwrite_striang.charAt(i));
+        }
+        
+        return sb.toString();
+        
+        // String start = my_string.substring(0, s);
+        // String end = my_string.substring(s + overwrite_string.length());
+        // return start + overwrite_string + end;
+    }
+}",bingo4xg
+JAVA,실패율,연산/구현/,"import java.util.Arrays;
+import java.util.Comparator;
+
+public class Solution {
+    public int[] solution(int N, int[] stages) 
+    {
+        Stage[] stageArray = new Stage[N];
+
+        // 사용자의 수
+        int totalUsers = stages.length;
+
+        for (int i = 1; i <= N; i++) 
+        {
+            int count = 0;
+
+            // 해당 스테이지에 멈춰있는 사용자 수 계산
+            for (int j = 0; j < stages.length; j++) 
+            {
+                if (stages[j] == i) 
+                {
+                    count++;
+                }
+            }
+            
+            // 실패율 계산
+            double failRate;
+            if (totalUsers == 0) 
+            {
+                failRate = 0;
+            } 
+            else 
+            {
+                failRate = (double) count / totalUsers;
+            }
+
+            stageArray[i - 1] = new Stage(i, failRate);
+
+            totalUsers -= count;
+        }
+
+        // 정렬: 실패율 내림차순, 실패율 같을 시 스테이지 번호 오름차순
+        Arrays.sort(stageArray, new Comparator<Stage>() {
+            @Override
+            public int compare(Stage o1, Stage o2) {
+                if (o1.failRate < o2.failRate) {
+                    return 1;
+                } else if (o1.failRate > o2.failRate) {
+                    return -1;
+                } else {
+                    return o1.stageNumber - o2.stageNumber;
+                }
+            }
+        });
+
+        // 결과 배열 생성
+        int[] result = new int[N];
+        for (int i = 0; i < N; i++) 
+        {
+            result[i] = stageArray[i].stageNumber;
+        }
+
+        return result;
+    }
+
+    class Stage 
+    {
+        int stageNumber;
+        double failRate;
+
+        Stage(int stageNumber, double failRate) {
+            this.stageNumber = stageNumber;
+            this.failRate = failRate;
+        }
+    }
+}",bingo4xg
+JAVA,flag에 따라 다른 값 반환하기,연산/,"class Solution {
+    public int solution(int a, int b, boolean flag) {
+        
+        if (flag == true)
+            return a + b;
+        else if (flag == false)
+            return a - b;
+
+        /*
+        if (flag)
+            return a + b;
+        else
+            return a - b;
+        */
+    }
+}",bingo4xg
+JAVA,문자 리스트를 문자열로 변환하기,문자열/,"class Solution {
+    public String solution(String[] arr) {
+        String answer = """";
+
+        for(int i = 0; i < arr.length; i++ /*String a : arr*/) 
+        {
+            answer += arr[i];
+        }
+
+        return answer;
+        
+        // return String.join("""", arr);
+    }
+}",bingo4xg
+JAVA,홀짝 구분하기,연산/ 구현/,"import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        
+        if(n % 2 == 0)
+        {
+            System.out.println(n + "" is even"");
+        }
+        else
+        {
+            System.out.println(n + "" is odd"");
+        }
+        
+        // System.out.print(n + "" is ""+(n % 2 == 0 ? ""even"" : ""odd""));
+    }
+}",bingo4xg
+JAVA,약수의 합,연산/,"class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        
+//         for(int i=1; i<=n; i++)
+//         {
+//             if(n%i == 0)
+//             {
+//                 answer = answer + i;
+//             }
+//         }
+        
+//         return answer;
+                
+        for(int i=2; i<n; i++)
+        {
+            if(n%i == 0)
+            {
+                answer = answer + i;
+            }
+        }
+        answer = answer + n + 1;
+        
+        return answer;
+    }
+}",bingo4xg
+JAVA,공배수,연산/,"class Solution {
+    public int solution(int number, int n, int m) {
+        /* int answer = 0;
+        return answer; */
+        
+        if (number % n == 0 && number % m == 0)
+        {
+            return 1;
+        }
+        else return 0;
+    }
+}",bingo4xg
+JAVA,문자열 곱하기,구현/,"class Solution {
+    public String solution(String my_string, int k) {
+        String answer = """";
+                
+        for (int i = 0; i < k; i++) 
+        {
+            answer += my_string;
+        }
+        
+        return answer;
+        
+        // return my_string.repeat(k);
+    }
+}
+```",bingo4xg
+JAVA,덧칠하기,연산/ 구현/,"class Solution {
+    public int solution(int n, int m, int[] section) {
+        int count = 0;
+        int lastPainted = 0;
+
+        for (int i = 0; i < section.length; i++) {
+            if (section[i] > lastPainted) {
+                count++;
+                lastPainted = section[i] + m - 1;
+            }
+        }
+
+        return count;
+    }
+}",bingo4xg
+JAVA,문자열 돌리기,구현/,"import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String a = sc.next();
+        
+        for(int i=0; i<a.length(); i++)
+            System.out.println(a.charAt(i));
+    }
+}",bingo4xg
+JAVA,문자열 붙여셔 출력하기,구현/,"import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String a = sc.next();
+        String b = sc.next();
+        
+        System.out.print(a+b);
+    }
+}",bingo4xg
+JAVA,수박수박수박수박수박수?,구현/,"class Solution {
+    public String solution(int n) {
+        String answer = """";
+        
+        for(int i=0; i<n; i++)
+        {
+            if(i%2==0)
+                answer = answer + ""수"";
+            else
+                answer = answer + ""박"";
+        }
+        return answer;
+    }
+}",bingo4xg
+JAVA,파일 합치기,DP/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+
+        StringTokenizer st;
+        for (int t = 0; t < T; t++) {
+            int n = Integer.parseInt(br.readLine());
+
+            int[] files = new int[n + 1]; // files[i] = 1번 부터 i번 까지의 합
+            int[][] dp = new int[n + 1][n + 1]; // dp[s][e] = s 부터 e까지 합할 때 최소한의 비용
+
+            st = new StringTokenizer(br.readLine());
+
+            files[1] = Integer.parseInt(st.nextToken()); // 1번까지의 합은 1번이랑 같다.
+            for (int i = 2; i <= n; i++) { // 2번 부터 n번 까지
+                int val = Integer.parseInt(st.nextToken()); // 현재 번호의 값
+                files[i] = val + files[i - 1]; // 현재번호의 값과 이전 번호까지의 누적합을 더하면 현재 번호까지의 누적합
+            }
+
+            for (int bundle = 1; bundle < n; bundle++) { // 시작 번호부터 몇장을 묶을 것인가?
+                for (int start = 1; start + bundle <= n; start++) { // 시작 번호가 몇번인가?
+                    int end = start + bundle;
+                    // bundle 이 증가하기 때문에 똑같은 [start][end]를 탐색할 일은 없다.
+                    dp[start][end] = Integer.MAX_VALUE; // min 비교를 위해 [start][end] 는 최대값
+
+                    // 시작 번호부터 끝 번호 사이의 범위
+                    for (int middle = start; middle < end; middle++) { // middle 지점을 기준으로 나눈다.
+                        dp[start][end] = Math.min( // start ~ end 구간의 최소 비용을 구한다.
+                                dp[start][end], // 이미 저장된 start ~ end 구간의 비용
+                                dp[start][middle] + dp[middle + 1][end] + (files[end] - files[start - 1])
+                                // middle 을 기준으로 나눠서 계산 후 start ~ end 의 부분합을 더한다.
+                        );
+                    }
+                }
+            }
+            System.out.println(dp[1][n]); 
+        }
+    }
+}
+
+// 주어진 소설 파일들은 연속적인 장이다. 그러므로 정렬해서 푸는 방식은 불가능, 무조건 연속된 두 파일을 합쳐야한다.
+// 마지막으로 파일을 합칠 때는 전체 합이랑 동일한 값
+
+// 1번 예제 40 30 30 50
+// 40 + ((30 + 30) + 50)
+// 40 + (30 + (30 + 50))
+// (40 + 30) + (30 + 50)
+// ((40 + 30) + 30) + 50
+
+// 40 30 30 3개로 가정
+// 40 + (30 + 30) -> DP[1][1] + DP[2][3]
+// (40 + 30) + 30 -> DP[1][2] + DP[3][3]
+// DP[1][3] = Math.min(DP[1][1] + DP[2][3], DP[1][2] + DP[3][3])
+
+// 40 30 30 50
+// 40 + ((30 + 30) + 50) -> DP[1][1] + DP[2][4]
+// 40 + (30 + (30 + 50)) -> DP[1][1] + DP[2][4]
+    // DP[2][4] = 30 + 30 + 50
+    // 30 + (30 + 50) -> DP[2][2] + DP[3][4]
+    // (30 + 30) + 50 -> DP[2][3] + DP[4][4]
+    // DP[2][4] = Math.min(DP[2][2] + DP[3][4], DP[2][3] + DP[4][4])
+
+// (40 + 30) + (30 + 50) -> DP[1][2] + DP[3][4]
+
+// (40 + (30 + 30)) + 50 -> DP[1][3] + DP[4][4]
+// ((40 + 30) + 30) + 50 -> DP[1][3] + DP[4][4]
+    // 40 + (30 + 30) -> DP[1][1] + DP[2][3]
+    // (40 + 30) + 30 -> DP[1][2] + DP[3][3]
+    // DP[1][3] = Math.min(DP[1][1] + DP[2][3], DP[1][2] + DP[3][3])
+
+// m = 1; m < e; m++
+// DP[s][e] = Math.min(DP[s][e], DP[s][m] + DP[m + 1][e])
+
+// 최적의 방법으로 파일을 묶는 점화식은 찾았는데... 비용은 어쩌지
+// f[n + 1] : f[1] = 40, f[2] = 70, f[3] = 100, f[4] = 150
+// 1번에서 2번까지의 합은 f[2] = 70
+// 1번에서 3번까지의 합은 f[3] = 100
+// 2번에서 3번까지의 합은 f[3] - f[1] = 60
+// 2번에서 4번까지의 합은 f[4] - f[1] = 110
+
+// DP[1][4]
+// DP[1][1] + DP[2][4] -> 1부터 4까지의 합 f[4]가 필요 -> f[4] - f[0]
+    // DP[1][1]
+        // 1부터 1까지 = f[1] - f[0]
+    // DP[2][4]
+        // DP[2][2] + DP[3][4]
+            // 2부터 4까지 = f[4] - f[1]
+        // DP[2][3] + DP[4][4]
+            // 2부터 4까지 = f[4] - f[1]
+// DP[1][2] + DP[3][4]
+// DP[1][3] + DP[4][4]
+
+// m = 1; m < e; m++
+// DP[s][e] = Math.min(DP[s][e], DP[s][m] + DP[m + 1][e] + (f[e] - f[s - 1]))",dnjs2721
+JAVA,회장뽑기,그래프 이론/그래프 탐색/너비 우선 탐색/최단 경로/플로이드–워셜/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n;
+    static ArrayList<Integer>[] map;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
+
+        map = new ArrayList[n + 1]; // 친구 정보를 저장할 리스트 배열, map[i] 는 i의 친구들을 나타낸다.
+        for (int i = 1; i <= n; i++) { // 1부터 n까지
+            map[i] = new ArrayList<>(); // 리스트 초기화
+        }
+
+        StringTokenizer st;
+        while (true) { // a, b 가 둘 다 -1 이면 입력 종료
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken()); // 사람 A
+            int b = Integer.parseInt(st.nextToken()); // 사람 B
+            if (a == -1 && b == -1) break; // a, b 둘 다 -1일 경우 입력 종료
+            map[a].add(b); // a에 친구 b를 추가
+            map[b].add(a); // b에 친구 a를 추가
+        }
+
+        int minScore = Integer.MAX_VALUE; // 현재까지의 최소 점수
+        ArrayList<Integer> chairMans = new ArrayList<>(); // 회장 후보를 담는 리스트
+        for (int i = 1; i <= n; i++) { // 1 부터 n 까지 탐색
+            int res = bfs(i); // i 번째 사람을 기준으로 회장 점수를 계산한다.
+            if (res <= minScore) { // 만약 회장 점수가 이전 minScore 보다 작거나 같을 때
+                if (res < minScore) { // 작을 경우
+                    minScore = res; // minScore 를 현재 회장 점수로 변경
+                    chairMans.clear(); // 현재 회장 후보를 삭제한다.
+                }
+                chairMans.add(i); // 회장 후보에 i 추가
+            }
+        }
+        System.out.printf(""%d %d\n"", minScore, chairMans.size()); // 회소 점수와 회장 후보의 수를 출력
+        chairMans.sort((o1, o2) -> o1 - o2); // 회장 후보를 오름 차순으로 정렬
+        for (int chairMan : chairMans) {
+            System.out.print(chairMan + "" ""); // 회장 후보 출력
+        }
+    }
+
+    public static int bfs(int start) {
+        int[] visited = new int[n + 1]; // 방문배열 겸 각 인덱스가 몇다리 친구인지 저장하는 배열
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start); // 큐에 시작 번호를 넣는다.
+        // 방문배열[시작번호] 에는 1을 넣는다.
+        // 1을 넣으면 1다리를 거쳐 친구가 된다는 말이지만 방문체크를 위해 1을 넣어야만 한다.
+        // 후에 나온 결과에 -1을 해주면 올바를 결과를 얻을 수 있다.
+        visited[start] = 1;
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 반복
+            Integer startNode = q.poll(); // 탐색 시작 노드
+            for (int node : map[startNode]) { // 탐색 시작 노드와 친구들인 노드들을 탐색
+                if (visited[node] != 0) continue; // 만약 친구 노드가 0이 아니라면, 즉 이미 방문한 노드라면 통과
+                // 친구 노드의 방문 값은 탐색 시작 노드의 방문 값 + 1이다.
+                visited[node] = visited[startNode] + 1; // 탐색 시작 노드에서 한다리 걸쳐야지만 알 수 있는 노드라는 뜻
+                q.add(node); // 큐에 친구 노드를 추가하고 탐색을 이어간다.
+            }
+        }
+
+        // 방문 배열중 최대 값을 구한다.
+        // 이 값이 start 번호를 기준으로 했을 때 start 의 회장 점수가 된다.
+        // 방문배열[시작번호] 에 1을 넣었기 때문에 -1을 해준다.
+        return Arrays.stream(visited).max().orElse(0) - 1; // orElse 가 동작하는 일은 없지만 하지 않으면 OptionalInt 를 반환햐야 한다.
+    }
+}",dnjs2721
+JAVA,뱀과 사다리 게임,그래프 이론/ 그래프 탐색/ 너비 우선 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n, m; // 사다리와 뱀의 수
+    static Map<Integer, Integer> map = new HashMap<>(); // 사다리와 뱀의 위치 정보
+    static int[] visited; // 방문 배열 겸 해당칸에 도달 하기 위한 최소 주사위 갯수
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        // 모든 칸은 최대 하나의 사다리 또는 뱀을 가지고 있다.
+        // 즉 사다리로 이어진 두 칸 에는 뱀의 시작 과 끝이 있을 수 없으며, 그 반대도 동이라하다.
+        // 이 말은 사다리와 뱀이 겹치지 않으니 구분하지 않아도 된다는 뜻이다.
+        for (int i = 0; i < n + m; i++) {
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            map.put(x, y); // x 칸에 도착하면 y 칸으로 이동한다.
+        }
+
+        visited = new int[101]; // 1부터 100까지의 방문 배열 초기화
+        bfs(1); // 1부터 탐색 시작
+
+        // 항상 100번칸에 도착한다.
+        System.out.println(visited[100] - 1); // 100번칸의 최소 주사위를 출력한다.
+    }
+
+    public static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        visited[start] = 1; // 원래 시작은 0이지만 편의를 위해 1로 저장, 후에 -1 처리
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 탐색
+            Integer now = q.poll(); // 현재 위치
+            for (int i = 1; i <= 6; i++) { // 1부터 6까지의 주사위 눈금, 해당 수 만큼 이동한다
+                int next = now + i; // 주사위 눈금과 현재 위치를 더한 값
+                if (next > 100) continue; // 만약 next 가 100을 넘는다면 이동이 불가능하다.
+                // map 의 getOrDefault 를 통해 만약 해당칸에 사다리나 뱀이 있다면 사다리나 뱀을 통해 이동한 뒤의 위치를 반환
+                // 사다리가 없다면 next 의 값을 가진다.
+                Integer afterRolling = map.getOrDefault(next, next); // 이동 후 위치
+                // 만약 이동 후 위치가 방문한 곳이라면 최소 주사위가 아니기에 넘어간다.
+                if (visited[afterRolling] == 0) {  // 이동 후 위치가 방문한적 없는 위치라면
+                    visited[afterRolling] = visited[now] + 1; // 주사위를 굴리기 전의 위치의 주사위 수 + 1을 한 값을 저장한다.
+                    q.add(afterRolling); // 큐에 추가하여 탐색을 이어간다.
+                }
+            }
+        }
+    }
+}
+
+// 주사위의 각 면에는 1부터 6까지 수가 하나씩 있다.
+// 게임의 크기는 10x10, 1 ~ 100
+// 주사위의 수만큼 이동해야 한다.
+// 100번 칸을 넘어가면 이동 불가능
+// 도착 칸이 사다리라면 사다리를 타고 이동
+// 뱀이 있는 칸에 도착하면 뱀을 따라 내려감
+// 1번 칸에서 시작해 100번 칸에 도착하자.
+// 최소한으로 주사위를 굴려서!",dnjs2721
+JAVA,특정 거리의 도시 찾기,그래프 이론/그래프 탐색/ 너비 우선 탐색 / 데이크스트라 /최단 경로/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n, m, k, x;
+    static ArrayList<Integer>[] map;
+    static int[] res;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken()); // 도시의 개수
+        m = Integer.parseInt(st.nextToken()); // 도로의 개수
+        k = Integer.parseInt(st.nextToken()); // 거리 정보
+        x = Integer.parseInt(st.nextToken()); // 시작 도시
+
+        res = new int[n + 1]; // res[i]는 시작 도시로 부터 거리
+        map = new ArrayList[n + 1]; // map[i]는 i 도사에서 갈 수 있는 도시들
+        for (int i = 0; i <= n; i++) {
+            map[i] = new ArrayList<>();
+        }
+
+        for (int i = 0; i < m; i++) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            map[a].add(b); // a에서 갈 수 있는 도시로 b 추가
+        }
+
+        bfs(x); // 탐색 시작
+
+        if (map[0].size() == 0) { // k 거리의 도시가 없다면
+            System.out.println(-1); // -1 출력
+        } else {
+            map[0].sort((o1, o2) -> o1 - o2); // k 거리의 도시를 오름 차순으로 정렬
+            for (int num : map[0]) {
+                System.out.println(num); // 순서대로 출력
+            }
+        }
+    }
+
+    public static void bfs(int start) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        res[start] = 1; // 시작 도시의 거리는 0이지만 방문 체크를 위해 1로 설정
+        while (!q.isEmpty()) { // 큐가 빌때까지 반복
+            Integer startNode = q.poll(); // 탐색 시작 도시
+            for (Integer node : map[startNode]) { // 탐색 시작 도시에서 갈 수 있는 도시들
+                if (res[node] == 0) { // 만약 아직 방문하지 않은 도시라면
+                    int cost = res[startNode] + 1; // 시작 도시에서 해당 도시 까지의 거리(실제로 해당 값에 - 1 한 값이 실제 거리이다.)
+                    if (cost - 1 == k) {
+                        map[0].add(node); // cost - 1이 k 와 같다면 map[0]에 추가
+                    }
+                    res[node] = cost; // 해당 도시의 거리를 저장
+                    q.add(node); // 큐에 추가
+                }
+            }
+        }
+    }
+}",dnjs2721
+JAVA,케빈 베이컨의 6단계 법칙,그래프 이론 / 그래프 탐색 / 너비 우선 탐색 / 최단 경로 / 플로이드–워셜/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n; // 유저의 수
+    static ArrayList<Integer>[] map; // 유저의 친구 관계를 나타내는 지도
+    static int[] visited; // 친구가 된 사람들 체크, 각 인덱스에는 친구가 되기까지의 단계가 저장된다.
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken()); // 유저의 수 저장
+        int m = Integer.parseInt(st.nextToken()); // 친구 관계의 수
+
+        map = new ArrayList[n + 1]; // 유저의 수 + 1만큼 List 배열 생성
+        for (int i = 1; i <= n; i++) {
+            map[i] = new ArrayList<>(); // map[i] = i번 유저의 친구들
+        }
+
+        for (int i = 0; i < m; i++) { // 친구 관계의 수 만큼 반복
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken()); // a, b 는 친구
+            int b = Integer.parseInt(st.nextToken());
+            map[a].add(b); // a 의 친구 목록에 b 추기
+            map[b].add(a); // b 의 친구 목록에 a 추가
+        }
+
+        int count = Integer.MAX_VALUE; // 현재 까지 가장 적은 케빈 베이컨의 수, min 비교를 위해 초기값은 MAX_VALUE
+        int answer = 0; // 가장 적은 케빈 베이컨의 수를 가진 유저의 번호
+        for (int i = 1; i <= n; i++) { // 1번 유저부터 n번 유저까지 반복
+            int res = bfs(i); // i 유저의 케빈 베이컨의 수
+            if (count > res) { // 현재 까지의 가장 적은 케빈 베이컨의 수 보다 i 유저의 케빈 베이컨의 수가 적다면
+                count = res; // count 값을 i 유저의 케빈 베이컨의 수로 변경
+                answer = i; // 가장 적은 케빈 베이컨의 수를 가진 유저의 번호를 i로 변경
+            }
+        }
+
+        System.out.println(answer); // 가장 적은 케빈 베이컨의 수를 가진 유저의 번호 출력
+    }
+
+    public static int bfs(int start) {
+        visited = new int[n + 1]; // 친구가 된 사람들 체크 배열 초기화
+        visited[start] = -1; // 시작 유저의 친구 단계 -1로 설정, 0은 친구 아님, 그 이외는 친구로 간주
+
+        Queue<Integer> q = new LinkedList<>(); // 큐 생성
+        for (Integer node : map[start]) { // 시작 유저의 친구 목록을 탐색
+            q.add(node); // 큐에 친구 추가
+            visited[node] = 1; // 해당 node 유저는 1단계만에 친구가 된다.
+        }
+
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 반복, 큐가 비었다는 뜻은 모든 유저가 친구가 됐다는 뜻이다.
+            Integer startNode = q.poll(); // 큐에서 유저를 가지고 온다.
+            for (Integer node : map[startNode]) { // 큐에서 가지고 온 유저의 친구 목록을 탐색
+                if (visited[node] == 0) { // 만약 node 유저가 친구가 아니라면
+                    q.add(node); // 큐에 친구 추가
+                    visited[node] = visited[startNode] + 1; // 해당 node 유저의 친구 단계는 startNode 의 친구 단계 + 1 단계이다.
+                }
+            }
+        }
+        
+        // 모든 친구 단계를 더한 뒤 반환
+        return Arrays.stream(visited).sum() + 1; // 제일 처음 시작했던 유저의 친구 단계가 -1이었기에 + 1을 해준다.
+        // 모든 시작 유저가 -1을 가지기에 사실상 + 1을 안해줘도 된다.
+    }
+}
+
+// 임의의 두 사람이 최소 몇 단계 만에 이어질 수 있는지",dnjs2721
+JAVA,A->B,그래프 이론 / 그리디 알고리즘 / 그래프 탐색 /너비 우선 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int A = Integer.parseInt(st.nextToken());
+        int B = Integer.parseInt(st.nextToken());
+
+				// 두 가지 방법의 풀이
+        System.out.println(solution1(A, B)); // BFS
+        System.out.println(solution2(A, B)); // Math
+    }
+
+    private static int solution1(int A, int B) {
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(A, 0)); // A 부터 탐색 시작
+
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 탐색 시작
+            Node node = q.poll(); // 현재 수와 탐색 횟수
+            int num = node.num;  // 현재 수
+
+            if (num <= 99999999) { // 인트형에서 뒤에 1을 추가했을 때 표현할 수 있는 최대는 99999999이다 -> 999999991
+                int numPlus1 = Integer.parseInt(num + ""1""); // num 뒤에 1을 추가 ex) 12 -> 121
+                if (numPlus1 == B) { // 해당 조건이 처음 통과 했을 때가 연산의 최소값이다.
+                    return node.count + 2; // 현재까지 연산횟수 + 이번 연산 횟수 1 + 1 반환
+                } else if (numPlus1 < B) { // numPlus1이 B보다 작을 경우
+                    q.add(new Node(numPlus1, node.count + 1)); // 큐에 추가
+                }
+            }
+
+            if (num * 2 == B) { // 해당 조건이 처음 통과 했을 때가 연산의 최소값이다.
+                return node.count + 2; // 현재까지 연산횟수 + 이번 연산 횟수 1 + 1 반환
+            } else if (num * 2 < B) { // num * 2가 B보다 작을 경우
+                q.add(new Node(num * 2, node.count + 1)); // 큐에 추가
+            }
+        }
+
+        return -1; // 만들 수 없는 경우
+    }
+
+    public static class Node {
+        int num;
+        int count;
+
+        public Node(int num, int count) {
+            this.num = num;
+            this.count = count;
+        }
+    }
+
+    private static int solution2(int A, int B) {
+        int count = 0; // 연산 횟수
+
+        while (A <= B) { // A가 B도다 작거나 같을 때 까지
+            if (A == B) { // 두 수가 같다면
+                return count + 1; // 연산횟수 + 1 반환
+            }
+
+            // 만약 B에서 2를 나눴을 때 나머지가 없다면
+            if (B % 2 == 0) {
+                count++; // 연산횟수 + 1
+                B /= 2; // B = B / 2
+
+            // 만약 B에서 10을 나눴을 때 나머지가 1이라면
+            } else if (B % 10 == 1) {
+                count++; // 연산횟수 + 1
+                B /= 10; // B = B / 10 -> 1의 자리수 버림
+
+            // 위 두 조건에 충족이 안된다면 만들 수 없는 수
+            // 즉 끝 자리가 3, 5, 7, 9 인 경우 불가능 하다. : 2를 곱해서 나올 수 없는 수
+            } else
+                break;
+        }
+
+        return -1;  // 만들 수 없는 경우
+    }
+}",dnjs2721
+JAVA,아기 상어,구현 / 그래프 이론 / 그래프 탐색 / 시뮬레이션 / 너비 우선 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n; // 공간의 가로, 세로 크기
+    static Node startNode = null; // 탐색 시작 지점
+    static int[][] map; // 공간
+    static boolean[][] visited; // 방문배열
+    static int[] dx = {0, -1, 1, 0}; // 상, 좌, 우, 하 이동 정보
+    static int[] dy = {-1, 0, 0, 1}; // 상, 좌, 우, 하 이동 정보
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        n = Integer.parseInt(br.readLine());
+
+        map = new int[n][n];
+
+        StringTokenizer st;
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if (map[i][j] == 9) { // 공간의 상태가 9라면 아기 상어가 있는 지점
+                    startNode = new Node(j, i, 0); // 아기 상어가 있는 지점을 처음 탐색 시작 지점으로 설정
+                }
+            }
+        }
+
+        System.out.println(bfs()); // 탐색을 시작하고 결과값을 출력
+    }
+
+    public static int bfs() {
+        int sharkSize = 2; // 아기상어의 크기, 처음은 2이다.
+        int ateCount = 0; // 아기상어가 현재 먹은 생선의 수
+        int turn = 0; // 현재까지 소요한 시간
+
+        // 아기 상어는 상화좌우로 이동하며, 자신과 가장 가까운 물고리에게 이동한다.
+        PriorityQueue<Node> q = new PriorityQueue<>((o1, o2) ->
+                o2.time != o1.time // 탐생 시작 지점에서 부터 o1, o2 의 거리(도달 시간)을 비교한다.
+                        ? o1.time - o2.time // 만약 두 위치의 거리가 같지 않다면 가까운 위치가 우선순위를 가진다.
+                        : o1.y != o2.y // 만약 두 위치의 거리가 동일하다면 가장 위 쪽, 즉 y값이 낮은 위치가 우선순위를 가진다.
+                        ? o1.y - o2.y : o1.x - o2.x // 만약 y 값 까지 같다면 가장 왼쪽, 즉 x값이 낮은 위치가 우선순위를 가진다.
+        );
+        map[startNode.y][startNode.x] = 0; // 처음 시작 지점은 상어가 있던 위치, 빈칸이 된다.
+
+        while (true) { // 상어가 물고기를 먹지 못할 때 까지 반복
+            visited = new boolean[n][n]; // 방문 배열, 상어가 물고기를 먹으면 초기화 된다.
+
+            q.add(new Node(startNode.x, startNode.y, 0)); // 큐에 탐색 시작지점의 위치정보, 탐색지점으로 부터 도달 시간에 대한 정보를 가진 노드를 추가한다.
+            visited[startNode.y][startNode.x] = true; // 탐색시작지점을 방문 체크한다.
+
+            boolean flag = false; // 상어가 물고기를 먹지못하면 false, 상어가 물고기를 먹었다면 true
+
+            while (!q.isEmpty()) { // 큐가 빌 때 까지 반복
+                startNode = q.poll(); // 우선순위가 가장 높은 노드를 뽑아 탐색 시작 지점으로 지정한다.
+
+                // 만약 탐색 지점이 0(빈칸)이 아니고 탐색 지점에 있는 물고기의 크기가 현재 상어의 크기보다 작다면 -> 상어가 물고기를 먹는다.
+                if (map[startNode.y][startNode.x] != 0 && map[startNode.y][startNode.x] < sharkSize) {
+                    map[startNode.y][startNode.x] = 0; // 물고기를 먹었기에 빈칸이 된다.
+                    ateCount++; // 먹은 생선의 수 + 1
+                    // 현재까지 소요한 시간에 탐색지점 노드의 시간을 더한다.
+                    // 현재 startNode.time 은 해당 탐색에서 처음 상어가 있던 위치에서 startNode 의 위치까지 도달한 시간이다.
+                    // 큐에서 우선순위를 가진 노드를 가지고 왔기 때문에 해당 로직에 처음 들어오는 노드가 가장 가까운 물고기이다.
+                    turn += startNode.time;
+                    // 물고기를 먹었다고 표시
+                    flag = true;
+                    break; // 현재 while 문을 빠져나간다.
+                }
+
+                for (int i = 0; i < 4; i++) {
+                    int nx = startNode.x + dx[i];
+                    int ny = startNode.y + dy[i];
+                    if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+                    if (visited[ny][nx]) continue;
+                    if (map[ny][nx] > sharkSize) continue;
+                    q.add(new Node(nx, ny, startNode.time + 1));
+                    visited[ny][nx] = true;
+                }
+            }
+            if (!flag) { // 만약 상어가 물고기를 먹지 못했다면 엄마 상어를 불러야한다.
+                break; // 바깥 while 문을 빠져나간다.
+            }
+
+            // 아기상어가 물고기를 먹었다면
+            if (sharkSize == ateCount) { // 현재 상어의 크기와 먹은 물고기의 수가 같다면
+                sharkSize++; // 상어의 크기를 1 증가시킨다.
+                ateCount = 0; // 먹은 물고기의 수를 0으로 초기화 한다.
+            }
+            // 다음 탐색을 위해 큐를 초기화 한다.
+            // 이 때 큐는 초기화 되었지만 아기상어가 마지막으로 도달한 startNode 에 대한 정보는 아직 저장 되어 있기에
+            // startNode 의 위치를 탐색 시작지점으로 설정하여 탐색을 이어나간다.
+            q.clear();
+        }
+
+        return turn; // 엄마 상어를 불렀다면 지금까지 소요한 시간을 반환한다.
+    }
+
+    public static class Node {
+        int x;
+        int y;
+        int time;
+
+        public Node(int x, int y, int time) {
+            this.x = x;
+            this.y = y;
+            this.time = time;
+        }
+    }
+}",dnjs2721
+JAVA,1로 2만들기,다이나믹 프로그래밍 / 그래프 이론 / 그래프 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+				
+				int n = Integer.parseInt(br.readLine());
+
+        ArrayList<Integer>[] dp = new ArrayList[n + 1]; // dp[idx] 에는 idx 를 1로 최소한의 연산을 사용해 만들 때 포함되어 있는 수를 가진다.
+
+        dp[1] = new ArrayList<>(); // 1을 1로 만들 때
+        dp[1].add(1); // 1만 포함된다.
+
+        for (int i = 2; i <= n; i++) { // 2부터 n을 1로 만들 때
+            // i - 1 연산은 항상 수헹되기에 dp[i - 1]을 가지고 온다.
+            ArrayList<Integer> tmp = new ArrayList<>(dp[i - 1]); // List 에 i를 추가해 주기 위해 new 를 통해 가지고 온다.
+            if (i % 3 == 0) { // i가 3으로 나누어 떨어질 때
+                if (tmp.size() > dp[i / 3].size()) { // tmp 의 크기가 dp[i / 3]의 크기보다 클 때
+                    // i 를 1로 만들 때 이전 연산 보다 i / 3 의 연산이 적은 연산을 사용하기 때문에 tmp 값을 바꿔준다.
+                    tmp.clear(); // 이전 값을 지운다.
+                    tmp.addAll(dp[i / 3]); // dp[i / 3]의 값으로 수정한다.
+                }
+            }
+            if (i % 2 == 0) {  // i가 3로 나누어 떨어질 때
+                if (tmp.size() > dp[i / 2].size()) { // tmp 의 크기가 dp[i / 2]의 크기보다 클 때
+                    tmp.clear();  // i 를 1로 만들 때 이전 연산 보다 i / 2 의 연산이 적은 연산을 사용하기 때문에 tmp 값을 바꿔준다.
+                    tmp.addAll(dp[i / 2]); // dp[i / 2]의 값으로 수정한다.
+                }
+            }
+            tmp.add(i); // tmp 에 i를 추가해 연산에 포함된 수를 추가해 준다.
+            dp[i] = tmp; // dp[i]를 tmp 로 설정한다.
+        }
+
+        bw.write(dp[n].size() - 1 + ""\n""); // 자기 자신은 연산 횟수에 포함되지 않기에 -1을 한 뒤 연산 횟수를 BufferedWriter 에 저징한다.
+        for (int i = dp[n].size() - 1; i >= 0; i--) { // dp[n]에는 오름차순으로 수가 저장되어 있기에 반대로 순환한다.
+            bw.write(dp[n].get(i) + "" ""); // BufferedWriter 에 순서대로 저장
+        }
+        bw.close(); // BufferedWriter 를 종료하고 저장된 문자들을 한번에 출력
+    }
+}
+```",dnjs2721
+JAVA,점프,DP/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine()); // 게임판의 가로 세로 길이
+
+        int[][] map = new int[n][n]; // 게임판, map[i][j]에는 (i, j) 위치에서 이동해야하는 거리가 저장되어 있다.
+        long[][] dp = new long[n][n]; // dp[i][j]에는 (i, j)에 도달 한 경우의 수를 나타낸다.
+
+        StringTokenizer st;
+        for (int i = 0; i < n; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < n; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken()); // 입략빋은 게임판의 정보를 저장한다.
+            }
+        }
+
+        dp[0][0] = 1; // (0, 0) 에서 (n - 1, n - 1)로 이동하는것이 목적이기에 (0, 0)은 1이다.
+        for (int i = 0; i < n; i++) { // 게임판 전체구역 탐색
+            for (int j = 0; j < n; j++) {
+                if (map[i][j] == 0) continue; // 만약 게임판의 탐색지점이 0이라면 해당지점에서는 진헹이 불가능하다. continue
+                int val = map[i][j]; // map[i][j]에서 이동해야하는 거리
+                // 아래로 이동
+                if (i + val < n) { // 만약 i + val 이 n보다 작다면 -> 게임판 범위 안
+                    // i + val == n - 1 && j == n - 1 -> 이동지역이 도착지점이거나
+                    // map[i + val][j] != 0 -> 이동지역이 0(종착지점)이 아니라면
+                    // map[n - 1][n - 1]은 항상 0이기에 || 연산을 사용했다.
+                    if ((i + val == n - 1 && j == n - 1) || map[i + val][j] != 0) {
+                        // 탐색지역에 도달할 수 있는 모든 경우가 이동지역에 도달 할 수 있기에
+                        dp[i + val][j] += dp[i][j]; // dp[이동지역] 에 dp[탐색지역] 의 값을 더한다.
+                    }
+                }
+
+                // 오른쪽 이동
+                if (j + val < n) { // 만약 j + val 이 n보다 작다면 -> 게임판 범위 안
+                    // i == n - 1 && j + val == n - 1 -> 이동지역이 도착지점이거나
+                    // map[i][j + val] != 0 -> 이동지역이 0(종착지점)이 아니라면
+                    // map[n - 1][n - 1]은 항상 0이기에 || 연산을 사용했다.
+                    if ((i == n - 1 && j + val == n - 1) || map[i][j + val] != 0) {
+                        // 탐색지역에 도달할 수 있는 모든 경우가 이동지역에 도달 할 수 있기에
+                        dp[i][j + val] += dp[i][j]; // dp[이동지역] 에 dp[탐색지역] 의 값을 더한다.
+                    }
+                }
+            }
+        }
+
+        // 가장 왼쪽 위 칸에서 가장 오른쪽 아래 칸으로 문제의 규칙에 맞게 갈 수 있는 경로의 개수를 출력한다.
+        System.out.println(dp[n - 1][n - 1]);
+    }
+}",dnjs2721
+JAVA,인구 이동,구현 / 그래프 이론 / 그래프 탐색 / 시뮬레이션 /너비 우선 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int N; // 땅의 가로, 세로 크기
+    static int L; // 인구 이동을 해야하는 범위
+    static int R; // 인구 이동을 해야하는 범위
+    static int[][] A; // 각 나라별 인구수를 저장하는 배열
+    static int[][] association; // 각 나라별 연합 번호를 나타내는 배열
+    static int[] dx = {0, 0, -1, 1}; // 상하좌우 이동에 대한 x좌표 값
+    static int[] dy = {-1, 1, 0, 0}; // 상하좌우 이동에 대한 y좌표 값
+    static Map<Integer, Integer> map; // 엽합별 평균 인구수
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        L = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
+
+        A = new int[N][N];
+
+        // N * N 땅에 각 나라의 인구수를 입력받아 저장한다.
+        for (int i = 0; i < N; i ++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                A[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        int answer = 0; // 인구 이동이 발생한 일 수
+        // checkUnion == 인구 이동이 가능한 국가가 있는지 검사
+        while (checkUnion()) { // 인구 이동이 가능하다면
+            answer++; // 인구 이동이 발생한 일 수 + 1
+            for (int i = 0; i < N; i++) { // 전체 국가 탐색
+                for (int j = 0; j < N; j++) { // 전체 국가 탐색
+                    // 해당 국가의 인구수를 연합의 인구 평균으로 변경한다.
+                    A[i][j] = map.get(association[i][j]);
+                }
+            }
+        }
+
+        // 인구 이동이 발생한 일 수 출력
+        System.out.println(answer);
+    }
+
+    /**
+     * 인구 이동이 가능한 국가가 있는지 확인하는 메서드
+     * @return true -> 인구 이동이 가능하다.
+     * @return false -> 인구 이동이 불가능하다.
+     */
+    public static boolean checkUnion() {
+        association = new int[N][N]; // 연합을 나타내며, 0이 아닌 수는 소속된 연합의 번호를 나타낸다.
+        map = new HashMap<>(); // key 는 연합의 번호이며, value 로 연합의 평균 인구수를 가진다.
+
+        boolean flag = false; // 인구 이동이 가능한지 확인하는 flag
+        int countryNum = 1; // 연합 넘버링을 위한 countryNum
+
+        for (int i = 0; i < N; i++) { // 전체 국가 탐색
+            for (int j = 0; j < N; j++) { // 전체 국가 탐색
+                if (association[i][j] != 0) continue; // 이미 연합국에 소속된 국가라면 continue
+                else { // 엽합에 소속되지 않은 국가라면
+                    // checkAssociation -> 연합국이 있는지 검사
+                    // 연합국이 있다면 true 를 반환하며 연합국이 있다는 뜻은 인구이동이 가능하다는 뜻이다.
+                    if (checkAssociation(j, i, countryNum)) flag = true;
+                    countryNum++; // 다음 연합 넘버링을 위해 + 1
+                }
+            }
+        }
+
+        return flag;
+    }
+
+    /**
+     * 엽합국이 있는지 검사하고 있다면 넘버링을 하는 메서드
+     * @return true -> 연합국이 있다.
+     * @return false -> 연합국이 없다.
+     */
+    public static boolean checkAssociation(int x, int y, int countryNum) {
+        boolean flag = false; // 연합국이 있는지 확인하는 flag
+        int count = 1; // 연합국의 수, 1은 자기 자신을 나타낸다.
+        int sum = A[y][x]; // 연합국의 총 인구수
+
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(x, y)); // 큐에 시작 국가를 넣는다.
+        association[y][x] = countryNum; // 시작 국가의 연합 넘버를 설정한다.
+
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 반복
+            Node node = q.poll(); // 탐색 시작 국가의 위치
+            for (int i = 0; i < 4; i++) { // 상하좌우 이동
+                int nx = node.x + dx[i]; // 탐색할 위치의 x 좌표
+                int ny = node.y + dy[i]; // 탐색할 위치의 y 좌표
+
+                if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue; // 땅의 범위를 벗어났을 때 continue
+                if (association[ny][nx] != 0) continue; // 탐색 국가가 이미 연합국에 소속되어 있을 때 continue
+
+                // 탐색 시작 국가와 탐색하는 국가의 인구 수 차이
+                // 절대값을 사용해 음수를 방지한다.
+                int diff = Math.abs(A[ny][nx] - A[node.y][node.x]);
+                if (L <= diff && diff <= R) { // 만약 두 국가의 인구 수 차이가 L아성 R이하 라면
+                    association[ny][nx] = countryNum; // 탐색하는 국가를 같은 연합으로 설정
+                    sum += A[ny][nx]; // 해당 연합에 대한 전체 인구수에 탐색하는 국가의 인구수를 더한다.
+                    count++; // 해당 연합에 소속된 국가의 수 + 1
+                    flag = true; // 연합이 형성 됐기 때문에 flag 를 true 로 변경
+                    q.add(new Node(nx, ny)); // q에 탐색한 국가를 넣어 탐색을 이어간다.
+                }
+            }
+        }
+
+        // countryNum 연합에 대한 탐색이 끝이 났다면
+        // 연합국이 없다면 탐색시작 국가 혼자인 연합이 된다.
+        // 결론적으로 모든 국가에 대한 연합이 생긴다.
+        map.put(countryNum, sum / count); // map 에 countryNum 연합의 평균 인구수를 추가한다.
+        return flag;
+    }
+
+    public static class Node {
+        int x;
+        int y;
+
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+}
+
+
+// n * n
+// 각 땅에는 나라가 하나씩 존재
+// map[i][j] 는 i 행 j열에 사는 사람
+// 모든 국경선은 정사각형 -> 이동가능 상하좌우
+// 아래 방법에 의해 인구 이동이 없을 때까지 반복
+// 1. 인접한 두 구역의 차가 L <= num <= R 이라면 국경을 연다.
+// 2. 인접한 국가들을 모두 검사하고 국경을 연다.
+// 3. 국경이 열려 이동할 수 있는 국가들을 연합이라 칭하고, 해당 국가들의 인구수는 모든 연합의 인구수/연합에 속한 나라의 수
+// 4. 연합을 해제하고 국경을 닫는다.",dnjs2721
+JAVA,타일 채우기,다이나믹 프로그래밍 / 비트마스킹/,"import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
+        if (n % 2 == 1) {
+            System.out.println(0);
+            return;
+        }
+
+        int[] dp = new int[n + 1];
+        dp[2] = 3;
+        for (int i = 4; i <= n; i += 2) {
+            // i 를 크기가 [i - 2]와 [2] 인 두 구역으로 나눈 경우.
+            dp[i] = (dp[i - 2] * dp[2]); // i - 2에서 가능한 경우의 수 X 2 에서 가능한 경우의 수
+
+            // n이 4 이상 일 때 n - 2와 상관없는 n에 대한 예외 모양 2개가 나온다.
+            dp[i] += 2; // i에 대한 예외 모양 2개
+
+            // i 를 크기가 [j] 와 [i - j] 인 두 구역으로 나눈 경우
+            // [j] 가 [i - 2] 와 같은 경우는 위에서 탐색한 부분이기에 [j] 가 [i - 4] 와 같을 때 까지만 탐색한다.
+            for (int j = 2; j <= i - 4; j += 2) {
+                dp[i] += dp[j] * 2; // j 에서 가능한 경우의 수 X i - j 에 대한 예외 모양 2개
+            }
+        }
+
+        System.out.println(dp[n]);
+    }
+}",dnjs2721
+JAVA,가장 긴 증가하는 부분 수열 4,DP/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine()); // 수열의 크기
+
+        int[] map = new int[n]; // 수열 저장 배열
+        Node[] dp = new Node[n]; // dp[i] 는 map[i] 를 포함한 가징 긴 증가하는 부분 수열
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            map[i] = Integer.parseInt(st.nextToken()); // 주어진 수열을 저장
+            dp[i] = new Node();
+            dp[i].add(map[i]); // dp[i] 의 초기값으로 map[i]를 가진다.
+        }
+
+        int maxLen = 1; // 수열의 크기가 최소 1부터 시작
+        int maxIdx = 0; // dp 중 부분 수열의 길이가 가장긴 idx
+
+        for (int i = 1; i < n; i++) { // dp[0] 은 map[0] 밖에 없기에 따로 탐색하지 않고 1 ~ n-1 까지 탐색한다.
+            for (int j = 0; j < i; j++) { // i 보다 작은 인덱스들을 탐색한다.
+                if (map[i] > map[j]) { // map[i] 가 map[j] 보다 클 때
+                    if (dp[i].getSize() < dp[j].getSize() + 1) { // 현재 dp[i]의 길이보다 dp[j] + 1의 길이가 크다면
+                        dp[i].update(dp[j]); // dp[i]의 값을 dp[j]의 값으로 변경
+                        dp[i].add(map[i]); // dp[i]에 map[i] 추가
+                    }
+                }
+            }
+            if (dp[i].getSize() > maxLen) { // 만약 dp[i]의 길이가 maxLen 보다 크다면
+                maxLen = dp[i].getSize(); // maxLen 변경
+                maxIdx = i; // maxIdx 변경
+            }
+        }
+
+        System.out.println(maxLen);
+        for (int num : dp[maxIdx].list) { // 가장 긴 부분 수열을 가진 dp[maxIdx]
+            System.out.print(num + "" "");
+        }
+    }
+
+    public static class Node {
+        List<Integer> list;
+
+        public Node() {
+            this.list = new ArrayList<>();
+        }
+
+        public void add(int num) {
+            this.list.add(num);
+        }
+
+        public void update(Node node) {
+            this.list = new ArrayList<>(node.list);
+        }
+
+        public int getSize() {
+            return list.size();
+        }
+    }
+}",dnjs2721
+JAVA,내려가기,다이나믹 프로그래밍 / 슬라이딩 윈도우/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+
+        // dp[0][i][j] 는 [i][j] 위치에 도달 했을 때 얻을 수 있는 최대 점수
+        // dp[1][i][j] 는 [i][j] 위치에 도달 했을 때 얻을 수 있는 최소 점수
+        int[][][] dp = new int[2][n][3];
+
+        StringTokenizer st;
+        for (int i = 0; i < n; i++) { // n 줄 만큼 입력
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < 3; j++) { // 가로의 크기는 3으로 정해져있다.
+                // 메모리 사용을 줄이기 위해 dp 배열만 사용한다.
+                int now = Integer.parseInt(st.nextToken()); 
+                if (i == 0) { // i == 0 이란 뜻은 처음 시작 지점을 뜻한다.
+                    dp[0][i][j] = now; // 처음 시작 지점이기에 자신의 값이 최대 점수다.
+                    dp[1][i][j] = now; // 처음 시작 지점이기에 자신의 값이 최소 점수다.
+                } else { // 1 <= i < n
+                    if (j == 0) { // i 줄의 첫번째 칸
+                        // 첫번째 칸에 도달 하기 위에서는 이전 줄의 첫번째 칸, 두번째 칸 중에서 출발하여야 한다.
+                        // 이전 줄의 출발 지점 중 최대, 최소 점수에서 출발 할 때 현재 위치의 점수가 최대, 최소 점수가 된다,
+                        dp[0][i][j] = now + Math.max(dp[0][i - 1][0], dp[0][i - 1][1]);
+                        dp[1][i][j] = now + Math.min(dp[1][i - 1][0], dp[1][i - 1][1]);
+                    } else if (j == 1) { // i 줄의 두번째 칸
+                        // 두번째 칸에 도달 하기 위에서는 이전 줄의 첫번째 칸, 두번째 칸, 세번째 칸 중에서 출발하여야 한다.
+                        // 이전 줄의 출발 지점 중 최대, 최소 점수에서 출발 할 때 현재 위치의 점수가 최대, 최소 점수가 된다,
+                        dp[0][i][j] = now + Math.max(dp[0][i - 1][0], Math.max(dp[0][i - 1][1], dp[0][i - 1][2]));
+                        dp[1][i][j] = now + Math.min(dp[1][i - 1][0], Math.min(dp[1][i - 1][1], dp[1][i - 1][2]));
+                    } else { // i 줄의 세번째 칸
+                        // 세번째 칸에 도달 하기 위에서는 이전 줄의 두번째 칸, 세번째 칸 중에서 출발하여야 한다.
+                        // 이전 줄의 출발 지점 중 최대, 최소 점수에서 출발 할 때 현재 위치의 점수가 최대, 최소 점수가 된다,
+                        dp[0][i][j] = now + Math.max(dp[0][i - 1][1], dp[0][i - 1][2]);
+                        dp[1][i][j] = now + Math.min(dp[1][i - 1][1], dp[1][i - 1][2]);
+                    }
+                }
+            }
+        }
+
+        // 마지막 줄 중 가장 큰 점수
+        int max = Arrays.stream(dp[0][n - 1]).max().orElse(0);
+        // 마지막 줄 중 가장 작은 점수
+        int min = Arrays.stream(dp[1][n - 1]).min().orElse(0);
+
+        System.out.printf(""%d %d"", max, min);
+    }
+}",dnjs2721
+JAVA,동전 2,DP/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
+
+        // dp[i] 는 i원을 만들 때 사용한 동전의 최소 개수를 나타낸다.
+        int[] dp = new int[k + 1];  // k원까지 탐색을 하기 위해 k + 1의 크기로 생성
+        Arrays.fill(dp, 100001); // 만약 dp[i] 가 100001 이라면 아직까지 만들수 없는 금액이라는 뜻이다.
+
+        for (int i = 0; i < n; i++) { // n번 반복
+            int val = Integer.parseInt(br.readLine()); // 동전의 가치 저장
+            if (val > k) continue; // 만약 동전의 가치가 k 보다 크다면 탐색할 필요 없다.
+
+            dp[val] = 1; // 전달받은 동전의 가치를 만드는 돈전의 최소 개수는 자기 자신을 사용하는 것
+            for (int won = val; won <= k; won++) { // 전달 받은 가치에서 + 1원씩 k 원 까지 탐색한다.
+                if (dp[won - val] == 100001) continue; // dp[won - val] 가 100001 이라면 아직까지 만들수 없는 금액이라는 뜻이다.
+                // 이전에 dp[won]을 만들 수 있던 동전의 최소 개수와
+                // val 가치의 동전을 사용했을 때 만들 수 있는 동전의 개수를 비교한다.
+                dp[won] = Math.min(dp[won], dp[won - val] + 1);
+            }
+        }
+
+        if (dp[k] == 100001) { // 만약 dp[k] 가 100001 이라면 만들수 없는 금액이라는 뜻이다.
+            System.out.println(-1); // -1 출력
+        } else {
+            System.out.println(dp[k]); // k원을 만드는데 사용한 동전의 최소 개수를 출력
+        }
+    }
+}
+
+// 가치의 합이 k원이 되도록
+// 각각의 동전은 몇 개라도 사용가능
+// 최소한의 동전을 사용하자.
+
+// 3 15
+// 1
+// 2
+// 12
+// 라는 입력이 들어왔을 때
+
+// 1 입력 ->  dp[1 ~ 15] 의 값은 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 이다.
+
+// 2 입력 ->
+// dp[2] = Math.min(dp[2], dp[0] + 1) -> Math.min(2, 0 + 1) : 1 (2동전 1개)
+// dp[3] = Math.min(dp[3], dp[1] + 1) -> Math.min(3, 1 + 1) : 2 (1동전 1개, 2동전 1개)
+// dp[4] = Math.min(dp[4], dp[2] + 1) -> Math.min(4, 1 + 1) : 2 (2동전 1개, 2동전 1개)
+// dp[5] = Math.min(dp[5], dp[3] + 1) -> Math.min(5, 2 + 1) : 3 (1동전 1개, 2동전 1개, 2동전 1개)
+// ......
+// dp[1 ~ 15] 의 값은 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8 이다.
+
+// 12 입력 ->
+// dp[12] = Math.min(dp[12], dp[0] + 1) -> Math.min(6, 0 + 1) : 1 (12동전 1개)
+// dp[13] = Math.min(dp[13], dp[1] + 1) -> Math.min(7, 1 + 1) : 2 (1동전 1개, 12동전 1개)
+// dp[14] = Math.min(dp[14], dp[2] + 1) -> Math.min(7, 1 + 1) : 2 (2동전 1개, 12동전 1개)
+// dp[15] = Math.min(dp[15], dp[3] + 1) -> Math.min(8, 2 + 1) : 3 (1동전 1개, 2동전 1개, 12동전 1개)",dnjs2721
+JAVA,파이프 옮기기 1,다이나믹 프로그래밍/ 그래프 이론 / 그래프 탐색/,"import java.util.*;
+import java.io.*;
+
+public class Main {
+    static int n;
+    static int[][] map;
+    static int answer = 0;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // BufferedReader를 통해 입력값을 전달 받는다.
+
+        n = Integer.parseInt(br.readLine()); // 가로, 세로 크기 초기화
+        map = new int[n + 1][n + 1]; // 1 부터 n 까지의 인덱스를 사용하기 위헤 n + 1 크기로 초기화
+
+        StringTokenizer st; // StringTokenizer : 전달받은 문자열을 지정한 구분자로 문자열을 분리해주는 클래스
+        for (int i = 1; i <= n; i++) { // 1 부터 n 까지
+            st = new StringTokenizer(br.readLine()); // br을 통해 입력 받은 문자열을 분리, default 공백 문자들인 ""\t\n\r\t""
+            for (int j = 1; j <= n; j++) { // 1 부터 n 까지
+                map[i][j] = Integer.parseInt(st.nextToken()); // 분리된 문자열은 token 이라 불리며 순서대로 정수형으로 변환 후 map[i][j]에 저장
+            }
+        }
+
+        // 파이프의 오른쪽 끝부분의 위치 정보 y, x
+        // 현재 파이프가 놓인 방향을 나타내는 type -> 0: 가로, 1: 세로, 2: 대각선
+        // 처음 시작은 [1, 1] 과 [1, 2] 의 위치를 차지하고 있는 가로로 놓인 파이프이다.
+        dfs(1, 2, 0); // dfs 탐색 시작
+
+        System.out.println(answer);
+    }
+
+    public static void dfs(int y, int x, int type) {
+        if (x == n && y == n) { // n, n 위치에 도달했다면
+            answer++; // 도착 할 수 있는 경우의 수 + 1
+            return; // 탐색 종료
+        }
+
+        switch (type) {
+            case 0 : // 현재 파이프가 가로(→)로 놓여진 경우
+                // 가로로 놓인 파이프는 →, ↘ 방항으로 이동 가능하다.
+                // →, ↘ 방향 모두 [y][x + 1]의 위치가 포함되기에 [y][x + 1]의 위치가 탐색 가능한 지역이여야만 한다.
+                if (x + 1 > n) return;  // x + 1이 범위 밖 이라면 이동할 방법이 없기에 해당 파이프에 대한 탐색을 종료한다.
+                if (map[y][x + 1] == 1) return; // [y][x + 1]이 벽 이라면 이동할 방법이 없기에 해당 파이프에 대한 탐색을 종료한다.
+                dfs(y, x + 1, 0); // [y][x + 1]의 위치가 탐색 가능한 지역이라면 가로 방향으로 재귀 탐색
+
+                // ↘ 방향이 가능한지 겁사
+                if (y + 1 > n) return; // y + 1이 범위 밖 이라면 ↘ 방향으로 탐색이 불가능 하기에 해당 파이프에 대한 탐색을 종료한다.
+                if (map[y + 1][x] == 1 || map[y + 1][x + 1] == 1) return; // [y + 1][x], [y + 1][x + 1] 이 벽이라면 ↘ 방향으로 탐색이 불가능 하기에 해당 파이프에 대한 탐색을 종료한다.
+                dfs(y + 1, x + 1, 2); // ↘ 방향으로 탐색이 가능하다면 ↘ 방향으로 재귀 탐색
+                break;
+
+            case 1 :  // 현재 파이프가 세로(↓)로 놓여진 경우
+                // 세로로 놓인 파이프는 ↓, ↘ 방항으로 이동 가능하다.
+                // ↓, ↘ 방향 모두 [y + 1][x]의 위치가 포함되기에 [y + 1][x]의 위치가 탐색 가능한 지역이여야만 한다.
+                if (y + 1 > n) return; // y + 1이 범위 밖 이라면 이동할 방법이 없기에 해당 파이프에 대한 탐색을 종료한다.
+                if (map[y + 1][x] == 1) return; // [y + 1][x]가 벽 이라면 이동할 방법이 없기에 해당 파이프에 대한 탐색을 종료한다.
+                dfs(y + 1, x, 1); // [y + 1][x]의 위치가 탐색 가능한 지역이라면 세로 방향으로 재귀 탐색
+
+                // ↘ 방향이 가능한지 겁사
+                if (x + 1 > n) return; // x + 1이 범위 밖 이라면 ↘ 방향으로 탐색이 불가능 하기에 해당 파이프에 대한 탐색을 종료한다.
+                if (map[y][x + 1] == 1 || map[y + 1][x + 1] == 1) return; // [y][x + 1], [y + 1][x + 1] 이 벽이라면 ↘ 방향으로 탐색이 불가능 하기에 해당 파이프에 대한 탐색을 종료한다.
+                dfs(y + 1, x + 1, 2); // ↘ 방향으로 탐색이 가능하다면 ↘ 방향으로 재귀 탐색
+                break;
+
+            case 2 : // 현재 파이프가 대각선(↘)으로 놓아진 경우
+                 if (x + 1 <= n && map[y][x + 1] == 0) { // [y][x + 1] 이 탐색 가능한 지역일 경우
+                     dfs(y, x + 1, 0); // 가로 방향으로 재귀 탐색
+                 }
+                 if (y + 1 <= n && map[y + 1][x] == 0) { // [y + 1][x] 가 탐색 가능한 지역일 경우
+                     dfs(y + 1, x, 1); // 세로 방향으로 재귀 탐색
+
+                     if (x + 1 <= n && map[y][x + 1] == 0 && map[y + 1][x + 1] == 0) {  // 가로, 세로 방향 모두 가능 하고, map[y + 1][x + 1]가 빈 칸 인 경우
+                         dfs(y + 1, x + 1, 2); // 대각선 방향으로 재귀 탐색
+                     }
+                 }
+                 break;
+        }
+    }
+}",dnjs2721
+JAVA,수레 움직이기,깊이 우선 탐색/ 그래프 이론 /,"class Solution {
+    static int n, m; // 퍼즐판의 세로, 가로
+    static int[][] map; // 퍼즐판
+    static int[] dx = {0, 0, -1, 1}; // 가로에 대한 상하좌우 이동 값
+    static int[] dy = {-1, 1, 0, 0}; // 세로에 대한 상하좌우 이동 값
+    static Node goalRed; // 빨간 수레의 목표 지점
+    static Node goalBlue; // 파란 수레의 목표 지점
+    static int answer; // 정답
+
+    // visited[0] 사용하지 않음
+    // visited[1] 빨간 수레의 방문 기록
+    // visited[2] 파란 수레의 방문 기록
+    static boolean[][][] visited;
+
+    public static int solution(int[][] maze) {
+        n = maze.length;
+        m = maze[0].length;
+        map = maze;
+        visited = new boolean[3][n][m];
+        answer = Integer.MAX_VALUE; // 탐색 후 최소값 비교를 위해 Integer.MAX_VALUE 로 초기화
+
+        Node startRed = null, startBlue = null; // 빨간 수레, 파란 수레의 시작 지점
+        for (int i = 0; i < n; i++) { // 전달받은 퍼즐판에서 필요한 정보 탐색
+            for (int j = 0; j < m; j++) {
+                if (map[i][j] == 1) { // 빨간 수레
+                    startRed = new Node(j, i); // 빨간 수레 위치정보 저장
+                    visited[1][i][j] = true; // 빨간 수레의 시작점 방문 체크
+                }
+                else if (map[i][j] == 2) { // 파란 수레
+                    startBlue = new Node(j, i); // 파란 수레 위치정보 저장
+                    visited[2][i][j] = true; // 파란 수레의 시작점 방문 체크
+                }
+                else if (map[i][j] == 3) goalRed = new Node(j, i); // 빨간 수레에 대한 목표 지점의 위치정보 저장
+                else if (map[i][j] == 4) goalBlue = new Node(j, i); // 파란 수레에 대한 목표 지점의 위지정보 저장
+            }
+        }
+
+        // 빨간 수레의 시작 저점, 파란 수레의 시작 지점, 빨간 수레 도착 여부, 파란 수레 도착 여부, 사용한 턴의 수
+        dfs(startRed, startBlue, false, false, 0); // dfs 탐색 시작
+
+        // 만약 dfs 탐색을 마쳤는데도 answer 이 MAXVALUE 란 뜻은 퍼즐을 풀 수 없는 경우를 뜻한다.
+        if (answer == Integer.MAX_VALUE) return 0; // 0을 반환
+        else return answer; // 퍼즐을 푸는데 필요한 턴의 최솟값을 리턴
+    }
+
+    public static void dfs(Node startRed, Node startBlue, boolean redFlag, boolean blueFlag, int depth) {
+        if (redFlag && blueFlag) { // 만약 두 수레 모두 목표에 도착했다면
+            answer = Math.min(answer, depth); // 최솟값 비교를 통해 가장 적은 턴에 성공한 턴 도출
+        }
+
+        else if (redFlag) { // 만약 빨간 수레만 도착 지점에 도착했다면, 빨간 수레는 고정하고 파란 수레만 움직인다.
+            for (int i = 0; i < 4; i++) { // 파란 수레에 대한 상하좌우 탐색 시작
+                int nextBlueX = startBlue.x + dx[i]; // 다음 파란 수레의 가로 위치
+                int nextBlueY = startBlue.y + dy[i]; // 다음 파란 수레의 세로 위치
+                // 만역 파란 수레의 다음 위치가 빨간 수레와 겹친다면 continue
+                if (nextBlueX == startRed.x && nextBlueY == startRed.y) continue;
+                // 파란 수레의 다음 위치에 대한 범위, 벽, 방문에 대한 적합성 검사
+                // false 를 반환한다면 불가능한 탐색 지역
+                if (!isItPossible(nextBlueX, nextBlueY, 2)) continue;
+
+                // 빨간 수레가 이미 도착한 상태에서 파란 수레가 목표 지점에 도달 했다면
+                if (nextBlueX == goalBlue.x && nextBlueY == goalBlue.y) {
+                    // 다음 탐색은 필요 없기에 현재 턴에 + 1
+                    answer = Math.min(answer, depth + 1); // 최솟값 비교를 통해 가장 적은 턴에 성공한 턴 도출
+                    return; // return 을 통해 해당 dfs 탐색을 종료한다.
+                }
+
+                // 파란 수레가 목표 지점에 도달하지 못했다면
+                visited[2][nextBlueY][nextBlueX] = true; // 파란 수레의 방문 배열에 방문 체크
+                // 고정된 빨간 수레의 정보, 파란 수레의 현재 탐색 지점에 대한 정보
+                // 빨간 수레는 이미 도달 한 상태이기에 true, 파란 수레는 도달하지 못했기 때문에 false
+                // 다음 턴을 의미하는 현재 턴(depth) + 1
+                // 위 정보를 이용해 재귀 탐색
+                dfs(startRed, new Node(nextBlueX, nextBlueY), true, false, depth + 1);
+                visited[2][nextBlueY][nextBlueX] = false; // 다음 탐색을 위한 방문 해제 : 백트래킹
+            }
+        }
+
+        else if (blueFlag) { // 만약 파란 수레만 도착 지점에 도착했다면, 파란 수레는 고정하고 빨간 수레만 움직인다.
+            for (int i = 0; i < 4; i++) { // 빨간 수레에 대한 상하좌우 탐색 시작
+                int nextRedX = startRed.x + dx[i]; // 다음 빨간 수레의 가로 위치
+                int nextRedY = startRed.y + dy[i]; // 다음 빨간 수레의 세로 위치
+                // 만역 빨간 수레의 다음 위치가 파란 수레와 겹친다면 continue
+                if (nextRedX == startBlue.x && nextRedY == startBlue.y) continue;
+                // 빨간 수레의 다음 위치에 대한 범위, 벽, 방문에 대한 적합성 검사
+                // false 를 반환한다면 불가능한 탐색 지역
+                if (!isItPossible(nextRedX, nextRedY, 1)) continue;
+
+                // 파란 수레가 이미 도착한 상태에서 빨간 수레가 목표 지점에 도달 했다면
+                if (nextRedX == goalRed.x && nextRedY == goalRed.y) {
+                    // 다음 탐색은 필요 없기에 현재 턴에 + 1
+                    answer = Math.min(answer, depth + 1); // 최솟값 비교를 통해 가장 적은 턴에 성공한 턴 도출
+                    return; // return 을 통해 해당 dfs 탐색을 종료한다.
+                }
+
+                // 빨간 수레가 목표 지점에 도달하지 못했다면
+                visited[1][nextRedY][nextRedX] = true; // 빨간 수레의 방문 배열에 방문 체크
+                // 빨간 수레의 현재 탐색 지점에 대한 정보, 고정된 파란 수레의 정보
+                // 빨간 수레는 도달하지 못했기 때문에 false, 파란 수레는 이미 도달 한 상태이기에 true
+                // 다음 턴을 의미하는 현재 턴(depth) + 1
+                // 위 정보를 이용해 재귀 탐색
+                dfs(new Node(nextRedX, nextRedY), startBlue, false, true, depth + 1);
+                visited[1][nextRedY][nextRedX] = false; // 다음 탐색을 위한 방문 해제 : 백트래킹
+            }
+        }
+
+        else { // 빨간 수레, 파란 수레 모두 도착 지점에 도달 하지 못했다면, 두 수레 모두 움직여야만 한다.
+            for (int i = 0; i < 4; i++) { // 빨간 수레에 대한 상하좌우 탐색 시작
+                int nextRedX = startRed.x + dx[i]; // 다음 빨간 수레의 가로 위치
+                int nextRedY = startRed.y + dy[i]; // 다음 빨간 수레의 세로 위치
+                // 빨간 수레의 다음 위치에 대한 범위, 벽, 방문에 대한 적합성 검사
+                // false 를 반환한다면 불가능한 탐색 지역
+                if (!isItPossible(nextRedX, nextRedY, 1)) continue;
+
+                for (int j = 0; j < 4; j++) { // 파란 수레에 대한 상하좌우 탐색 시작
+                    int nextBlueX = startBlue.x + dx[j]; // 다음 파란 수레의 가로 위치
+                    int nextBlueY = startBlue.y + dy[j]; // 다음 파란 수레의 세로 위치
+                    // 파란 수레의 다음 위치에 대한 범위, 벽, 방문에 대한 적합성 검사
+                    // false 를 반환한다면 불가능한 탐색 지역
+                    if (!isItPossible(nextBlueX, nextBlueY, 2)) continue;
+                    // 다음 수레들이 동시에 같은 위치에 있다면 continue
+                    if (nextBlueX == nextRedX && nextBlueY == nextRedY) continue;
+                    // 수레끼리 자리를 바꾼거라면 continue
+                    if ((nextBlueX == startRed.x && nextBlueY == startRed.y)
+                            && (nextRedX == startBlue.x && nextRedY == startBlue.y)) continue;
+
+                    boolean tmpRedFlag = false; // 이번 탐색에서 빨간 수레의 목표지점 도달 여부
+                    boolean tmpBlueFlag = false; // 이번 탐색에서 파란 수레의 목표지점 도달 여부
+                    // 만약 빨간 수레가 목표에 도달 하였다면, true
+                    if (nextRedX == goalRed.x && nextRedY == goalRed.y) tmpRedFlag = true;
+                    // 만약 파란 수레가 목표에 도달 하였다면, true
+                    if (nextBlueX == goalBlue.x && nextBlueY == goalBlue.y) tmpBlueFlag = true;
+
+
+                    visited[1][nextRedY][nextRedX] = true; /// 빨간 수레의 방문 배열에 방문 체크
+                    visited[2][nextBlueY][nextBlueX] = true; // 파란 수레의 방문 배열에 방문 체크
+
+                    // 빨간 수레의 현재 탐색 지점에 대한 정보, 파란 수레의 현재 탐색 지점에 대한 정보
+                    // 빨간 수레의 목표지점 도달 여부, 파란 수레의 목표지점 도달 여부
+                    // 다음 턴을 의미하는 현재 턴(depth) + 1
+                    // 위 정보를 이용해 재귀 탐색
+                    dfs(new Node(nextRedX, nextRedY), new Node(nextBlueX, nextBlueY), tmpRedFlag, tmpBlueFlag, depth + 1);
+
+                    visited[1][nextRedY][nextRedX] = false; // 다음 탐색을 위한 탐색한 빨간 수레 방문 해제 : 백트래킹
+                    visited[2][nextBlueY][nextBlueX] = false; // 다음 탐색을 위한 탐색한 파란 수레 방문 해제 : 백트래킹
+                }
+            }
+        }
+    }
+
+    public static boolean isItPossible(int x, int y, int redOrBlue) { // 해당 위치가 탐색 가능한 지점인지 확인하는 메서드
+        if (x < 0 || y < 0 || x >= m || y >= n) return false; // 퍼즐판의 범위에서 벗어나는지
+        if (map[y][x] == 5) return false; // 탐색지역이 벽인지
+        if (visited[redOrBlue][y][x]) return false; // 이미 탐색한 지점인지
+        return true; // 위 조건들을 제외하고는 탐색 가능한 지점
+    }
+
+
+    public static class Node { // 수레의 위치 정보를 나타내는 클래스
+        int x;
+        int y;
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+}",dnjs2721
+JAVA,아날로그 시계,구현/,"class Solution {
+    public static int solution(int h1, int m1, int s1, int h2, int m2, int s2) {
+        int startTimeSec = (h1 * 60 * 60) + (m1 * 60) + s1; // 시작 시각을 초로 변환
+        int endTimeSec = (h2 * 60 * 60) + (m2 * 60) + s2; // 종료 시각을 초로 변환
+
+        int alam = 0;
+
+        double[] prevAngles = calAngle(startTimeSec); // 시작 시각에 대한 시침, 분침, 초침의 각도 계산
+        double prevHAngle = prevAngles[0]; // 시침의 각도
+        double prevMAngle = prevAngles[1]; // 분침의 각도
+        double prevSAngle = prevAngles[2]; // 초침의 각도
+
+        // 시작 시각의 초침과 시침/분침이 겹쳤을 경우 알람이 울린다.
+        if (prevSAngle == prevMAngle || prevSAngle == prevHAngle) alam++;
+
+        for (int sec = startTimeSec + 1; sec <= endTimeSec; sec++) { // 시작 시각 + 1초 부터 마지막 시각까지 탐색
+            double[] curAngles = calAngle(sec); // 현재 시각에 대한 시침, 분침, 초침의 각도 계산
+            double curHAngle = curAngles[0]; // 현재 시침의 각도
+            double curMAngle = curAngles[1]; // 현재 분침의 각도
+            double curSAngle = curAngles[2]; // 현재 초침의 각도
+
+            // 현재 시각의 초침과 시침/분침이 겹쳤을 경우 알람이 울린다.
+            if (curHAngle == curSAngle || curMAngle == curSAngle) {
+                alam++; // 알람이 울렸다
+                prevHAngle = curHAngle; // 이전 시각을 현재 시각으로 초기화 한다
+                prevMAngle = curMAngle; // 이전 시각을 현재 시각으로 초기화 한다
+                prevSAngle = curSAngle; // 이전 시각을 현재 시각으로 초기화 한다
+                continue; // 시침과 분침이 같을 경우에는 알람이 한번만 울린다.
+            }
+
+            // 초침이 시침을 넘어선 경우
+            // 이전 시각에 대한 초침이 이신 시각에 대한 시침 뒤에 있다가
+            // 현재 시각에 대한 초침이 현재 시각에 대한 시침 앞에 있다면
+            // 초침이 시침을 넘어 갔다는 뜻.. 그렇다면 그 사이 ms에 겹쳤던 순간이 있음을 의미한다.
+            if ((prevSAngle < prevHAngle) && (curSAngle >= curHAngle)) {
+                alam++;
+            } else if ((prevSAngle < prevHAngle) && curSAngle == 0) {
+                // 이전 시각에 대한 초침이 이신 시각에 대한 시침 뒤에 있다가
+                // 현재 시각에 대한 초침이 0이 됐을 때
+                // 이는 초침이 시침을 넘어섰지만 0초가 됐을 때를 말한다.
+                alam++;
+            }
+
+            // 초침이 분침을 넘어선 경우
+            // 이전 시각에 대한 초침이 이신 시각에 대한 분침 뒤에 있다가
+            // 현재 시각에 대한 초침이 현재 시각에 대한 분침 앞에 있다면
+            // 초침이 분침을 넘어 갔다는 뜻.. 그렇다면 그 사이 ms에 겹쳤던 순간이 있음을 의미한다.
+            if ((prevSAngle < prevMAngle) && (curSAngle >= curMAngle)) {
+                alam++;
+            } else if ((prevSAngle < prevMAngle) && curSAngle == 0) {
+                // 이전 시각에 대한 초침이 이신 시각에 대한 분침 뒤에 있다가
+                // 현재 시각에 대한 초침이 0이 됐을 때
+                // 이는 초침이 분침을 넘어섰지만 0초가 됐을 때를 말한다.
+                alam++;
+            }
+
+            prevHAngle = curHAngle; // 이전 시각을 현재 시각으로 초기화 한다,
+            prevMAngle = curMAngle; // 이전 시각을 현재 시각으로 초기화 한다,
+            prevSAngle = curSAngle; // 이전 시각을 현재 시각으로 초기화 한다,
+        } 
+
+        return alam;
+    }
+
+    public static double[] calAngle(int sec) {
+        // 1시간당 시침이 이동하는 각도는 360 / 12 = 30도
+        // 1분당 시침이 이동하는 각도는 30 / 60
+        // 1초당 시침이 이동하는 각도는 30 / 60 / 60
+        double hourHandSecAngle = 30.0 / 60 / 60;
+
+        // 1분당 분침이 이동하는 각도는 360 / 60 = 6도
+        // 1초당 분침이 이동하는 각도는 6 / 60
+        double minuteHandSecAngle = 6.0 / 60;
+
+        // 1초당 초침이 이동하는 각도는 360 / 60 = 6도
+        double secondHandSecAngle = 6.0;
+
+        // 각 침의 최대 각도는 360도, 360도를 넘는 다면 한바퀴를 넘어간것이기에 360으로 나눈 나머지가 현재 각도가 된다.
+        // sec 초에 대한 시침, 분침, 초침 의 각도 정보를 반환한다.
+        return new double[]{(sec * hourHandSecAngle) % 360, (sec * minuteHandSecAngle) % 360, sec * secondHandSecAngle % 360};
+    }
+}",dnjs2721
+JAVA,석유 시추,집합과 맵/ 큐 /,"import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Queue;
+
+class Solution {
+    static int[] dx = {0, 0, -1, 1}; // 상하좌우 x에 대한 이동 값
+    static int[] dy = {-1, 1, 0, 0}; // 상하좌우 y에 대한 이동 값
+    static int n, m; // 지도의 세로, 가로
+    static int[][] map;
+    static HashMap<Integer, Integer> hole = new HashMap<>(); // 넘버링된 구역의 석유의 양이 key, value형태로 저장
+    static int holeIdx = 2; // 0 과 1은 각각 빈 땅, 석유 라는 뜻을 가지고 있기에 2부터 시작
+
+    public static int solution(int[][] land) {
+        int answer = 0;
+
+        n = land.length;
+        m = land[0].length;
+        map = land;
+
+				// 지도 전체 탐색
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+								// 값이 1인 지역은 석유가 있는 지역
+								// 0인 지역은 석유가 없으며 1보다 큰 지역은 이미 탐색을 완료한 구역
+                if (map[j][i] == 1) { // 석유가 있는 지역에 한해 bfs 탐색
+                    bfs(i, j); // bfs 탐색이 완료된 지역은 넘버링이 된다.
+                }
+            }
+        }
+
+				// 획득 가능한 석유 체크
+        for (int i = 0; i < m; i++) {
+						// 중복을 방지하기 위한 구덩이 방문 배열
+            boolean[] visited = new boolean[holeIdx + 1]; // 열이 바뀔 때 마다 초기화
+            int res = 0; // 해당 열에 시추관을 뚫었을 때 얻을 수 있는 석유의 양
+            for (int j = 0; j < n; j++) {
+                if (map[j][i] == 0) continue; // 탐색 지역이 석유가 없다면 continue
+
+                int cur = map[j][i]; // 0이 아닌 지역의 구덩이 넘버
+                if (visited[cur]) continue; // 만약 이번 시추관 탐색 중 이미 탐색한 구덩이라면 continue
+                visited[cur] = true; // 구덩이 방문 체크
+                res += hole.get(cur); // 해당 구덩이의 석유의 양을 res에 더한다.
+            }
+
+						// 위의 탐색이 끝이나면 res는 해당 시추관을 뚫었을 때 얻을 수 있는 석유의 양이 된다.
+            answer = Math.max(answer, res); // 탐색을 통해 얻을 수 있는 최대 석유의 양을 도출한다.
+        }
+
+        return answer; // 정답 출력
+    }
+
+    public static void bfs(int x, int y) {
+        Queue<Node> q = new LinkedList<>(); // LinkedList를 이용하여 큐 생성
+        int count = 1; // 해당 탐색에서 발견한 석유의 양
+
+				// 메모리 사용을 줄이기 위하여 방문을 위한 배열 생성 대신 입력 받은 지도를 수정한다.
+				// 0, 1 : 미탐색 지역, 2 ~ : 탐색을 완료하고 넘버링 된 지역
+        map[y][x] = holeIdx; // 탐색 지역 넘버링:방문처리
+        q.add(new Node(x, y)); // 탐색을 위해 큐에 노드 추가
+
+        while (!q.isEmpty()) { // 큐가 빌 때 까지 반복
+            Node node = q.poll(); // 큐의 선입선출에 의해 먼저 들어간 Node 추출
+            for (int i = 0; i < 4; i++) { // Node의 위치에서 상하좌우 탐색
+                int nx = node.x + dx[i];
+                int ny = node.y + dy[i];
+								// 탐색 지역이 범위를 벗어난 지역이라면 continue
+                if (nx < 0 || ny < 0 || nx >= m || ny >= n) continue;
+								// 탐색 지역이 빈 땅이라면 continue
+                if (map[ny][nx] == 0) continue;
+								// 탐색 지역이 1이 아닌 다른 수 
+									// 이미 넘버링 된 지역이기에 continue
+                if (map[ny][nx] != 1) continue;
+								// 탐색 지역 넘버링:방문처리
+                map[ny][nx] = holeIdx;
+								// 다음 탐색을 이어가기 위해 탐색지역을 큐에 추가
+                q.add(new Node(nx, ny));
+								// 발견한 석유의 양 증가
+                count++;
+            }
+        }
+
+				// hole에 holeIdx를 key, 탐색한 석유의 양을 value로 hashMap에 저장합니다.
+        hole.put(holeIdx, count);
+				// 다음 넘버링을 위해 holeIdx++
+        holeIdx++;
+    }
+
+		// bfs 탐색을 위해 사용되는 클래스
+		// 격자 모양의 지도의 특정 위치에 대한 위치정보를 담고있다.
+    public static class Node {
+        int x; 
+        int y;
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+}",dnjs2721
+JAVA,붕대 감기,집합과 맵/,"class Solution {
+    public static int solution(int[] bandage, int health, int[][] attacks) {
+        int maxHealth = health; // 회복가능한 최대 체력
+        int maxTime = attacks[attacks.length - 1][0]; // 주어진 공격 중 마지막 공격 시간
+
+        int[] map = new int[maxTime + 1]; // map[i] == i 초에 하는 공격 피해 수치 // hashMap 도 가능
+        for (int[] attack : attacks) {
+            map[attack[0]] = attack[1];
+        }
+
+        int t = bandage[0]; // 붕대감는 시간
+        int recovery = bandage[1]; // 초당 회복 시간
+        int bonusRecovery = bandage[2]; // 붕대감는 시간 충족시 추가 회복량
+
+        int currentTime = 0; // 붕대 연속 감기 성공 시간
+        for (int i = 1; i <= maxTime; i++) { // 1초부터 마지막 공격 시간까지 탐색
+            currentTime++; // 붕대 감기 시간 1증가
+            if (map[i] != 0) { // map[i] 가 0이 아니라는 뜻은 i초에 공격이 있다는 것 -> 회복 불가능, 피해량 계산
+                health -= map[i]; // 현재 체력에서 피해량 계산
+                if (health <= 0) return -1; // 현재 체력이 0이하로 떨어지면 사망, 바로 종료
+                currentTime = 0; // 공격을 받은 후에는 붕대 연속 감기 성공 시간 0으로 초기화
+            } else {
+                health += recovery; // map[i]가 0일 때, 공격이 없기에 초당 회복량 계산
+                if (currentTime == t) { // 만약 붕대 연속 감기 성공 시간이 붕대감기 시전 속도랑 같아진다면
+                    health += bonusRecovery; // 보서스 회복 체력까지 계산
+                    currentTime = 0; // 붕대감기에 성공하였기에 붕대 연속 감기 성공 시간 0으로 초기화
+                }
+                if (health > maxHealth) health = maxHealth; // 현재 체력에 최대 체력 보다 많다면 현재 체력을 최대 체력으로 초기화
+            }
+        }
+
+        return health; // 모든 공격이 끝난 후 사망하지 않았다면 현재 체력 반환
+    }
+}",dnjs2721
+PYTHON,없는 숫자 더하기,Set/,"def solution(numbers):
+    # 0부터 9까지의 숫자를 리스트로 저장
+    missing_numbers = list(range(10))
+
+    # numbers를 순회하며, 해당 숫자가 missing_numbers에 있으면 제거
+    for num in numbers:
+        if num in missing_numbers:
+            missing_numbers.remove(num)
+
+    # 남아 있는 숫자들의 합을 반환
+    return sum(missing_numbers)
+
+",Hong-bjj
+PYTHON,달리기 경주,배열/,"def solution(players, callings):
+answer = []
+for calling in callings:
+    a = players.index(calling)
+    players[a-1], players[a] = players[a], players[a-1]
+
+    #print(calling)
+    #print(players[a])
+    #print(players)
+answer = players
+
+return answer",Hong-bjj
+PYTHON,최소 직사각형,배열/,"def solution(sizes): 
+    w = []  
+    h = []  
+    for i in range(len(sizes)):
+        if sizes[i][0] >= sizes[i][1]:
+            w.append(sizes[i][0]) 
+            h.append(sizes[i][1]) 
+        else: 
+            h.append(sizes[i][0])  
+            w.append(sizes[i][1]) 
+
+    return max(w) * max(h)
+",Hong-bjj
+PYTHON,a와 b출력하기,연산/,"a, b = map(int, input().strip().split(' '))
+print(""a ="",a)
+print(""b ="",b)
+```",Hong-bjj
+PYTHON,문자열 내  p와 y의 개수,연산/,"def solution(s):
+	answer = True
+	s = s.lower()
+	p = s.count('p')
+	y = s.count('y')
+	if(p!= y):
+		answer = False
+return answer",Hong-bjj
+PYTHON,완주하지 못한 선수,반복문/,"def solution(participant, completion):
+for name in completion:
+participant.remove(name)  # 완주한 선수 제거
+return participant[0]  # 남은 선수가 완주하지 못한 선수",Hong-bjj
+PYTHON,평균 구하기,반복문/,"def solution(arr):
+    answer = 0
+    for a in arr:
+        answer += a
+    answer /= len(arr)
+    return answer",Hong-bjj
+PYTHON,직사각형 별찍기,반복문/,"a, b = map(int, input().split(' '))
+for i in range(b):
+    print(""*""*a)",Hong-bjj
+PYTHON,콜라즈 추측,반복문/,"def solution(num):
+# 작업을 반복하는 횟수를 카운트하는 변수
+count = 0
+
+# 주어진 수가 1이 될 때까지 반복
+while num != 1:
+    # 작업 횟수가 500을 초과하면 -1을 반환
+    if count >= 500:
+        return -1
+    # 입력된 수가 짝수라면 2로 나누고, 홀수라면 3을 곱하고 1을 더함
+if num % 2 == 0:
+            num = num / 2
+        else:
+            num = num * 3 + 1
+    # 작업 횟수 증가
+    count += 1
+
+# 1이 될 때까지의 작업 횟수 반환
+return count
+",Hong-bjj
+PYTHON,문자열 출력하기,구현/,"str = input()
+print(str) 
+",Hong-bjj
+CPP,연결 요소의 개수,그래프 이론 / 그래프 탐색 / 너비 우선 탐색 / 깊이 우선 탐색 /,"#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> adj;
+vector<int> vis;
+
+void dfs(int cur) {
+	vis[cur] = 1;
+	for (int i = 0; i < adj[cur].size(); i++) {
+		int nxt = adj[cur][i];
+		if (vis[nxt] == 0) {
+			dfs(nxt);
+		}
+	}
+}
+
+int main() {
+	int n, m;
+	cin >> n >> m;
+
+	adj.resize(n + 1);
+	vis.resize(n + 1);
+
+	while (m--) {
+		int a, b;
+		cin >> a >> b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+
+	int cnt = 0;
+
+	for (int i = 1; i <= n; i++) {
+		if (vis[i] == 0) {
+			dfs(i);
+			cnt++;
+		}
+	}
+	
+	cout << cnt;
+
+	return 0;
+}",justashow
+CPP,좌표 압축,정렬/ 좌표 압축/,"#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> nums;
+vector<int> ans;
+
+int main() {
+	int n, num;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> num;
+		nums.push_back(num);
+		ans.push_back(num);
+	}
+
+	sort(nums.begin(), nums.end());
+	nums.erase(unique(nums.begin(), nums.end()), nums.end());
+
+	for (int i = 0; i < n; i++) {
+		cout << lower_bound(nums.begin(), nums.end(), ans[i]) - nums.begin() << "" "";
+	}
+
+	return 0;
+}",justashow
+CPP,쉬운 최단거리,그래프 이론 / 그래프 탐색 / 너비 우선 탐색/,"#include <bits/stdc++.h>
+using namespace std;
+
+int n, m;
+int a[1010][1010];
+int b[1010][1010];
+int vis[1010][1010];
+queue<pair<int, int>> q;
+
+int dx[] = { -1, 1, 0, 0 };
+int dy[] = { 0, 0, 1, -1 };
+
+void bfs() {
+	while (!q.empty()) {
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx >= 0 && nx <= n - 1 && ny >= 0 && ny <= m - 1) {
+				if (vis[nx][ny] == 0 && a[nx][ny] == 1) {
+					vis[nx][ny] = 1;
+					q.push(pair(nx, ny));
+					b[nx][ny] = b[x][y] + 1;
+				}
+			}
+		}
+	}
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> a[i][j];
+			if (a[i][j] == 2) {
+				q.push(pair(i, j));
+				vis[i][j] = 1;
+			}
+		}
+	}
+
+	bfs();
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (a[i][j] == 1 && b[i][j] == 0) b[i][j] = -1;
+			cout << b[i][j] << "" "";
+		}
+		cout << ""\n"";
+	}
+
+	return 0;
+}",justashow
+CPP,"1,2,3 더하기",DP/,"#include <bits/stdc++.h>
+using namespace std;
+
+int dp[11];
+
+int main() {
+	int t;
+	
+	dp[1] = 1;
+	dp[2] = 2;
+	dp[3] = 4;
+
+	for (int i = 4; i < 11; i++) {
+		dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+	}
+
+	cin >> t;
+
+	while (t--) {
+		int n;
+		cin >> n;
+		cout << dp[n] << ""\n"";
+	}
+
+	return 0;
+}",justashow
+CPP,숨바꼭질,그래프 이론/ 그래프 탐색/ 너비 우선 탐색/,"#include <bits/stdc++.h>
+using namespace std;
+
+int n, k;
+int cnt = 0;
+queue<int> q;
+int vis[100100];
+
+void bfs() {
+	q.push(n);
+
+	while (!q.empty()) {
+		int x = q.front();
+		q.pop();
+
+		if (x == k) {
+			cout << vis[x];
+			return;
+		}
+		if (x + 1 <= 100000 && vis[x + 1] == 0) {
+			vis[x + 1] = vis[x] + 1;
+			q.push(x + 1);
+		}
+		if (x - 1 >= 0 && vis[x - 1] == 0) {
+			vis[x - 1] = vis[x] + 1;
+			q.push(x - 1);
+		}
+		if (x * 2 <= 100000 && vis[x * 2] == 0) {
+			vis[x * 2] = vis[x] + 1;
+			q.push(x * 2);
+		}
+	}
+}
+
+int main() {
+	cin >> n >> k;
+	
+	bfs();
+
+	return 0;
+}",justashow
+CPP,계단 오르기,DP/,"#include <bits/stdc++.h>
+using namespace std;
+
+int a[301];
+int dp[301];
+int main() {
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++) {
+		cin >> a[i];
+	}
+
+	dp[0] = a[0];
+	dp[1] = a[0] + a[1];
+	dp[2] = max(a[0] + a[2], a[1] + a[2]);
+
+	for (int i = 3; i < n; i++) {
+		dp[i] = max(dp[i - 2] + a[i], dp[i - 3] + a[i - 1] + a[i]);
+	}
+
+	cout << dp[n - 1];
+
+	return 0;
+}",justashow
+CPP,회의실 배정,그리디 알고리즘/정렬/,"#include <bits/stdc++.h>
+using namespace std;
+
+vector<pair<int, int>> v;
+
+int main() {
+	int n, a, b;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> a >> b;
+		v.push_back(pair(b, a));
+	}
+
+	sort(v.begin(), v.end());
+
+	int prv = -1;
+	int res = 0;
+
+	for (int i = 0; i < n; i++) {
+		int start = v[i].second;
+		int end = v[i].first;
+
+		if (prv <= start) {
+			res++;
+			prv = end;
+		}
+	}
+
+	cout << res;
+
+	return 0;
+}",justashow
+CPP,토마토,그래프 이론/ 그래프 탐색 / 너비 우선 탐색/,"#include <bits/stdc++.h>
+using namespace std;
+
+int m, n;
+int dx[] = { 1, -1, 0, 0 };
+int dy[] = { 0, 0, 1, -1 };
+int box[1010][1010];
+queue<pair<int, int>> q;
+
+void bfs(int x, int y) {
+
+	while (!q.empty()) {
+		x = q.front().first;
+		y = q.front().second;
+		q.pop();
+
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx >= 0 && nx <= n - 1 && ny >= 0 && ny <= m - 1) {
+				if (box[nx][ny] == 0) {
+					box[nx][ny] = box[x][y] + 1;
+					q.push(pair(nx, ny));
+				}
+			}
+		}
+
+	}
+
+}
+
+int main() {
+	int res = 0;
+
+	cin >> m >> n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cin >> box[i][j];
+			if (box[i][j] == 1) q.push(pair(i, j));
+		}
+	}
+
+	bfs(0, 0);
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			if (box[i][j] == 0) {
+				cout << -1;
+				return 0;
+			}
+			if (box[i][j] > res) res = box[i][j];
+		}
+	}
+
+	cout << res - 1;
+		
+	return 0;
+}",justashow
+CPP,유기농 배추,그래프 이론/ 그래프 탐색 / 너비 우선 탐색 / 깊이 우선 탐색/,"#include <bits/stdc++.h>
+using namespace std;
+
+int t, m, n, k, x, y;
+int cabb[51][51];
+int vis[51][51];
+
+int dx[] = { -1, 1, 0, 0 };
+int dy[] = { 0, 0, 1, -1 };
+
+void dfs(int x, int y) {
+	vis[x][y] = 1;
+	for (int i = 0; i < 4; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
+		if (cabb[nx][ny] == 1 && vis[nx][ny] == 0) dfs(nx, ny);
+	}
+}
+
+int main() {
+	int res = 0;
+	cin >> t;
+	while (t--) {
+		cin >> m >> n >> k;
+		for (int i = 0; i < k; i++) {
+			cin >> x >> y;
+			cabb[x][y] = 1;
+		}
+
+		for (int a = 0; a < m; a++) {
+			for (int b = 0; b < n; b++) {
+				if (cabb[a][b] == 1 && vis[a][b] == 0) {
+					dfs(a, b);
+					res++;
+				}
+			}
+		}
+
+		cout << res << ""\n"";
+		res = 0;
+		memset(cabb, 0, sizeof(cabb));
+		memset(vis, 0, sizeof(vis));
+	}
+		
+	return 0;
+}",justashow
+CPP,포토주 시식,DP/,"#include <bits/stdc++.h>
+using namespace std;
+
+int dp[10010];
+int wine[10010];
+
+int main() {
+	int n;
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		cin >> wine[i];
+	}
+	dp[0] = 0;
+	dp[1] = wine[1];
+	dp[2] = wine[1] + wine[2];
+	
+	for (int i = 3; i <= n; i++) {
+		dp[i] = max({ dp[i - 1], wine[i] + dp[i - 2], dp[i - 3] + wine[i - 1] + wine[i] });
+	}
+
+	cout << dp[n];
+
+	return 0;
+}",justashow
+CPP,2Xn 타일링 2,자료 구조 / 세그먼트 트리 / 분할 정복/,"#include <bits/stdc++.h>
+using namespace std;
+
+int dp[1010];
+
+int tile(int x) {
+	if (x == 1) return 1;
+	if (x == 2) return 3;
+	if (dp[x] != 0) return dp[x] % 10007;
+	dp[x] = tile(x - 1) + 2 * tile(x - 2);
+	return dp[x] % 10007;
+}
+
+int main() {
+	int n;
+	cin >> n;
+
+	cout << tile(n);
+
+	return 0;
+}",justashow
+CPP,요격 시스템,자료구조/ 정렬/,"#include <bits/stdc++.h>
+using namespace std;
+
+int solution(vector<vector<int>> targets) {
+    int answer = 0;
+    int n = targets.size();
+    vector<pair<int, int>> lines(n);
+    
+    for (int i = 0; i < n; i++) {
+        int s = targets[i][0];
+        int e = targets[i][1];
+        lines[i] = make_pair(e,s); // pair<int, int>(e,s)
+    }
+    
+    sort(lines.begin(), lines.end());
+    
+    int prv = -100;
+
+    for (int i = 0; i < n; i++) {
+        int s = lines[i].second;
+        int e = lines[i].first;
+        if (s < prv) {
+            continue;
+        }
+        else {
+            answer++;
+            prv = e;
+        }
+    }
+    
+    return answer;
+}",justashow
+CPP,체스판 다시 칠하기,브루트포스/,"#include <bits/stdc++.h>
+using namespace std;
+
+string board[51];
+
+int chess(int x, int y) {
+	int cnt, cnt1 = 0, cnt2 = 0;
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			char c = board[x + i][y + j];
+			if ((i + j) % 2 == 0) {
+				(c == 'W') ? cnt1++ : cnt2++;
+			}
+			else {
+				(c == 'B') ? cnt1++ : cnt2++;
+			}
+			cnt = min(cnt1, cnt2);
+		}
+	}
+	return cnt;
+}
+
+int main() {
+	int n, m;
+	int res = 64;
+	cin >> n >> m;
+
+	for (int i = 0; i < n; i++) {
+		cin >> board[i];
+	}
+
+	for (int i = 0; i + 8 <= n; i++) {
+		for (int j = 0; j + 8 <= m; j++) {
+			int tmp = chess(i, j);
+			if (tmp <= res) res = tmp;
+		}
+	}
+
+	cout << res;
+
+	return 0;
+}",justashow
+CPP,부족한 금액 계산하기,연산/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+long long solution(int price, int money, int count)
+{
+    long long answer = 0;
+
+    for (int i = 1; i <= count; i++) {
+        answer += price * i;
+    }
+    
+    if (answer < money) answer = 0;
+    else answer = answer - money;
+    
+    return answer;
+}",justashow
+CPP,나머지가 1이 되는 수 찾기,연산/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+int solution(int n) {
+    int answer = 0;
+    
+    for (int i = 2; i < n; i++) {
+        int tmp = n % i;
+        if (tmp == 1) {
+            answer = i;
+            break;
+        }   
+    }
+    
+    return answer;
+}",justashow
+CPP,숫자 문자열과 영단어,연산/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = 0;
+    string result;
+    
+    for (int i = 0; i < s.length(); i++) {
+        if (s.substr(i, 4) == ""zero"") result += '0';
+        else if (s.substr(i, 3) == ""one"") result += '1';
+        else if (s.substr(i, 3) == ""two"") result += '2';
+        else if (s.substr(i, 5) == ""three"") result += '3';
+        else if (s.substr(i, 4) == ""four"") result += '4';
+        else if (s.substr(i, 4) == ""five"") result += '5';
+        else if (s.substr(i, 3) == ""six"") result += '6';
+        else if (s.substr(i, 5) == ""seven"") result += '7';
+        else if (s.substr(i, 5) == ""eight"") result += '8';
+        else if (s.substr(i, 4) == ""nine"") result += '9';
+        else if (s[i] - '0' <= 9) result += s[i];
+    }
+    
+    answer = stoi(result);
+    
+    return answer;
+}",justashow
+CPP,숫자 작꿍,배열/구현/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+int xx[10];
+int yy[10];
+
+string solution(string X, string Y) {
+    string answer = """";
+    for (int i = 0; i < X.length(); i++) {
+        xx[X[i] - '0']++;
+    }
+    for (int i = 0; i < Y.length(); i++) {
+        yy[Y[i] - '0']++;
+    }
+    
+    for (int i = 9; i >= 0; i--) {
+        if(xx[i] != 0 && yy[i] != 0) {
+            int cnt = (xx[i] < yy[i]) ? xx[i] : yy[i];
+            for (int j = 0; j < cnt; j++) {
+                answer += to_string(i);
+            }
+        }
+    }
+    
+    if (answer == """") answer += ""-1"";
+    if (answer[0] == '0') answer = ""0"";
+    
+    return answer;
+}",justashow
+CPP,성격 유형 검사하기,집합과 맵/,"#include <bits/stdc++.h>
+using namespace std;
+
+map<char, int> mp;
+
+string solution(vector<string> survey, vector<int> choices) {
+    string answer = """";
+    for (int i = 0; i < survey.size(); i++) {
+        if (choices[i] == 1) mp[survey[i][0]] += 3;
+        if (choices[i] == 2) mp[survey[i][0]] += 2;
+        if (choices[i] == 3) mp[survey[i][0]] += 1;
+        if (choices[i] == 4) mp[survey[i][0]] += 0;
+        if (choices[i] == 5) mp[survey[i][1]] += 1;
+        if (choices[i] == 6) mp[survey[i][1]] += 2;
+        if (choices[i] == 7) mp[survey[i][1]] += 3;
+    }
+    
+    answer += (mp['R'] >= mp['T']) ? 'R' : 'T';
+    answer += (mp['C'] >= mp['F']) ? 'C' : 'F';
+    answer += (mp['J'] >= mp['M']) ? 'J' : 'M';
+    answer += (mp['A'] >= mp['N']) ? 'A' : 'N';
+    
+    return answer;
+}",justashow
+CPP,로또의 최고 순위와 최저 순위,배열/,"#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> solution(vector<int> lottos, vector<int> win_nums) {
+    vector<int> answer;
+    int win[46];
+		int rank[] = {6, 6, 5, 4, 3, 2, 1};
+    int cnt = 0, cnt_zero = 0;
+    for (int i = 0; i < win_nums.size(); i++) {
+        win[win_nums[i]] = 1;
+    }
+       
+    for (int i = 0; i < lottos.size(); i++) {
+        if (lottos[i] == 0) {
+            cnt_zero++;
+        }
+        else if (win[lottos[i]] == 1) {
+            cnt++;
+        }   
+    }
+    
+    answer.push_back(rank[cnt + cnt_zero]);
+    answer.push_back(rank[cnt]);
+
+    return answer;
+}",justashow
+CPP,음양 더하기,연산/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+int solution(vector<int> absolutes, vector<bool> signs) {
+    int answer = 0;
+    
+    for (int i = 0; i < signs.size(); i++) {
+        answer += (signs[i]) ? absolutes[i] : -absolutes[i];
+    }
+    
+    return answer;
+}",justashow
+CPP,신고 결과 받기,자료구조/ 정렬/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+vector<int> solution(vector<string> id_list, vector<string> report, int k) {
+    vector<int> answer;
+    answer.resize(id_list.size());
+    map<string, int> id;
+    map<string, set<string>> mp;
+    
+    for (int i = 0; i < id_list.size(); i++) {
+        id[id_list[i]] = i;
+    }
+    for (int i = 0; i < report.size(); i++) {
+        stringstream ss(report[i]);
+        string reporter, reported;
+        ss >> reporter >> reported;
+        mp[reported].insert(reporter);
+    }
+    
+    for (auto x : mp) {
+        if (x.second.size() >= k) {
+            for (auto y : x.second) {
+                answer[id[y]]++;
+            }
+        }
+    }
+    
+    return answer;
+}",justashow
+CPP,약수의 개수와 덧셈,연산/,"#include <bits/stdc++.h>
+
+using namespace std;
+
+int solution(int left, int right) {
+    int answer = 0;
+    
+    for (int i = left; i <= right; i++) {
+        int cnt = 0;
+        for (int j = 1; j <= i; j++) {
+            if (i % j == 0) {
+                cnt++;
+            }
+        }
+        answer += (cnt % 2) ? -i : i;
+    }
+        
+    return answer;
+}",justashow
+CPP,체스판 다시 칠하기,브루트포스/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+using namespace std;
+
+static vector<string> map;
+static int N, M, result = 64;
+static char start[2] = { 'W', 'B' };
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M;
+	cin.ignore();
+
+	map.resize(N);
+	for (int i = 0; i < N; i++) {
+		getline(cin, map[i]);
+	}
+
+	for (int y = 0; y <= N - 8; y++) {
+		for (int x = 0; x <= M - 8; x++) {
+
+			for (char st : start) {
+
+				int cnt = 0;
+
+				for (int i = y; i < y + 8; i++) {
+					for (int j = x; j < x + 8; j++) {
+
+						if (i % 2 == 0) {
+							if (j % 2 == 0) {
+								if (map[i][j] != st) {
+									cnt++;
+								}
+							}
+							else {
+								if (map[i][j] == st) {
+									cnt++;
+								}
+							}
+						}
+						else {
+							if (j % 2 == 0) {
+								if (map[i][j] == st) {
+									cnt++;
+								}
+							}
+							else {
+								if (map[i][j] != st) {
+									cnt++;
+								}
+							}
+						}
+					}
+				}
+
+				result = min(result, cnt);
+			}
+		}
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,크로아티아 알파벳,구현/문자열/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+using namespace std;
+
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	string str;
+	getline(cin, str);
+
+	int result = 0;
+
+	for (int i = 0; i < str.length(); i++) {
+		if (i < str.length() - 1 && str[i] == 'c') {
+			if (str[i + 1] == '=' || str[i + 1] == '-') {
+				i++;
+				result++;
+				continue;
+			}
+			else {
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 2 && str[i] == 'd') {
+			if (str[i + 1] == 'z' && str[i + 2] == '=') {
+				i += 2;
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 1 && str[i] == 'd') {
+			if (str[i + 1] == '-') {
+				i++;
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 1 && str[i] == 'l') {
+			if (str[i + 1] == 'j') {
+				i++;
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 1 && str[i] == 'n') {
+			if (str[i + 1] == 'j') {
+				i++;
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 1 && str[i] == 's') {
+			if (str[i + 1] == '=') {
+				i++;
+				result++;
+				continue;
+			}
+		}
+		if (i < str.length() - 1 && str[i] == 'z') {
+			if (str[i + 1] == '=') {
+				i++;
+				result++;
+				continue;
+			}
+		}
+		result++;
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,그룹 단어 체커,구현/문자열/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <set>
+#include <string>
+using namespace std;
+
+static set<char> groupWord;
+static int N, result = 0;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N;
+	cin.ignore();
+
+	for (int i = 0; i < N; i++) {
+		string str;
+		getline(cin, str);
+
+		char now = str[0];
+		groupWord.insert(now);
+
+		bool checkWord = true;
+
+		for (int j = 1; j < str.length(); j++) {
+			// 연속이면 continue
+			if (now == str[j]) {
+				continue;
+			} // 다를 경우
+			else if (now != str[j]) {
+				// 떨어져서 나타나면 그룹 단어가 아님
+				if (groupWord.count(str[j])) {
+					checkWord = false;
+					break;
+				}
+				else {
+					now = str[j];
+					groupWord.insert(now);
+				}
+			}
+		}
+
+		if (checkWord == true) {
+			result++;
+		}
+
+		groupWord.clear();
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,불!,그래프 이론/그래프 탐색/너비 우선 탐색/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+using namespace std;
+
+typedef pair<int, pair<int, int>> node;
+static int w, h;
+static char map[1001][1001];
+static bool visited[1001][1001] = { false, };
+static int xx[4] = { 1, -1, 0, 0 };
+static int yy[4] = { 0, 0, 1, -1 };
+
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> h >> w;
+	cin.ignore();
+
+	fill(&map[0][0], &map[1000][1001], '#');
+
+	priority_queue<node, vector<node>, greater<node>> fire;
+	priority_queue<node, vector<node>, greater<node>> sg;
+
+	for (int H = 0; H < h; H++) {
+		string str;
+		getline(cin, str);
+
+		for (int W = 0; W < w; W++) {
+			map[H][W] = str[W];
+
+			if (str[W] == 'J') {
+				map[H][W] = '.';
+				sg.push(node(0, make_pair(H, W)));
+			}
+			if (str[W] == 'F') {
+				map[H][W] = '.';
+				fire.push(node(0, make_pair(H, W)));
+			}
+		}
+	}
+
+	int result = -1;
+	int cnt = 0;
+
+	while (!sg.empty()) {
+		while (!fire.empty() && fire.top().first == cnt) {
+			int nowFire_time = fire.top().first;
+			int nowFire_y = fire.top().second.first;
+			int nowFire_x = fire.top().second.second;
+			fire.pop();
+
+			if (map[nowFire_y][nowFire_x] == 'F') {
+				continue;
+			}
+			map[nowFire_y][nowFire_x] = 'F';
+
+			for (int i = 0; i < 4; i++) {
+				int nextFire_y = nowFire_y + yy[i];
+				int nextFire_x = nowFire_x + xx[i];
+
+				if (nextFire_y >= 0 && nextFire_x >= 0 && nextFire_y < h && nextFire_x < w) {
+					if (map[nextFire_y][nextFire_x] == '.') {
+						fire.push(node(nowFire_time + 1, make_pair(nextFire_y, nextFire_x)));
+					}
+				}
+			}
+		}
+
+		while (!sg.empty() && sg.top().first == cnt) {
+			int now_time = sg.top().first;
+			int now_y = sg.top().second.first;
+			int now_x = sg.top().second.second;
+			sg.pop();
+
+			if (now_y <= 0 || now_x <= 0 || now_y >= h - 1 || now_x >= w - 1) {
+				result = now_time + 1;
+				break;
+			}
+
+			if (visited[now_y][now_x] == true) {
+				continue;
+			}
+			visited[now_y][now_x] = true;
+
+			for (int i = 0; i < 4; i++) {
+				int next_y = now_y + yy[i];
+				int next_x = now_x + xx[i];
+
+				if (next_y >= 0 && next_x >= 0 && next_y < h && next_x < w) {
+					if (map[next_y][next_x] == '.') {
+						bool check_fire = false;
+
+						for (int j = 0; j < 4; j++) {
+							int check_fire_y = next_y + yy[j];
+							int check_fire_x = next_x + xx[j];
+
+							if (check_fire_y >= 0 && check_fire_x >= 0 && check_fire_y < h && check_fire_x < w) {
+								if (map[check_fire_y][check_fire_x] == 'F') {
+									check_fire = true;
+									break;
+								}
+							}
+						}
+
+						if (check_fire == true) {
+							continue;
+						}
+
+						sg.push(node(now_time + 1, make_pair(next_y, next_x)));
+					}
+				}
+			}
+		}
+		cnt++;
+
+		if (result != -1) {
+			break;
+		}
+	}
+
+	if (result == -1) {
+		cout << ""IMPOSSIBLE\n"";
+	}
+	else {
+		cout << result << ""\n"";
+	}
+
+	return 0;
+}",dbgus1006
+CPP,불,그래프 이론/그래프 탐색/너비 우선 탐색/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+using namespace std;
+
+typedef pair<int, pair<int, int>> node;
+static int T, w, h;
+static char map[1001][1001];
+static bool visited[1001][1001] = { false, };
+static int xx[4] = { 1, -1, 0, 0 };
+static int yy[4] = { 0, 0, 1, -1 };
+
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> T;
+
+	for (int t = 0; t < T; t++) {
+		cin >> w >> h;
+		cin.ignore();
+		
+		// 시작은 전부 벽으로
+		fill(&map[0][0], &map[1000][1001], '#');
+
+		// 불과 상근이의 이동을 체크할 BFS
+		priority_queue<node, vector<node>, greater<node>> fire;
+		priority_queue<node, vector<node>, greater<node>> sg;
+
+		for (int H = 0; H < h; H++) {
+			string str;
+			getline(cin, str);
+
+			for (int W = 0; W < w; W++) {
+				map[H][W] = str[W];
+
+				// 불과 상근이의 초기 위치를 큐에 저장하고 맵에는 .으로 표시
+				if (str[W] == '@') {
+					map[H][W] = '.';
+					sg.push(node(0, make_pair(H, W)));
+				}
+				if (str[W] == '*') {
+					map[H][W] = '.';
+					fire.push(node(0, make_pair(H, W)));
+				}
+			}
+		}
+
+		int result = -1;
+		int cnt = 0;
+
+		// 상근이가 이동할 수 있다면
+		while (!sg.empty()) {
+			// 불이 번질 곳이 있고 같은 초 동안 번지는 불일 때
+			while (!fire.empty() && fire.top().first == cnt) {
+				int nowFire_time = fire.top().first;
+				int nowFire_y = fire.top().second.first;
+				int nowFire_x = fire.top().second.second;
+				fire.pop();
+
+				// 이미 불이 번졌으면 스킵
+				if (map[nowFire_y][nowFire_x] == '*') {
+					continue;
+				}
+				map[nowFire_y][nowFire_x] = '*';
+
+				for (int i = 0; i < 4; i++) {
+					int nextFire_y = nowFire_y + yy[i];
+					int nextFire_x = nowFire_x + xx[i];
+
+					if (nextFire_y >= 0 && nextFire_x >= 0 && nextFire_y < h && nextFire_x < w) {
+						if (map[nextFire_y][nextFire_x] == '.') {
+							fire.push(node(nowFire_time + 1, make_pair(nextFire_y, nextFire_x)));
+						}
+					}
+				}
+			}
+
+			// 상근이가 이동할 수 있고 현재 시점일 때
+			while (!sg.empty() && sg.top().first == cnt) {
+				int now_time = sg.top().first;
+				int now_y = sg.top().second.first;
+				int now_x = sg.top().second.second;
+				sg.pop();
+
+				// 맵의 가장자리에 도달했으면 다음 시점에 탈출
+				if (now_y <= 0 || now_x <= 0 || now_y >= h - 1 || now_x >= w - 1) {
+					result = now_time + 1;
+					break;
+				}
+
+				if (visited[now_y][now_x] == true) {
+					continue;
+				}
+				visited[now_y][now_x] = true;
+
+				for (int i = 0; i < 4; i++) {
+					int next_y = now_y + yy[i];
+					int next_x = now_x + xx[i];
+
+					if (next_y >= 0 && next_x >= 0 && next_y < h && next_x < w) {
+						if (map[next_y][next_x] == '.') {
+							bool check_fire = false;
+							
+							// 이동할 위치 상하좌우에 불이 있으면 다음 시점에 불이 번지므로 이동 불가
+							for (int j = 0; j < 4; j++) {
+								int check_fire_y = next_y + yy[j];
+								int check_fire_x = next_x + xx[j];
+
+								if (check_fire_y >= 0 && check_fire_x >= 0 && check_fire_y < h && check_fire_x < w) {
+									if (map[check_fire_y][check_fire_x] == '*') {
+										check_fire = true;
+										break;
+									}
+								}
+							}
+
+							if (check_fire == true) {
+								continue;
+							}
+
+							sg.push(node(now_time + 1, make_pair(next_y, next_x)));
+						}
+					}
+				}
+			}
+			cnt++;
+
+			if (result != -1) {
+				break;
+			}
+		}
+
+		if (result == -1) {
+			cout << ""IMPOSSIBLE\n"";
+		}
+		else {
+			cout << result << ""\n"";
+		}
+
+		fill(&visited[0][0], &visited[1000][1001], false);
+
+	}
+
+	return 0;
+}",dbgus1006
+CPP,문자열,문자열/ 브루트포스/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <sstream>
+using namespace std;
+
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	vector<string> v;
+	string T;
+	getline(cin, T);
+	istringstream iss(T);
+	string str_buf;
+	while (getline(iss, str_buf, ' ')) {
+		v.push_back(str_buf);
+	}
+
+	int result = 0;
+
+	for (int i = 0; i < v[0].length(); i++) {
+		if (v[0][i] != v[1][i]) {
+			result++;
+		}
+	}
+
+	for (int i = 0; i < v[1].length() - v[0].length() + 1; i++) {
+		// 문자열 A의 길이를 B만큼 채우기 위해 0부터 B - A '개수' 만큼 반복
+		// AA = B의 앞 + A + B의 뒤
+		string AA = v[1].substr(0, i) + v[0] + v[1].substr(v[0].length() + i, v[1].length() - (v[0].length() + i));
+
+		int diff = 0;
+		for (int j = 0; j < AA.length(); j++) {
+			if (AA[j] != v[1][j]) {
+				diff++;
+			}
+		}
+		result = min(result, diff);
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,LCS 2,DP/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <stack>
+using namespace std;
+
+static string str1, str2;
+static int dp[1001][1001] = { 0, };
+static stack<char> result;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	getline(cin, str1);
+	getline(cin, str2);
+
+	for (int i = 1; i <= str1.size(); i++) {
+		for (int j = 1; j <= str2.size(); j++) {
+			if (str1[i - 1] == str2[j - 1]) {
+				dp[i][j] = dp[i - 1][j - 1] + 1;
+			}
+			else {
+				dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+			}
+		}
+	}
+
+	cout << dp[str1.length()][str2.length()] << ""\n"";
+
+	int fixed_col = str2.length();
+	for (int i = str1.length(); i > 0; i--) {
+		for (int j = fixed_col; j > 0; j--) {
+			if (dp[i][j] == dp[i - 1][j]) {
+				fixed_col = j;
+				break;
+			}
+			else if (dp[i][j] == dp[i][j - 1]) {
+				continue;
+			}
+			else {
+				result.push(str1[i - 1]);
+			}
+		}
+	}
+
+	while (!result.empty()) {
+		cout << result.top();
+		result.pop();
+	}
+
+	return 0;
+}",dbgus1006
+CPP,도시 분할 계획,그래프이론/ 최소 스패닝 트리/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+/*
+스패닝 트리란?
+모든 정점을 연결하지만 사이클이 없는 부분 그래프.
+
+즉, 최소 스패닝 트리(MST)란 간선의 가중치 값이 최소가 되는 스패닝 트리를 의미한다.
+
+MST를 구하는 알고리즘 중 크루스칼 알고리즘(Kruskal Algorithm)을 사용.
+크루스칼 알고리즘은 간선 중심으로 그리디 방식을 사용한다.
+
+[동작원리]
+1. 선택되지 않은 간선들 중 최소 가중치인 간선을 선택
+2. 선택된 간선이 사이클이 있는지 판별
+3. 총 V - 1개의 간선이 선택될 때까지 반복
+*/
+
+typedef pair<int, pair<int, int>> edge;
+static vector<edge> mst;
+static vector<edge> edges;
+static int N, M, result = 0;
+static vector<int> parent;
+
+// 해당 정점의 root를 찾는 함수
+// 같은 그래프, 즉 사이클이 발생하는지 확인
+int find_root(int x) {
+	if (parent[x] == x) {
+		return parent[x];
+	}
+	return parent[x] = find_root(parent[x]);
+}
+
+// 서로 연결되지 않은 두 그래프를 병합하는 함수
+void union_root(int a, int b) {
+	int A = find_root(a);
+	int B = find_root(b);
+
+	if (A != B) {
+		parent[B] = A;
+	}
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M;
+
+	parent.resize(N + 1);
+
+	for (int i = 1; i <= N; i++) {
+		parent[i] = i;
+	}
+
+	for (int i = 0; i < M; i++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+
+		edges.push_back(edge(c, make_pair(a, b)));
+	}
+
+	// 2개의 분리된 마을로 분할해야 하므로 N이 2이면 나눌 필요가 없다.
+	if (N == 2) {
+		cout << result;
+		return 0;
+	}
+
+	sort(edges.begin(), edges.end());
+
+	for (int i = 0; i < edges.size(); i++) {
+		edge now = edges[i];
+
+		int a = now.second.first;
+		int b = now.second.second;
+
+		if (find_root(a) == find_root(b)) {
+			continue;
+		}
+
+		mst.push_back(now);
+		union_root(a, b);
+
+		// MST가 N - 1이면 모든 정점이 이어지는 스패닝 트리
+		// N - 2이면 간선 하나가 없기 때문에 2그룹으로 분할된 트리
+		if (mst.size() == N - 2) {
+			break;
+		}
+	}
+
+	for (int i = 0; i < mst.size(); i++) {
+		result += mst[i].first;
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,최소 스패닝 트리,그래프 이론/최소 스패닝 트리/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+typedef pair<int, pair<int, int>> node;
+static vector<node> edges;
+static vector<node> mst;
+static int V, E, result = 0;
+static vector<int> parent;
+
+// 노드의 루트를 찾는 함수
+int find_root(int v) {
+	if (parent[v] == v) {
+		return parent[v];
+	}
+	return find_root(parent[v]);
+}
+
+// 사이클이 발생하지 않은 간선이 선택되어 두 노드의 루트가 같도록 갱신한다.
+void union_root(int a, int b) {
+	int A = find_root(a);
+	int B = find_root(b);
+
+	if (A != B) {
+		parent[B] = A;
+	}
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> V >> E;
+
+	parent.resize(V + 1);
+
+	// 각 노드의 부모 초기값은 자신
+	for (int i = 1; i <= V; i++) {
+		parent[i] = i;
+	}
+
+	// 가중치, 노드A, 노드B로 구성된 간선
+	for (int i = 0; i < E; i++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+
+		edges.push_back(node(c, make_pair(a, b)));
+	}
+
+	// 최소 가중치를 찾기 위해 가중치를 오름차순으로 정렬
+	sort(edges.begin(), edges.end());
+
+	for (int i = 0; i < edges.size(); i++) {
+		node now = edges[i];
+
+		// 현재 간선의 두 정점 a, b
+		int a = now.second.first;
+		int b = now.second.second;
+
+		// 루트가 같다면 (사이클이 발생) 현재 간선을 선택하지 않는다.
+		if (find_root(a) == find_root(b)) {
+			continue;
+		}
+
+		// 사이클이 발생하지 않으면 mst (최소 스패닝 트리)에 삽입하고
+		mst.push_back(now);
+
+		// 해당하는 두 노드를 같은 집합 (스패닝 트리)으로 묶는다.
+		union_root(a, b);
+
+		// 스패닝 트리는 모든 노드를 사이클 없이 잇기 때문에 간선의 개수는 노드 -1
+		if (mst.size() == V - 1) {
+			break;
+		}
+	}
+
+	// 최소 스패닝 트리의 가중치를 구한다.
+	for (int i = 0; i < mst.size(); i++) {
+		result += mst[i].first;
+	}
+
+	cout << result;
+
+	return 0;
+}",dbgus1006
+CPP,줄 세우기,그래프 이론 /위상 정렬 / 방향 비순환 그래프/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <stack>
+using namespace std;
+
+static vector<int> Result;
+static vector<int> preCount;
+static vector<vector<int>> List;
+static int N, M;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M;
+
+	Result.resize(N + 1);
+	preCount.resize(N + 1);
+	List.resize(N + 1);
+
+	// a가 b의 앞에 서는 관계를 그래프로 저장. 앞서는 학생이 몇명인지 preCount로 체크
+	for (int i = 0; i < M; i++) {
+		int a, b;
+
+		cin >> a >> b;
+
+		List[a].push_back(b);
+		preCount[b]++;
+	}
+
+	queue<int> q;
+
+	// 앞서는 학생이 없다면 큐에 삽입
+	for (int i = 1; i <= N; i++) {
+		if (preCount[i] == 0) {
+			q.push(i);
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		int now = q.front();
+		q.pop();
+		Result[i] = now;
+
+		// 현재 줄을 선 학생의 뒤에 오는 학생들을 체크
+		for (int j = 0; j < List[now].size(); j++) {
+			int next = List[now][j];
+
+			// 앞에 서야 할 학생이 나왔으므로 preCount를 -1 한다. 더 이상 앞에 서야 할 학생이 없다면 큐에 삽입
+			if (--preCount[next] == 0) {
+				q.push(next);
+			}
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		cout << Result[i] << "" "";
+	}
+
+	return 0;
+}",dbgus1006
+CPP,구슬 탈출 2,그래프 이론/그래프 탐색/시뮬레이션/너비 우선 탐색/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+#include <tuple>
+using namespace std;
+
+typedef pair<int, int> node;
+typedef tuple<node, node, int> balls;
+static char map[11][11];
+static int N, M;
+static node redBall, blueBall;
+static int yy[4] = { 0, 0, 1, -1 };
+static int xx[4] = { 1, -1, 0, 0 };
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M;
+	cin.ignore();
+
+	for (int i = 0; i < N; i++) {
+		string line;
+		getline(cin, line);
+
+		for (int j = 0; j < M; j++) {
+			map[i][j] = line[j];
+
+			if (map[i][j] == 'R') {
+				redBall = make_pair(i, j);
+				map[i][j] = '.';
+			}
+			if (map[i][j] == 'B') {
+				blueBall = make_pair(i, j);
+				map[i][j] = '.';
+			}
+		}
+	}
+
+	queue<balls> q;
+	q.push(balls(redBall, blueBall, 0));
+
+	while (!q.empty()) {
+		node nowRed = get<0>(q.front());
+		node nowBlue = get<1>(q.front());
+		int cntMove = get<2>(q.front());
+		q.pop();
+
+		if (cntMove > 10) {
+			continue;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			node nextRed = nowRed;
+			node nextBlue = nowBlue;
+			int cntRed = 0, cntBlue = 0;
+			bool isRedClear = false, isBlueClear = false;
+
+			while (true) {
+				if (!isRedClear) {
+					if (map[nextRed.first + yy[i]][nextRed.second + xx[i]] == '.') {
+						cntRed++;
+						nextRed.first += yy[i];
+						nextRed.second += xx[i];
+					}
+					else if (map[nextRed.first + yy[i]][nextRed.second + xx[i]] == 'O') {
+						cntRed++;
+						nextRed.first += yy[i];
+						nextRed.second += xx[i];
+						isRedClear = true;
+					}
+				}
+				if (!isBlueClear) {
+					if (map[nextBlue.first + yy[i]][nextBlue.second + xx[i]] == '.') {
+						cntBlue++;
+						nextBlue.first += yy[i];
+						nextBlue.second += xx[i];
+					}
+					else if (map[nextBlue.first + yy[i]][nextBlue.second + xx[i]] == 'O') {
+						cntBlue++;
+						nextBlue.first += yy[i];
+						nextBlue.second += xx[i];
+						isBlueClear = true;
+					}
+				}
+
+				if ((map[nextBlue.first + yy[i]][nextBlue.second + xx[i]] == '#' && map[nextRed.first + yy[i]][nextRed.second + xx[i]] == '#') ||
+					(isBlueClear && map[nextRed.first + yy[i]][nextRed.second + xx[i]] == '#') ||
+					(map[nextBlue.first + yy[i]][nextBlue.second + xx[i]] == '#' && isRedClear) ||
+					(isRedClear && isBlueClear)) {
+					break;
+				}
+			}
+
+			if (nextRed == nextBlue) {
+				if (cntRed > cntBlue) {
+					nextRed.first -= yy[i];
+					nextRed.second -= xx[i];
+				}
+				else if (cntRed < cntBlue) {
+					nextBlue.first -= yy[i];
+					nextBlue.second -= xx[i];
+				}
+			}
+
+			if (!isBlueClear) {
+				if (isRedClear) {
+					if (cntMove + 1 > 10) {
+						cout << ""-1"";
+						return 0;
+					}
+					cout << cntMove + 1;
+					return 0;
+				}
+				q.push(balls(nextRed, nextBlue, cntMove + 1));
+			}
+		}
+	}
+
+	cout << ""-1"";
+
+	return 0;
+}",dbgus1006
+CPP,벽 부수고 이동하기 2,그래프 이론/그래프 탐색/너비 우선 탐색/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <tuple>
+#include <string>
+using namespace std;
+
+typedef tuple<int, int, int> node;
+static int map[1003][1003];
+static int dist[11][1003][1003] = { 0, };
+static int N, M, K;
+static int xx[4] = { 0, 0, 1, -1 };
+static int yy[4] = { 1, -1, 0, 0 };
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M >> K;
+	cin.ignore();
+
+	for (int i = 1; i <= N; i++) {
+		string line;
+		getline(cin, line);
+
+		for (int j = 1; j <= M; j++) {
+			map[i][j] = line[j - 1] - '0';
+		}
+	}
+
+	queue<node> pq;
+	pq.push(node(0, 1, 1));
+	dist[0][1][1] = 1;
+	int minDist = -1;
+
+	while (!pq.empty()) {
+		int countBust = get<0>(pq.front());
+		int now_y = get<1>(pq.front());
+		int now_x = get<2>(pq.front());
+		pq.pop();
+
+		if (now_y == N && now_x == M) {
+			minDist = dist[countBust][now_y][now_x];
+			break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			int next_y = now_y + yy[i];
+			int next_x = now_x + xx[i];
+
+			if (next_y >= 1 && next_y <= N && next_x >= 1 && next_x <= M) {
+				if (map[next_y][next_x] == 0) {
+					if (dist[countBust][next_y][next_x] == 0) {
+						pq.push(node(countBust, next_y, next_x));
+						dist[countBust][next_y][next_x] = dist[countBust][now_y][now_x] + 1;
+					}
+				}
+				else {
+					if (countBust < K) {
+						if (dist[countBust + 1][next_y][next_x] == 0) {
+							pq.push(node(countBust + 1, next_y, next_x));
+							dist[countBust + 1][next_y][next_x] = dist[countBust][now_y][now_x] + 1;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	cout << minDist << ""\n"";
+
+	return 0;
+}",dbgus1006
+CPP,카드,구현/자료 구조/시뮬레이션/덱/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <unordered_map>
+#include <string>
+using namespace std;
+
+static unordered_map<string, int> map;
+static int N;
+
+bool compare(pair<string, int>& a, pair<string, int>& b) {
+	if (a.second == b.second) {
+		if (a.first[0] == '-') {
+			if (b.first[0] == '-') {
+				if (a.first.size() > b.first.size()) {
+					return true;
+				}
+				else if (a.first.size() < b.first.size()) {
+					return false;
+				}
+				else {
+					if (a.first.compare(b.first) > 0) {
+						return true;
+					}
+					return false;
+				}
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			if (b.first[0] == '-') {
+				return false;
+			}
+			else {
+				if (a.first.size() > b.first.size()) {
+					return false;
+				}
+				else if (a.first.size() < b.first.size()) {
+					return true;
+				}
+				else {
+					if (a.first.compare(b.first) < 0) {
+						return true;
+					}
+					return false;
+				}
+			}
+		}
+	}
+	return a.second > b.second;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N;
+	cin.ignore();
+
+	for (int i = 0; i < N; i++) {
+		string card;
+		getline(cin, card);
+
+		if (map.find(card) == map.end()) {
+			map.insert(make_pair(card, 1));
+			continue;
+		}
+		map[card]++;
+	}
+
+	vector<pair<string, int>> vc(map.begin(), map.end());
+	sort(vc.begin(), vc.end(), compare);
+
+	cout << vc.front().first;
+
+	return 0;
+}",dbgus1006
+CPP,벽 부수고 이동하기 4,그래프 이론/그래프 탐색/너비 우선 탐색/깊이 우선 탐색/,"#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+#include <string>
+using namespace std;
+
+typedef pair<int, int> node;
+static int N, M;
+static int map[1001][1001] = { 0, };
+static bool visited[1001][1001] = { false, };
+static vector<node> wall;
+static int xx[4] = { 0, 0, 1, -1 };
+static int yy[4] = { 1, -1, 0, 0 };
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	cin >> N >> M;
+	cin.ignore();
+
+	for (int i = 0; i < N; i++) {
+		string mapCol;
+		getline(cin, mapCol);
+
+		for (int j = 0; j < M; j++) {
+			map[i][j] = mapCol[j] - '0';
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			if (map[i][j] == 0) { // 이동할 수 있는 블록의 개수를 구하기 위해 0인 칸에서 BFS.
+				queue<node> q;
+				q.push(node(i, j));
+				int cnt = 0;
+
+				while (!q.empty()) {
+					int now_y = q.front().first;
+					int now_x = q.front().second;
+					q.pop();
+
+					if (visited[now_y][now_x] == true) {
+						continue;
+					}
+					visited[now_y][now_x] = true;
+					cnt++;
+
+					for (int k = 0; k < 4; k++) {
+						int next_y = now_y + yy[k];
+						int next_x = now_x + xx[k];
+
+						if (next_y >= 0 && next_y < N && next_x >= 0 && next_x < M) {
+							if (map[next_y][next_x] == 0) {
+								if (visited[next_y][next_x] == false) {
+									q.push(node(next_y, next_x));									
+								}
+							}
+							else { // 현재 구하는 0블록의 인접한 벽 블록을 저장한다.
+								if (visited[next_y][next_x] == false) {
+									wall.push_back(node(next_y, next_x));
+									visited[next_y][next_x] = true;
+								}
+							}
+						}
+					}
+				}
+
+				while (!wall.empty()) { // 인접한 각 벽 블록에 0블록 개수를 더한다.
+					map[wall.back().first][wall.back().second] += cnt;
+					visited[wall.back().first][wall.back().second] = false;
+					wall.pop_back();
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < M; j++) {
+			cout << map[i][j] % 10;
+		}
+		cout << ""\n"";
+	}
+
+	return 0;
+}",dbgus1006
+JS,날짜 비교하기,구현/,"function solution(date1, date2) {
+    var answer = 0;
+
+    // 날짜 객체 변환
+    
+    var day1 = new Date(date1[0], date1[1] - 1, date1[2]);
+    var day2 = new Date(date2[0], date2[1] - 1, date2[2]);
+    console.log(day1)
+    
+    if(day2 > day1){
+        answer = 1;
+    } else {
+        answer = 0;
+    }
+
+    return answer;
+    
+}",병태
+JS,카운트 다운,구현/,"function solution(start, end_num) {
+    var answer = [];
+    while(start >= end_num) {
+        answer.push(start)
+        start--
+    }
+    return answer;
+}",병태
+JS,세균 증식,연산/,"function solution(n, t) {
+    var answer = 0;
+    return n * (2 ** t);
+}",병태
+JS,주사위의 개수,연산/구현/,"function solution(box, n) {
+    // 상자의 가로, 세로, 높이 주사위의 개수 계산
+    let a = Math.floor(box[0] / n);
+    let b = Math.floor(box[1] / n);
+    let c = Math.floor(box[2] / n);
+
+    // 상자에 들어갈 수 있는 주사위의 개수를 모두 곱한 최대 개수 계산
+    return a * b * c;
+}",병태
+JS,개미군단,연산/,"function solution(hp) {
+    // ant1 장군개미 ant2 병정개미 ant3일개미
+    
+    const ant1 = Math.floor(hp / 5);
+    // 장군개미 수 계산
+    hp = hp - (ant1 * 5);
+    // 공격 후 남은 체력
+    
+    const ant2 = Math.floor(hp / 3);
+    hp = hp - (ant2 * 3);
+    
+    const ant3 = hp;
+    
+    return ant1 + ant2 + ant3;
+}",병태
+JS,인덱스 바꾸기,구현/,"function solution(my_string, num1, num2) {
+    // 문자열 자르기
+    var adele = my_string.split('');
+    
+    // 문자들 위치변경
+    const age = adele[num1];
+    adele[num1] = adele[num2];
+    adele[num2] = age;
+    
+    // 문자들 다시조합
+    var answer = adele.join('');
+    
+    return answer;
+}",병태
+JS,x 사이의 개수,연산/,"function solution(myString) {
+     // 결과 값 담는 곳
+    const lengths = [];
+    // 문자열 특정 x를 자르기
+    const engLish = myString.split('x');
+    
+    for (var i = 0; i < engLish.length; i++) {
+        lengths.push(engLish[i].length);
+    }
+    
+    return lengths;
+}",병태
+JS,옷가게 할인 받기,연산/,"function solution(price) {
+    if (price >= 500000) {
+        return Math.floor(price * 0.8);
+    }
+    else if (price >= 300000) {
+        return Math.floor(price * 0.9);
+    }
+    else if (price >= 100000) {
+        return Math.floor(price * 0.95);
+    }
+    else return price;   
+}",병태
+JS,몫 구하기,연산/,"function solution(num1, num2) {
+    var answer = ~~(num1 / num2);
+    return answer;
+}
+```",병태
+JS,나이 출력,연산/,"function solution(age) {
+    var answer = 23;
+    return 2023 - age ;
+}",병태
+JS,숫자 비교하기,연산/,"function solution(num1, num2) {
+    return (num1 === num2 ? 1 : - 1);
+}",병태
+JS,대문자로 바꾸기,구현/,"function solution(myString) {
+    var answer = """";
+    for (let i = 0; i < myString.length; i++) {
+        // toUpperCase 대문자 toLowerCase 소문자 메소드
+        answer += myString.toUpperCase();
+    }
+    return answer;
+}
+
+
+// return myString.toUpperCase()",병태
+JS,ad 제거하기,구현/,"function solution(strArr) {
+    var answer = [];
+    for (var i = 0; i < strArr.length; i++ ) {
+        if (!strArr[i].includes(""ad"")) {
+            answer.push(strArr[i]);
+        }
+    }
+    return answer;
+}",병태
+JAVA,두 개 뽑아서 더하기,배열/연산/,"import java.util.*;
+class Solution {
+    public int[] solution(int[] numbers) {
+        ArrayList<Integer> array = new ArrayList<>();
+        for(int i =0 ; i<numbers.length ; i++){
+            for(int j =i+1; j<numbers.length ; j++){
+                int sum = numbers[i]+numbers[j];
+//                System.out.print(sum +"" "");
+                if(array.contains(sum)){
+                    continue;
+                }
+                else{
+                    array.add(sum);
+                }
+            }
+        }
+        int[] answer = new int[array.size()];
+        int size =0 ;
+        for(int element : array){
+            answer[size++]=element;
+        }
+        Arrays.sort(answer);
+        return answer;
+    }
+}",jhlee343
+JAVA,캐시,배열/LRU/,"import java.util.*;
+class Solution {
+    public int solution(int cacheSize, String[] cities) {
+        int answer = 0;
+         ArrayList<String> cache = new ArrayList<>();
+
+        for(String city : cities){
+            //현재 배열크기 확인
+            city = city.toUpperCase();
+            if(cacheSize==0){
+                answer = 5*cities.length;
+                return answer;
+            }
+            
+            for(int i =0 ; i<cities.length; i++){    
+                //캐시에 도시가 있다면
+                if(cache.contains(city)){
+                    cache.remove(city);
+                    cache.add(city);
+                    answer+=1;   
+                    break;
+                }
+                //캐시에 도시가 없다면
+                else{
+                    //캐시가 이미 다 차있는 경우
+                    if(cache.size()==cacheSize){
+                        cache.remove(0);
+                    }
+                    cache.add(city);
+                    answer+=5;
+                    break;
+                    }
+                   
+                }
+            }
+        return answer;
+        }
+    }
+
+/* 
+LRU : 맨 앞에 가장 최근에 쓰인 작업, 뒤에는 가장 오랫동안 쓰이지 않은 작업
+cache hit :  해야할 작업이 캐시에 없는 상태
+cache miss : 캐시에 있는 작업을 CPU가 호출하는 경우
+5 5 5 1 1 1 1 1 1 
+*/",jhlee343
+JAVA,푸드 파이트 대회,문자열/,"class Solution {
+    public String solution(int[] food) {
+        String answer = """";
+        for(int i = 1 ; i<food.length ; i++){
+            int count = food[i]/2;
+            for(int j =0 ; j<count ; j++){
+                answer+=i;
+            }
+        }
+        StringBuilder sb = new StringBuilder(answer);
+        String reverseSB = sb.reverse().toString();
+        answer=answer+0+reverseSB;
+        System.out.println(answer);
+        return answer;
+    }
+}",jhlee343
+JAVA,모의고사,배열/구현/,"import java.util.*;
+class Solution {
+    public int[] solution(int[] answers) {
+        int pattern_one[] = {1,2,3,4,5};
+        int pattern_two[] = {2,1,2,3,2,4,2,5};
+        int pattern_three[] = {3,3,1,1,2,2,4,4,5,5};
+        int count[] = new int[3];
+        
+        ArrayList<Integer> arr = new ArrayList<>();
+        for(int i =0 ; i<answers.length ; i++){
+                if(pattern_one[i%(pattern_one.length)]==answers[i]){
+                    count[0]+=1;
+                }
+                if(pattern_two[i%pattern_two.length]==answers[i]){
+                    count[1]+=1;
+                }
+            
+                if(pattern_three[i%pattern_three.length]==answers[i]){
+                    count[2]+=1;
+                }
+        }
+        int max = Math.max(count[0],Math.max(count[1],count[2]));
+        for(int i=0 ; i<count.length ;i++){
+            if(count[i]==max){
+                arr.add(i+1);
+            }
+        }
+        int answer[] = new int[arr.size()];
+        for(int i=0 ; i<arr.size(); i++){
+            answer[i]=arr.get(i).intValue();
+        }
+        return answer;
+    }
+}",jhlee343
+JAVA,덧칠하기,연산/구현/,"import java.util.*;
+class Solution {
+    public int solution(int n, int m, int[] section) {
+        /*
+        section이 1보다 크니까 최소 한번이상 칠함
+        최소 횟수로 롤러질
+        가장 처음 롤러질 할 곳은 section[0]부터
+        */
+        int answer = 1;
+        int roller = section[0];
+        for(int paint : section){
+            if(roller+m-1<paint){
+                answer+=1;
+                roller = paint;
+            }
+        }
+        return answer;
+    }
+}",jhlee343
+JAVA,완주하지 못한 선수,집합과 맵/,"import java.util.*;
+class Solution {
+    public String solution(String[] participant, String[] completion) {
+        String answer = """";
+        HashMap<String,Integer> map = new HashMap<>();
+        for(String p : participant){
+            map.put(p,map.getOrDefault(p,0)+1);
+        }
+        for(String c : completion){
+            map.put(c,map.get(c)-1);
+        }
+        for(String k : map.keySet()){
+            if(map.get(k)!=0){
+                answer = k;
+            }
+        }
+        return answer;
+    }
+}",jhlee343
+JAVA,숫자 문자열과 영단어,배열/구현/,"class Solution {
+    public int solution(String s) {
+        int answer = 0;
+        String num[]= {""zero"",""one"",""two"",""three"",""four"",""five"",""six"",""seven"",""eight"",""nine""};
+        for(int i =0 ; i<num.length ;i++){
+            s= s.replace(num[i],Integer.toString(i));
+        }
+        answer = Integer.parseInt(s);
+        return answer;
+    }
+}",jhlee343
+JAVA,크레인 인형뽑기 게임,스택/큐/덱/,"import java.util.*;
+
+class Solution {
+    public int solution(int[][] board, int[] moves) {
+        int answer = 0;
+        Stack <Integer> stack = new Stack<>();
+        /*배열에서 확인
+        for(int i =0 ; i<board.length ;i++){
+            for(int j =0 ; j<board[0].length ;j++){
+                System.out.print(board[i][j]+"" "");
+            }
+            System.out.println("" "");
+        }
+        	0 0 0 0 0  
+            0 0 1 0 3  
+            0 2 5 0 1  
+            4 2 4 4 2  
+            3 5 1 3 1 
+        */
+        for(int i =0 ; i< moves.length ; i++){
+            int y_axis = moves[i]-1; // moves[i]에서 1을 빼줘야지 배열안에서 맞춰 들어갈수 있음
+            for(int j = 0 ; j<board[0].length; j++){
+                if(board[j][y_axis]!=0){//
+                    int obj = board[j][y_axis];
+                    board[j][y_axis]=0;
+                    if(stack.isEmpty()){
+                        stack.push(obj);
+                    }
+                    else{
+                        if(obj == stack.peek()){
+                            stack.pop();
+                            answer+=2;
+                        }
+                        else{
+                            stack.push(obj);
+                        }
+                    }
+                    break;
+                    }
+                
+            }
+        }
+        
+        // /*	4 3 1 1 3 2  stack 사용으로 구현도 해볼것 */
+        // for(int i =1 ; i<list.size() ; i++){
+        //         System.out.print(list.get(i-1)+"" "");
+        //     if(list.get(i-1)==list.get(i)){
+        //         list.remove(i-1);
+        //         list.remove(i);
+        //         answer++;
+        //     }
+        //     }
+        return answer;
+    }
+}",jhlee343
+JAVA,부족한 금액 계산하기,연산/,"class Solution {
+    public long solution(int price, int money, int count) {
+        long answer = -1;
+        
+        int c = 1; //진행한 횟수
+        /* answer type -> long 이기 때문에 cumsum, total 변수 type도 long으로 해줘야 함*/
+        long cumsum = 0; //누적 증가 비용 
+        long total = 0;
+        while(c<=count){
+            //3..6...9..비용 증가
+            cumsum +=price;
+            //증가비용 total
+            total +=cumsum;
+            //while문 count
+            c+=1;
+        }
+        answer =total-money;
+         // !!금액이 부족하지 않은 경우!!!
+        if(answer<0){answer =0;}
+        return answer;
+    }
+}",jhlee343
+JAVA,가장 가까운 같은 글자,연산/,"class Solution {
+    public int[] solution(String s) {
+        //string s의 길이가 answer의 길이와 같음
+        int[] answer = new int[s.length()];
+        String[] arr = new String[s.length()];
+        arr = s.split("""");
+        for(int i =0 ; i<s.length(); i++){
+            answer[i] = -1;
+            for(int j = i-1 ; j>0 ; j--){
+               if(arr[i].equals(arr[j])){
+                   answer[i] = i-j;
+                   break;
+               }
+            }
+        }
+        return answer;
+    }
+}
+```",jhlee343
+JAVA,이진변환 반복하기,연산/,"class Solution {
+    public int[] solution(String s) {
+        int[] answer = new int[2];
+        int count_zero = 0;
+        //delete '0' using replaceAll
+        while(s.length() > 1){
+            int count_one = 0;
+            for(int i =0 ; i<s.length() ; i++){
+                if(s.charAt(i)=='0'){
+                    answer[1] +=1;
+                }
+                else{
+                    count_one +=1 ;
+                }
+            }
+            s = Integer.toBinaryString(count_one);
+            answer[0] +=1;
+        }
+        return answer;
+    }
+}",jhlee343
+JAVA,명예의 전당(1),배열/,"import java.util.*;
+class Solution {
+    public int[] solution(int k, int[] score) {
+        int[] answer = new int[score.length];
+        int k_ary[] = new int[k];
+        for(int i =0 ; i<k ; i++){
+            k_ary[i] = score[i];
+            answer[i]=k_ary[i];
+        }
+        Arrays.sort(k_ary);
+        for(int i =0 ;i<k ; i++){
+           System.out.println(k_ary[i]);
+        }
+
+        for(int i=k ; i<score.length; i++){
+            if(score[i]>=k_ary[0]){
+                k_ary[k]=score[0];
+                Arrays.sort(k_ary);
+            }
+        }
+        return answer;
+    }
+}",jhlee343
+JAVA,멀리뛰기,DP/,"class Solution {
+    public long solution(int n) {
+        long answer = 0;
+        int sum =n;
+        //n값이 커지는게 문제같은데...
+        /*for(int i =0; i<=n ; i++){
+            for(int j = n ; j>=0 ; j--){
+                int total = 1*i + 2*j;
+                if(sum == total){
+                    if(i==0 || j==0){
+                        answer++;
+                    }else{
+                        answer += i+j;
+                    }
+                }
+            }
+        }
+        */
+        int dp[] = new int[2001];
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i =3 ; i<=n ;i++){
+            dp[i] = (dp[i-1]+dp[i-2])%1234567;
+        }
+        answer = dp[n]%1234567;
+
+        return answer;
+    }
+}",jhlee343

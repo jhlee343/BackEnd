@@ -1,87 +1,57 @@
 package shootingstar.typing.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shootingstar.typing.entity.CodeLanguage;
 import shootingstar.typing.entity.SortingType;
 import shootingstar.typing.entity.Text;
 import shootingstar.typing.repository.TextRepository;
-import shootingstar.typing.repository.dto.FindAllTextsByLangDto;
-import shootingstar.typing.repository.dto.FindDesTextByIdDto;
+import shootingstar.typing.repository.dto.*;
 import shootingstar.typing.service.dto.SaveTextDto;
+import shootingstar.typing.util.TextConverter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class TypingService {
 
     private final TextRepository textRepository;
+    private final TextConverter textConverter = new TextConverter();
 
     /**
      * P1 : 언어별 랜덤 지문 선택
      * 랜덤 id 반환
      */
-    public long getRandomId(CodeLanguage lang){
-        List<FindAllTextsByLangDto> langDtos = textRepository.findAllByLang(lang);
-        if (langDtos.size() == 0) {
+    public long getRandomId(CodeLanguage lang) {
+        Long id = textRepository.randomTrackByLang(lang);
+        if (id == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        int randomIndex = (int) ((Math.random()) * langDtos.size());
-        long id = langDtos.get(randomIndex).getId();
         return id;
     }
 
     /**
      * P2 : 언어별 페이지 리스트
-     * {id, title, description} 조회
+     * content : Array{id, title, description, createDate, author} 조회
+     * totalElements : 총 개수
+     * totalPages : 총 페이지 수
+     * number : 현재 페이지
      */
-    public String getLangText(CodeLanguage language, int pageNumber, SortingType sortingType) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllByLangWithSorting(language, pageNumber, sortingType);
-        if (texts.size() == 0) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-        return convertJSON(texts);
-    }
-
-    /**
-     * P2 : 언어별 페이지 리스트
-     * 언어별 전체 레코드 개수 조회
-     */
-    public String getCountByLangText(CodeLanguage language) {
-        String allCount = String.valueOf(textRepository.countAllByLang(language));
-        return allCount;
-    }
-
-    public String getSearchText(CodeLanguage language, int pageNumber, SortingType sortingType, String target) throws JsonProcessingException {
-        List<FindAllTextsByLangDto> texts = textRepository.findAllSearchWithSorting(language, pageNumber, sortingType, target);
-        if (texts.size() == 0) {
-            throw new NoSuchElementException("등록된 지문이 없습니다.");
-        }
-        return convertJSON(texts);
-    }
-
-    public String getCountSearchText(CodeLanguage language, String target) {
-        String allCount = String.valueOf(textRepository.countAllSearch(language, target));
-        return allCount;
+    public Page<FindAllTextsByLangDto> getLangPage(CodeLanguage language, SortingType sortingType, String search, Pageable pageable) {
+        return textRepository.findAllTextsByLang(language, sortingType, search, pageable);
     }
 
     /**
      * P3 : 설명 페이지
      * {title, description, desText} 조회
      */
-    public FindDesTextByIdDto getDesText(Long id) {
-        FindDesTextByIdDto desTextDto = textRepository.findDesTextById(id);
+    public FindDesTextByIdDto getDesText(CodeLanguage language, Long id) {
+        FindDesTextByIdDto desTextDto = textRepository.findDesTextByLangAndId(language, id);
         if (desTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
@@ -92,22 +62,21 @@ public class TypingService {
      * P4 : 타이핑 페이지
      * typingText 조회
      */
-    public String getTypingText(Long id) {
-        Optional<Text> optionalText = textRepository.findById(id);
-        if (optionalText.isEmpty()) {
+    public FindTypingTextDto getTypingText(CodeLanguage language, Long id) {
+        FindTypingTextDto findTypingTextDto = textRepository.findTypingTextByLangAndId(language, id);
+        if (findTypingTextDto == null) {
             throw new NoSuchElementException("등록된 지문이 없습니다.");
         }
-        Text text = optionalText.get();
-        return text.getTypingText();
+        return findTypingTextDto;
     }
 
     /**
      * 데이터베이스 지문 추가
      */
     @Transactional
-    public Text save(SaveTextDto saveTextDto) throws JsonProcessingException {
-        String desText = convertJSON(convert(saveTextDto.getText())); // 전달 받은 지문을 JSON 으로 변환
-        String typingText = convertJSON(convertRemoveAnno(saveTextDto.getText())); // 전달 받은 지문의 주석을 제거하고 JSON 으로 변환
+    public Text save(SaveTextDto saveTextDto) throws Exception {
+        String desText = textConverter.convertJSON(textConverter.convert(saveTextDto.getText())); // 전달 받은 지문을 JSON 으로 변환
+        String typingText = textConverter.convertJSON(textConverter.convertRemoveAnno(saveTextDto.getText(), saveTextDto.getLang())); // 전달 받은 지문의 주석을 제거하고 JSON 으로 변환
 
         Text text = new Text(
                 saveTextDto.getLang(),
@@ -120,77 +89,5 @@ public class TypingService {
         textRepository.save(text);
 
         return text;
-    }
-
-    /**
-     * 전달 받은 텍스트를 주석 제거하지 않고 리스트로 반환
-     */
-    public List<String> convert(String text) {
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
-            String line;
-            boolean previousLineEmpty = false;
-
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    if (!previousLineEmpty) {
-                        lines.add(line);
-                        previousLineEmpty = true;
-                    }
-                } else {
-                    lines.add(line);
-                    previousLineEmpty = false;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (lines.get(lines.size() - 1).trim().isEmpty()) {
-            lines.remove(lines.size() - 1);
-        }
-
-        return lines;
-    }
-
-    /**
-     * 전달 받은 텍스트를 주석 제거 후 리스트로 반환
-     */
-    public List<String> convertRemoveAnno(String text) {
-        List<String> lines = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new StringReader(text))) {
-            String line;
-            boolean previousLineEmpty = false;
-
-            while ((line = reader.readLine()) != null) {
-                // 주석 제거
-                String cleanedLine = line.replaceAll("//.*", "");
-                if (cleanedLine.trim().isEmpty()) {
-                    if (!previousLineEmpty) {
-                        lines.add(cleanedLine);
-                        previousLineEmpty = true;
-                    }
-                } else {
-                    lines.add(cleanedLine);
-                    previousLineEmpty = false;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (lines.get(lines.size() - 1).trim().isEmpty()) {
-            lines.remove(lines.size() - 1);
-        }
-
-        return lines;
-    }
-
-    /**
-     * object 를 JSON string 으로 반환
-     */
-    private String convertJSON(Object object) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        return objectMapper.writeValueAsString(object);
     }
 }
