@@ -16,7 +16,7 @@ spring:
 #        show_sql: true
 
   profiles:
-    include: database, port, corp
+    include: database, port, cors
 
 logging:
   level:
