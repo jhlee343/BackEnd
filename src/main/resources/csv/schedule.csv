@@ -1,4 +1,4 @@
-﻿JAVA,비밀지도,집합과 맵/,"class Solution {
+﻿JAVA,비밀지도,비트 조작/배열/문자열 처리,"class Solution {
     public String[] solution(int n, int[] arr1, int[] arr2) {
         
         String[] Map = new String[n];
@@ -13,7 +13,7 @@
         return Map;
     }
 }",bingo4xg
-JAVA,시저암호,구현/,"class Solution {
+JAVA,시저 암호,구현/문자열 처리,"class Solution {
     public String solution(String s, int n) {
         
         StringBuilder result = new StringBuilder();
@@ -33,7 +33,7 @@ JAVA,시저암호,구현/,"class Solution {
         return result.toString();
     }
 }",bingo4xg
-JAVA,과일장수,배열/,"import java.util.Arrays;
+JAVA,과일장수,구현/배열/,"import java.util.Arrays;
 import java.util.Collections;
 
 class Solution {
@@ -54,7 +54,7 @@ class Solution {
         return result;
     }
 }",bingo4xg
-JAVA,바탕화면 정리,구현/,"class Solution {
+JAVA,바탕화면 정리,구현/정렬,"class Solution {
     public int[] solution(String[] wallpaper) {
         
         // wallpaper 최대값이 50이므로 luy 초기값을 51로 두어 파일이 0좌표에 있을 때도 식별하게 한다
@@ -64,11 +64,11 @@ JAVA,바탕화면 정리,구현/,"class Solution {
         // 모든 격자 순회
         for(int i = 0; i < wallpaper.length; i++) {
             for(int j = 0; j < wallpaper[i].length(); j++) {
-                if(wallpaper[i].charAt(j) == '#') {         // 파일이 발견되면
-                    if(luy != 51) {                          // 마지막에 나온 파일의 y좌표+1값을 rdy에 저장
+                if(wallpaper[i].charAt(j) == '#') { // 파일이 발견되면
+                    if(luy != 51) {  // 마지막에 나온 파일의 y좌표+1값을 rdy에 저장
                         rdy = i+1;
                     } 
-                    else {                                  // 처음 나온 파일이면 y값을 luy에 저장 (파일이 1개인 경우를 대비해 rdy값에 i+1)
+                    else { // 처음 나온 파일이면 y값을 luy에 저장 (파일이 1개인 경우를 대비해 rdy값에 i+1)
                         luy = i;
                         rdy = i+1;
                     }
@@ -86,7 +86,7 @@ JAVA,바탕화면 정리,구현/,"class Solution {
         return result;
     }
 }",bingo4xg
-JAVA,명예의 전당(1),스택/큐/덱/,"import java.util.PriorityQueue;
+JAVA,명예의 전당(1),배열/정렬,"import java.util.PriorityQueue;
 
 public class Solution {
     public int[] solution(int k, int[] score) {
@@ -108,15 +108,11 @@ public class Solution {
         return result;
     }
 }",bingo4xg
-JAVA,폰켓몬,집합과 맵/,"import java.util.HashSet;
+JAVA,폰켓몬,해쉬/배열,"import java.util.HashSet;
 
 class Solution {
     public int solution(int[] nums) {
         
-        /* 
-        1. 포켓몬 종류 파악
-        2. nums 배열의 절반과 포켓몬 종류 중 더 작은 값 출력 
-        */
         HashSet<Integer> types = new HashSet<>();
         for (int num : nums) {
             types.add(num);
@@ -125,7 +121,7 @@ class Solution {
         return Math.min(nums.length / 2, types.size());
     }
 }",bingo4xg
-JAVA,모의고사,배열/,"import java.util.ArrayList;
+JAVA,모의고사,구현/배열,"import java.util.ArrayList;
 
 class Solution {
     public int[] solution(int[] answers) {
@@ -157,16 +153,10 @@ class Solution {
         return result;
     }
 }",bingo4xg
-JAVA,기사단원의 무기,배열/,"import java.util.ArrayList;
+JAVA,기사단원의 무기,구현/배열,"import java.util.ArrayList;
 
 class Solution {
     public int solution(int number, int limit, int power) {
-        /*
-        1. 기사 배열 만들기
-        2. 1부터 number값까지 차례로 나눈 몫의 값(약수의 개수)을 knight에 기록
-        3. 기록된 배열 중 limit을 넘는 값은 power값으로 치환
-        4. knight 원소 전부 더하기
-        */
         
         int[] knight = new int[number]; // 각 기사의 약수개수를 저장할 배열
         for(int i = 1; i <= number; i++) {
@@ -188,7 +178,7 @@ class Solution {
         return sum;
     }
 }",bingo4xg
-JAVA,크레인 인형뽑기 게임,배열/,"import java.util.ArrayList;
+JAVA,크레인 인형뽑기 게임,스택/큐/배열,"import java.util.ArrayList;
 
 class Solution {
     public int solution(int[][] board, int[] moves) {
@@ -219,7 +209,7 @@ class Solution {
         return count;
     }
 }",bingo4xg
-JAVA,콜라즈 추측,연산/,"class Solution {
+JAVA,콜라츠 추측,구현/수학,"class Solution {
     public int solution(int num) {
         
         long n = num;
@@ -236,7 +226,7 @@ JAVA,콜라즈 추측,연산/,"class Solution {
         return -1;
     }
 }",bingo4xg
-JAVA,없는 숫자 더하기,연산/,"class Solution {
+JAVA,없는 숫자 더하기,구현,"class Solution {
     public int solution(int[] numbers) {
         
         int sum = 0;
@@ -247,12 +237,12 @@ JAVA,없는 숫자 더하기,연산/,"class Solution {
         return (45 - sum);
     }
 }",bingo4xg
-JAVA,두 수의 차,연산/,"class Solution {
+JAVA,두 수의 차,구현,"class Solution {
     public int solution(int num1, int num2) {
         return num1-num2;
     }
 }",bingo4xg
-JAVA,추억 점수,연산/,"class Solution {
+JAVA,추억 점수,구현/문자열 처리,"class Solution {
     public int[] solution(String[] name, int[] yearning, String[][] photo) {
         
         // int 배열 answer를 photo의 길이만큼 초기화
@@ -269,7 +259,7 @@ JAVA,추억 점수,연산/,"class Solution {
         return answer;
     }
 }",bingo4xg
-JAVA,문자열 섞기,연산/ 문자열/,"class Solution {
+JAVA,문자열 섞기,구현/문자열 처리,"class Solution {
     public String solution(String str1, String str2) {
         String answer = """";
 
@@ -282,7 +272,7 @@ JAVA,문자열 섞기,연산/ 문자열/,"class Solution {
         return answer;
     }
 }",bingo4xg
-JAVA,중복된 숫자 개수,연산/,"class Solution {
+JAVA,중복된 숫자 개수,구현,"class Solution {
     public int solution(int[] array, int n) {
         
         int result = 0;
@@ -296,12 +286,12 @@ JAVA,중복된 숫자 개수,연산/,"class Solution {
         return result;
     }
 }",bingo4xg
-JAVA,두 수의 합,연산/,"class Solution {
+JAVA,두 수의 합,구현,"class Solution {
     public int solution(int num1, int num2) {
         return num1 + num2;
     }
 }",bingo4xg
-JAVA,달리기 경주,집합과 맵/,"import java.util.HashMap;
+JAVA,달리기 경주,구현/맵,"import java.util.HashMap;
 import java.util.Map;
 
 class Solution {
@@ -333,7 +323,7 @@ class Solution {
         return players;
     }
 }",bingo4xg
-JAVA,옹알이(1),배열/,"class Solution {
+JAVA,옹알이(1),구현/문자열 처리,"class Solution {
     public int solution(String[] babbling) {
         int answer = 0;
         
@@ -354,9 +344,8 @@ JAVA,옹알이(1),배열/,"class Solution {
         
         return answer;
     }
-}
-```",bingo4xg
-JAVA,문자열 겹쳐쓰기,구현/,"class Solution {
+}",bingo4xg
+JAVA,문자열 겹쳐쓰기,구현/문자열 처리,"class Solution {
     public String solution(String my_string, String overwrite_string, int s) {
         
         StringBuilder sb = new StringBuilder(my_string);
@@ -367,13 +356,9 @@ JAVA,문자열 겹쳐쓰기,구현/,"class Solution {
         }
         
         return sb.toString();
-        
-        // String start = my_string.substring(0, s);
-        // String end = my_string.substring(s + overwrite_string.length());
-        // return start + overwrite_string + end;
     }
 }",bingo4xg
-JAVA,실패율,연산/구현/,"import java.util.Arrays;
+JAVA,실패율,구현/배열/정렬,"import java.util.Arrays;
 import java.util.Comparator;
 
 public class Solution {
@@ -448,37 +433,28 @@ public class Solution {
         }
     }
 }",bingo4xg
-JAVA,flag에 따라 다른 값 반환하기,연산/,"class Solution {
+JAVA,flag에 따라 다른 값 반환하기,구현/조건문,"class Solution {
     public int solution(int a, int b, boolean flag) {
         
         if (flag == true)
             return a + b;
         else if (flag == false)
             return a - b;
-
-        /*
-        if (flag)
-            return a + b;
-        else
-            return a - b;
-        */
     }
 }",bingo4xg
-JAVA,문자 리스트를 문자열로 변환하기,문자열/,"class Solution {
+JAVA,문자 리스트를 문자열로 변환하기,구현/문자열 처리,"class Solution {
     public String solution(String[] arr) {
         String answer = """";
 
-        for(int i = 0; i < arr.length; i++ /*String a : arr*/) 
+        for(int i = 0; i < arr.length; i++) 
         {
             answer += arr[i];
         }
 
         return answer;
-        
-        // return String.join("""", arr);
     }
 }",bingo4xg
-JAVA,홀짝 구분하기,연산/ 구현/,"import java.util.Scanner;
+JAVA,홀짝 구분하기,구현/조건문,"import java.util.Scanner;
 
 public class Solution {
     public static void main(String[] args) {
@@ -493,24 +469,12 @@ public class Solution {
         {
             System.out.println(n + "" is odd"");
         }
-        
-        // System.out.print(n + "" is ""+(n % 2 == 0 ? ""even"" : ""odd""));
     }
 }",bingo4xg
-JAVA,약수의 합,연산/,"class Solution {
+JAVA,약수의 합,구현,"class Solution {
     public int solution(int n) {
         int answer = 0;
-        
-//         for(int i=1; i<=n; i++)
-//         {
-//             if(n%i == 0)
-//             {
-//                 answer = answer + i;
-//             }
-//         }
-        
-//         return answer;
-                
+                        
         for(int i=2; i<n; i++)
         {
             if(n%i == 0)
@@ -523,10 +487,8 @@ JAVA,약수의 합,연산/,"class Solution {
         return answer;
     }
 }",bingo4xg
-JAVA,공배수,연산/,"class Solution {
+JAVA,공배수,구현,"class Solution {
     public int solution(int number, int n, int m) {
-        /* int answer = 0;
-        return answer; */
         
         if (number % n == 0 && number % m == 0)
         {
@@ -535,7 +497,7 @@ JAVA,공배수,연산/,"class Solution {
         else return 0;
     }
 }",bingo4xg
-JAVA,문자열 곱하기,구현/,"class Solution {
+JAVA,문자열 곱하기,구현/문자열 처리,"class Solution {
     public String solution(String my_string, int k) {
         String answer = """";
                 
@@ -546,11 +508,9 @@ JAVA,문자열 곱하기,구현/,"class Solution {
         
         return answer;
         
-        // return my_string.repeat(k);
     }
-}
-```",bingo4xg
-JAVA,덧칠하기,연산/ 구현/,"class Solution {
+}",bingo4xg
+JAVA,덧칠하기,구현/,"class Solution {
     public int solution(int n, int m, int[] section) {
         int count = 0;
         int lastPainted = 0;
@@ -565,7 +525,7 @@ JAVA,덧칠하기,연산/ 구현/,"class Solution {
         return count;
     }
 }",bingo4xg
-JAVA,문자열 돌리기,구현/,"import java.util.Scanner;
+JAVA,문자열 돌리기,구현/문자열 처리,"import java.util.Scanner;
 
 public class Solution {
     public static void main(String[] args) {
@@ -576,7 +536,7 @@ public class Solution {
             System.out.println(a.charAt(i));
     }
 }",bingo4xg
-JAVA,문자열 붙여셔 출력하기,구현/,"import java.util.Scanner;
+JAVA,문자열 붙여서 출력하기,구현/문자열 처리,"import java.util.Scanner;
 
 public class Solution {
     public static void main(String[] args) {
@@ -587,7 +547,7 @@ public class Solution {
         System.out.print(a+b);
     }
 }",bingo4xg
-JAVA,수박수박수박수박수박수?,구현/,"class Solution {
+JAVA,수박수박수박수박수박수?,구현/문자열 처리,"class Solution {
     public String solution(int n) {
         String answer = """";
         
@@ -601,7 +561,7 @@ JAVA,수박수박수박수박수박수?,구현/,"class Solution {
         return answer;
     }
 }",bingo4xg
-JAVA,파일 합치기,DP/,"import java.util.*;
+JAVA,파일 합치기,다이나믹 프로그래밍/구간 합,"import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -643,62 +603,7 @@ public class Main {
             System.out.println(dp[1][n]); 
         }
     }
-}
-
-// 주어진 소설 파일들은 연속적인 장이다. 그러므로 정렬해서 푸는 방식은 불가능, 무조건 연속된 두 파일을 합쳐야한다.
-// 마지막으로 파일을 합칠 때는 전체 합이랑 동일한 값
-
-// 1번 예제 40 30 30 50
-// 40 + ((30 + 30) + 50)
-// 40 + (30 + (30 + 50))
-// (40 + 30) + (30 + 50)
-// ((40 + 30) + 30) + 50
-
-// 40 30 30 3개로 가정
-// 40 + (30 + 30) -> DP[1][1] + DP[2][3]
-// (40 + 30) + 30 -> DP[1][2] + DP[3][3]
-// DP[1][3] = Math.min(DP[1][1] + DP[2][3], DP[1][2] + DP[3][3])
-
-// 40 30 30 50
-// 40 + ((30 + 30) + 50) -> DP[1][1] + DP[2][4]
-// 40 + (30 + (30 + 50)) -> DP[1][1] + DP[2][4]
-    // DP[2][4] = 30 + 30 + 50
-    // 30 + (30 + 50) -> DP[2][2] + DP[3][4]
-    // (30 + 30) + 50 -> DP[2][3] + DP[4][4]
-    // DP[2][4] = Math.min(DP[2][2] + DP[3][4], DP[2][3] + DP[4][4])
-
-// (40 + 30) + (30 + 50) -> DP[1][2] + DP[3][4]
-
-// (40 + (30 + 30)) + 50 -> DP[1][3] + DP[4][4]
-// ((40 + 30) + 30) + 50 -> DP[1][3] + DP[4][4]
-    // 40 + (30 + 30) -> DP[1][1] + DP[2][3]
-    // (40 + 30) + 30 -> DP[1][2] + DP[3][3]
-    // DP[1][3] = Math.min(DP[1][1] + DP[2][3], DP[1][2] + DP[3][3])
-
-// m = 1; m < e; m++
-// DP[s][e] = Math.min(DP[s][e], DP[s][m] + DP[m + 1][e])
-
-// 최적의 방법으로 파일을 묶는 점화식은 찾았는데... 비용은 어쩌지
-// f[n + 1] : f[1] = 40, f[2] = 70, f[3] = 100, f[4] = 150
-// 1번에서 2번까지의 합은 f[2] = 70
-// 1번에서 3번까지의 합은 f[3] = 100
-// 2번에서 3번까지의 합은 f[3] - f[1] = 60
-// 2번에서 4번까지의 합은 f[4] - f[1] = 110
-
-// DP[1][4]
-// DP[1][1] + DP[2][4] -> 1부터 4까지의 합 f[4]가 필요 -> f[4] - f[0]
-    // DP[1][1]
-        // 1부터 1까지 = f[1] - f[0]
-    // DP[2][4]
-        // DP[2][2] + DP[3][4]
-            // 2부터 4까지 = f[4] - f[1]
-        // DP[2][3] + DP[4][4]
-            // 2부터 4까지 = f[4] - f[1]
-// DP[1][2] + DP[3][4]
-// DP[1][3] + DP[4][4]
-
-// m = 1; m < e; m++
-// DP[s][e] = Math.min(DP[s][e], DP[s][m] + DP[m + 1][e] + (f[e] - f[s - 1]))",dnjs2721
+}",dnjs2721
 JAVA,회장뽑기,그래프 이론/그래프 탐색/너비 우선 탐색/최단 경로/플로이드–워셜/,"import java.util.*;
 import java.io.*;
 
@@ -820,16 +725,7 @@ public class Main {
             }
         }
     }
-}
-
-// 주사위의 각 면에는 1부터 6까지 수가 하나씩 있다.
-// 게임의 크기는 10x10, 1 ~ 100
-// 주사위의 수만큼 이동해야 한다.
-// 100번 칸을 넘어가면 이동 불가능
-// 도착 칸이 사다리라면 사다리를 타고 이동
-// 뱀이 있는 칸에 도착하면 뱀을 따라 내려감
-// 1번 칸에서 시작해 100번 칸에 도착하자.
-// 최소한으로 주사위를 굴려서!",dnjs2721
+}",dnjs2721
 JAVA,특정 거리의 도시 찾기,그래프 이론/그래프 탐색/ 너비 우선 탐색 / 데이크스트라 /최단 경로/,"import java.util.*;
 import java.io.*;
 
@@ -955,9 +851,7 @@ public class Main {
         return Arrays.stream(visited).sum() + 1; // 제일 처음 시작했던 유저의 친구 단계가 -1이었기에 + 1을 해준다.
         // 모든 시작 유저가 -1을 가지기에 사실상 + 1을 안해줘도 된다.
     }
-}
-
-// 임의의 두 사람이 최소 몇 단계 만에 이어질 수 있는지",dnjs2721
+}",dnjs2721
 JAVA,A->B,그래프 이론 / 그리디 알고리즘 / 그래프 탐색 /너비 우선 탐색/,"import java.util.*;
 import java.io.*;
 
@@ -969,7 +863,7 @@ public class Main {
         int A = Integer.parseInt(st.nextToken());
         int B = Integer.parseInt(st.nextToken());
 
-				// 두 가지 방법의 풀이
+         // 두 가지 방법의 풀이
         System.out.println(solution1(A, B)); // BFS
         System.out.println(solution2(A, B)); // Math
     }
@@ -1148,50 +1042,52 @@ public class Main {
         }
     }
 }",dnjs2721
-JAVA,1로 2만들기,다이나믹 프로그래밍 / 그래프 이론 / 그래프 탐색/,"import java.util.*;
+JAVA,1로 만들기 2,다이나믹 프로그래밍 / 그래프 이론 / 그래프 탐색/,"import java.util.*;
 import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-				
-				int n = Integer.parseInt(br.readLine());
 
-        ArrayList<Integer>[] dp = new ArrayList[n + 1]; // dp[idx] 에는 idx 를 1로 최소한의 연산을 사용해 만들 때 포함되어 있는 수를 가진다.
+        int n = Integer.parseInt(br.readLine());
 
-        dp[1] = new ArrayList<>(); // 1을 1로 만들 때
-        dp[1].add(1); // 1만 포함된다.
+        int[] dp = new int[n + 1]; // dp[idx] 에는 idx 를 1로 만들 때 필요한 최소한의 연산 횟수를 가진다.
+        int[] route = new int[n + 1]; // route[idx] 에는 idx 를 1로 최소한의 연산을 사용해 만들 때 참고한 idx 를 가진다.
+
+        route[1] = -1; // 1에서 1을 만들 때는 연산이 필요없기에 -1이란 특정 값을 가진다.
 
         for (int i = 2; i <= n; i++) { // 2부터 n을 1로 만들 때
-            // i - 1 연산은 항상 수헹되기에 dp[i - 1]을 가지고 온다.
-            ArrayList<Integer> tmp = new ArrayList<>(dp[i - 1]); // List 에 i를 추가해 주기 위해 new 를 통해 가지고 온다.
-            if (i % 3 == 0) { // i가 3으로 나누어 떨어질 때
-                if (tmp.size() > dp[i / 3].size()) { // tmp 의 크기가 dp[i / 3]의 크기보다 클 때
-                    // i 를 1로 만들 때 이전 연산 보다 i / 3 의 연산이 적은 연산을 사용하기 때문에 tmp 값을 바꿔준다.
-                    tmp.clear(); // 이전 값을 지운다.
-                    tmp.addAll(dp[i / 3]); // dp[i / 3]의 값으로 수정한다.
-                }
+            dp[i] = dp[i - 1] + 1; // i - 1 연산은 항상 수헹되기에 dp[i - 1]을 가지고 온 뒤 연산 횟수를 추가해 dp[i]에 저장한다.
+            route[i] = i - 1; // dp[i]의 최소연산 횟수를 구하기 위해 dp[i - 1]을 참고 했기에 route[i]에 i - 1을 저장한다.
+
+            // i가 3로 나누어 떨어지고 dp[i] 의 연산횟수가 dp[i / 3]에 1을 더한 연산횟수 보다 클 때
+            if (i % 3 == 0 && dp[i] > dp[i / 3] + 1) {
+                dp[i] = dp[i / 3] + 1; // dp[i / 3]을 가지고 온 뒤 연산 횟수를 추가해 dp[i]에 저장한다.
+                route[i] = i / 3; // dp[i]의 최소연산 횟수를 구하기 위해 dp[i / 3]을 참고 했기에 route[i]에 i / 3을 저장한다.
             }
-            if (i % 2 == 0) {  // i가 3로 나누어 떨어질 때
-                if (tmp.size() > dp[i / 2].size()) { // tmp 의 크기가 dp[i / 2]의 크기보다 클 때
-                    tmp.clear();  // i 를 1로 만들 때 이전 연산 보다 i / 2 의 연산이 적은 연산을 사용하기 때문에 tmp 값을 바꿔준다.
-                    tmp.addAll(dp[i / 2]); // dp[i / 2]의 값으로 수정한다.
-                }
+
+            // i가 2로 나누어 떨어지고 dp[i] 의 연산횟수가 dp[i / 2]에 1을 더한 연산횟수 보다 클 때
+            if (i % 2 == 0 && dp[i] > dp[i / 2] + 1) {
+                dp[i] = dp[i / 2] + 1; // dp[i / 2]을 가지고 온 뒤 연산 횟수를 추가해 dp[i]에 저장한다.
+                route[i] = i / 2; // dp[i]의 최소연산 횟수를 구하기 위해 dp[i / 2]을 참고 했기에 route[i]에 i / 2를 저장한다.
             }
-            tmp.add(i); // tmp 에 i를 추가해 연산에 포함된 수를 추가해 준다.
-            dp[i] = tmp; // dp[i]를 tmp 로 설정한다.
         }
 
-        bw.write(dp[n].size() - 1 + ""\n""); // 자기 자신은 연산 횟수에 포함되지 않기에 -1을 한 뒤 연산 횟수를 BufferedWriter 에 저징한다.
-        for (int i = dp[n].size() - 1; i >= 0; i--) { // dp[n]에는 오름차순으로 수가 저장되어 있기에 반대로 순환한다.
-            bw.write(dp[n].get(i) + "" ""); // BufferedWriter 에 순서대로 저장
+        // 연산 횟수를 BufferedWriter 에 저징한다.
+        bw.write(dp[n] + ""\n"");
+
+        int check = n; // n 부터 1로 만들 때 포함되어 있는 수
+        while (route[check] != -1) { // root[check] 가 -1이 될 떄 까지 반복 -> check 가 1이면 -1이다.
+            bw.write(check + "" ""); // BufferedWriter 에 check 와 공백을 저장한다.
+            check = route[check]; // check 를 root[check]의 값으로 변경한다.
         }
+
+        bw.write(""1""); // 마지막에 1을 BufferedWriter 에 추가한다.
         bw.close(); // BufferedWriter 를 종료하고 저장된 문자들을 한번에 출력
     }
-}
-```",dnjs2721
-JAVA,점프,DP/,"import java.util.*;
+}",dnjs2721
+JAVA,점프,다이나믹 프로그래밍,"import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -1369,19 +1265,8 @@ public class Main {
             this.y = y;
         }
     }
-}
-
-
-// n * n
-// 각 땅에는 나라가 하나씩 존재
-// map[i][j] 는 i 행 j열에 사는 사람
-// 모든 국경선은 정사각형 -> 이동가능 상하좌우
-// 아래 방법에 의해 인구 이동이 없을 때까지 반복
-// 1. 인접한 두 구역의 차가 L <= num <= R 이라면 국경을 연다.
-// 2. 인접한 국가들을 모두 검사하고 국경을 연다.
-// 3. 국경이 열려 이동할 수 있는 국가들을 연합이라 칭하고, 해당 국가들의 인구수는 모든 연합의 인구수/연합에 속한 나라의 수
-// 4. 연합을 해제하고 국경을 닫는다.",dnjs2721
-JAVA,타일 채우기,다이나믹 프로그래밍 / 비트마스킹/,"import java.io.*;
+}",dnjs2721
+JAVA,타일 채우기,다이나믹 프로그래밍 / 수학적 패턴/ 조합,"import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -1412,7 +1297,7 @@ public class Main {
         System.out.println(dp[n]);
     }
 }",dnjs2721
-JAVA,가장 긴 증가하는 부분 수열 4,DP/,"import java.util.*;
+JAVA,가장 긴 증가하는 부분 수열 4,다이나믹 프로그래밍 / 수학,"import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -1474,7 +1359,7 @@ public class Main {
         }
     }
 }",dnjs2721
-JAVA,내려가기,다이나믹 프로그래밍 / 슬라이딩 윈도우/,"import java.util.*;
+JAVA,내려가기,다이나믹 프로그래밍,"import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -1524,7 +1409,7 @@ public class Main {
         System.out.printf(""%d %d"", max, min);
     }
 }",dnjs2721
-JAVA,동전 2,DP/,"import java.util.*;
+JAVA,동전 2,다이나믹 프로그래밍 / 수학,"import java.util.*;
 import java.io.*;
 
 public class Main {
@@ -1558,33 +1443,7 @@ public class Main {
             System.out.println(dp[k]); // k원을 만드는데 사용한 동전의 최소 개수를 출력
         }
     }
-}
-
-// 가치의 합이 k원이 되도록
-// 각각의 동전은 몇 개라도 사용가능
-// 최소한의 동전을 사용하자.
-
-// 3 15
-// 1
-// 2
-// 12
-// 라는 입력이 들어왔을 때
-
-// 1 입력 ->  dp[1 ~ 15] 의 값은 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 이다.
-
-// 2 입력 ->
-// dp[2] = Math.min(dp[2], dp[0] + 1) -> Math.min(2, 0 + 1) : 1 (2동전 1개)
-// dp[3] = Math.min(dp[3], dp[1] + 1) -> Math.min(3, 1 + 1) : 2 (1동전 1개, 2동전 1개)
-// dp[4] = Math.min(dp[4], dp[2] + 1) -> Math.min(4, 1 + 1) : 2 (2동전 1개, 2동전 1개)
-// dp[5] = Math.min(dp[5], dp[3] + 1) -> Math.min(5, 2 + 1) : 3 (1동전 1개, 2동전 1개, 2동전 1개)
-// ......
-// dp[1 ~ 15] 의 값은 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8 이다.
-
-// 12 입력 ->
-// dp[12] = Math.min(dp[12], dp[0] + 1) -> Math.min(6, 0 + 1) : 1 (12동전 1개)
-// dp[13] = Math.min(dp[13], dp[1] + 1) -> Math.min(7, 1 + 1) : 2 (1동전 1개, 12동전 1개)
-// dp[14] = Math.min(dp[14], dp[2] + 1) -> Math.min(7, 1 + 1) : 2 (2동전 1개, 12동전 1개)
-// dp[15] = Math.min(dp[15], dp[3] + 1) -> Math.min(8, 2 + 1) : 3 (1동전 1개, 2동전 1개, 12동전 1개)",dnjs2721
+}",dnjs2721
 JAVA,파이프 옮기기 1,다이나믹 프로그래밍/ 그래프 이론 / 그래프 탐색/,"import java.util.*;
 import java.io.*;
 
@@ -1662,7 +1521,7 @@ public class Main {
         }
     }
 }",dnjs2721
-JAVA,수레 움직이기,깊이 우선 탐색/ 그래프 이론 /,"class Solution {
+JAVA,수레 움직이기,깊이 우선 탐색/ 그래프 이론 / 백 트래킹 / 미로 탐색,"class Solution {
     static int n, m; // 퍼즐판의 세로, 가로
     static int[][] map; // 퍼즐판
     static int[] dx = {0, 0, -1, 1}; // 가로에 대한 상하좌우 이동 값
@@ -1829,7 +1688,7 @@ JAVA,수레 움직이기,깊이 우선 탐색/ 그래프 이론 /,"class Solutio
         }
     }
 }",dnjs2721
-JAVA,아날로그 시계,구현/,"class Solution {
+JAVA,아날로그 시계,시뮬레이션/수학,"class Solution {
     public static int solution(int h1, int m1, int s1, int h2, int m2, int s2) {
         int startTimeSec = (h1 * 60 * 60) + (m1 * 60) + s1; // 시작 시각을 초로 변환
         int endTimeSec = (h2 * 60 * 60) + (m2 * 60) + s2; // 종료 시각을 초로 변환
@@ -1911,7 +1770,7 @@ JAVA,아날로그 시계,구현/,"class Solution {
         return new double[]{(sec * hourHandSecAngle) % 360, (sec * minuteHandSecAngle) % 360, sec * secondHandSecAngle % 360};
     }
 }",dnjs2721
-JAVA,석유 시추,집합과 맵/ 큐 /,"import java.util.LinkedList;
+JAVA,석유 시추,그래프 이론/너비 우선 탐색,"import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Queue;
 
@@ -1930,20 +1789,20 @@ class Solution {
         m = land[0].length;
         map = land;
 
-				// 지도 전체 탐색
+        // 지도 전체 탐색
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-								// 값이 1인 지역은 석유가 있는 지역
-								// 0인 지역은 석유가 없으며 1보다 큰 지역은 이미 탐색을 완료한 구역
+	        // 값이 1인 지역은 석유가 있는 지역
+	        // 0인 지역은 석유가 없으며 1보다 큰 지역은 이미 탐색을 완료한 구역
                 if (map[j][i] == 1) { // 석유가 있는 지역에 한해 bfs 탐색
                     bfs(i, j); // bfs 탐색이 완료된 지역은 넘버링이 된다.
                 }
             }
         }
 
-				// 획득 가능한 석유 체크
+         // 획득 가능한 석유 체크
         for (int i = 0; i < m; i++) {
-						// 중복을 방지하기 위한 구덩이 방문 배열
+	   // 중복을 방지하기 위한 구덩이 방문 배열
             boolean[] visited = new boolean[holeIdx + 1]; // 열이 바뀔 때 마다 초기화
             int res = 0; // 해당 열에 시추관을 뚫었을 때 얻을 수 있는 석유의 양
             for (int j = 0; j < n; j++) {
@@ -1955,7 +1814,7 @@ class Solution {
                 res += hole.get(cur); // 해당 구덩이의 석유의 양을 res에 더한다.
             }
 
-						// 위의 탐색이 끝이나면 res는 해당 시추관을 뚫었을 때 얻을 수 있는 석유의 양이 된다.
+	   // 위의 탐색이 끝이나면 res는 해당 시추관을 뚫었을 때 얻을 수 있는 석유의 양이 된다.
             answer = Math.max(answer, res); // 탐색을 통해 얻을 수 있는 최대 석유의 양을 도출한다.
         }
 
@@ -1966,8 +1825,8 @@ class Solution {
         Queue<Node> q = new LinkedList<>(); // LinkedList를 이용하여 큐 생성
         int count = 1; // 해당 탐색에서 발견한 석유의 양
 
-				// 메모리 사용을 줄이기 위하여 방문을 위한 배열 생성 대신 입력 받은 지도를 수정한다.
-				// 0, 1 : 미탐색 지역, 2 ~ : 탐색을 완료하고 넘버링 된 지역
+        // 메모리 사용을 줄이기 위하여 방문을 위한 배열 생성 대신 입력 받은 지도를 수정한다.
+        // 0, 1 : 미탐색 지역, 2 ~ : 탐색을 완료하고 넘버링 된 지역
         map[y][x] = holeIdx; // 탐색 지역 넘버링:방문처리
         q.add(new Node(x, y)); // 탐색을 위해 큐에 노드 추가
 
@@ -1976,30 +1835,30 @@ class Solution {
             for (int i = 0; i < 4; i++) { // Node의 위치에서 상하좌우 탐색
                 int nx = node.x + dx[i];
                 int ny = node.y + dy[i];
-								// 탐색 지역이 범위를 벗어난 지역이라면 continue
+	       // 탐색 지역이 범위를 벗어난 지역이라면 continue
                 if (nx < 0 || ny < 0 || nx >= m || ny >= n) continue;
-								// 탐색 지역이 빈 땅이라면 continue
+	       // 탐색 지역이 빈 땅이라면 continue
                 if (map[ny][nx] == 0) continue;
-								// 탐색 지역이 1이 아닌 다른 수 
-									// 이미 넘버링 된 지역이기에 continue
+	       // 탐색 지역이 1이 아닌 다른 수 
+	       // 이미 넘버링 된 지역이기에 continue
                 if (map[ny][nx] != 1) continue;
-								// 탐색 지역 넘버링:방문처리
+	       // 탐색 지역 넘버링:방문처리
                 map[ny][nx] = holeIdx;
-								// 다음 탐색을 이어가기 위해 탐색지역을 큐에 추가
+                // 다음 탐색을 이어가기 위해 탐색지역을 큐에 추가
                 q.add(new Node(nx, ny));
-								// 발견한 석유의 양 증가
+	       // 발견한 석유의 양 증가
                 count++;
             }
         }
 
-				// hole에 holeIdx를 key, 탐색한 석유의 양을 value로 hashMap에 저장합니다.
+         // hole에 holeIdx를 key, 탐색한 석유의 양을 value로 hashMap에 저장합니다.
         hole.put(holeIdx, count);
-				// 다음 넘버링을 위해 holeIdx++
+         // 다음 넘버링을 위해 holeIdx++
         holeIdx++;
     }
 
-		// bfs 탐색을 위해 사용되는 클래스
-		// 격자 모양의 지도의 특정 위치에 대한 위치정보를 담고있다.
+    // bfs 탐색을 위해 사용되는 클래스
+    // 격자 모양의 지도의 특정 위치에 대한 위치정보를 담고있다.
     public static class Node {
         int x; 
         int y;
@@ -2009,7 +1868,7 @@ class Solution {
         }
     }
 }",dnjs2721
-JAVA,붕대 감기,집합과 맵/,"class Solution {
+JAVA,붕대 감기,시뮬레이션/구현,"class Solution {
     public static int solution(int[] bandage, int health, int[][] attacks) {
         int maxHealth = health; // 회복가능한 최대 체력
         int maxTime = attacks[attacks.length - 1][0]; // 주어진 공격 중 마지막 공격 시간
@@ -2043,7 +1902,7 @@ JAVA,붕대 감기,집합과 맵/,"class Solution {
         return health; // 모든 공격이 끝난 후 사망하지 않았다면 현재 체력 반환
     }
 }",dnjs2721
-PYTHON,없는 숫자 더하기,Set/,"def solution(numbers):
+PYTHON,없는 숫자 더하기,구현/집합,"def solution(numbers):
     # 0부터 9까지의 숫자를 리스트로 저장
     missing_numbers = list(range(10))
 
@@ -2056,19 +1915,16 @@ PYTHON,없는 숫자 더하기,Set/,"def solution(numbers):
     return sum(missing_numbers)
 
 ",Hong-bjj
-PYTHON,달리기 경주,배열/,"def solution(players, callings):
-answer = []
-for calling in callings:
-    a = players.index(calling)
-    players[a-1], players[a] = players[a], players[a-1]
+PYTHON,달리기 경주,구현/배열,"def solution(players, callings):
+    answer = []
+    for calling in callings:
+        a = players.index(calling)
+        if a > 0:  # 첫 번째 요소가 아닐 때만 교환
+            players[a-1], players[a] = players[a], players[a-1]
 
-    #print(calling)
-    #print(players[a])
-    #print(players)
-answer = players
-
-return answer",Hong-bjj
-PYTHON,최소 직사각형,배열/,"def solution(sizes): 
+    answer = players
+    return answer",Hong-bjj
+PYTHON,최소 직사각형,구현/배열,"def solution(sizes): 
     w = []  
     h = []  
     for i in range(len(sizes)):
@@ -2081,55 +1937,53 @@ PYTHON,최소 직사각형,배열/,"def solution(sizes):
 
     return max(w) * max(h)
 ",Hong-bjj
-PYTHON,a와 b출력하기,연산/,"a, b = map(int, input().strip().split(' '))
+PYTHON,a와 b출력하기,구현/입출력,"a, b = map(int, input().strip().split(' '))
 print(""a ="",a)
-print(""b ="",b)
-```",Hong-bjj
-PYTHON,문자열 내  p와 y의 개수,연산/,"def solution(s):
-	answer = True
-	s = s.lower()
-	p = s.count('p')
-	y = s.count('y')
-	if(p!= y):
-		answer = False
-return answer",Hong-bjj
-PYTHON,완주하지 못한 선수,반복문/,"def solution(participant, completion):
-for name in completion:
-participant.remove(name)  # 완주한 선수 제거
-return participant[0]  # 남은 선수가 완주하지 못한 선수",Hong-bjj
-PYTHON,평균 구하기,반복문/,"def solution(arr):
+print(""b ="",b)",Hong-bjj
+PYTHON,문자열 내  p와 y의 개수,구현/문자열 처리,"def solution(s):
+    answer = True
+    s = s.lower()
+    p = s.count('p')
+    y = s.count('y')
+    if p != y:
+        answer = False
+    return answer",Hong-bjj
+PYTHON,완주하지 못한 선수,구현,"def solution(participant, completion):
+    for name in completion:
+        participant.remove(name)  # 완주한 선수 제거
+    return participant[0]  # 남은 선수가 완주하지 못한 선수",Hong-bjj
+PYTHON,평균 구하기,구현/수학,"def solution(arr):
     answer = 0
     for a in arr:
         answer += a
     answer /= len(arr)
     return answer",Hong-bjj
-PYTHON,직사각형 별찍기,반복문/,"a, b = map(int, input().split(' '))
+PYTHON,직사각형 별찍기,구현/별찍기,"a, b = map(int, input().split(' '))
 for i in range(b):
     print(""*""*a)",Hong-bjj
-PYTHON,콜라즈 추측,반복문/,"def solution(num):
-# 작업을 반복하는 횟수를 카운트하는 변수
-count = 0
+PYTHON,콜라츠 추측,구현/수학,"def solution(num):
+    # 작업을 반복하는 횟수를 카운트하는 변수
+    count = 0
 
-# 주어진 수가 1이 될 때까지 반복
-while num != 1:
-    # 작업 횟수가 500을 초과하면 -1을 반환
-    if count >= 500:
-        return -1
-    # 입력된 수가 짝수라면 2로 나누고, 홀수라면 3을 곱하고 1을 더함
-if num % 2 == 0:
+    # 주어진 수가 1이 될 때까지 반복
+    while num != 1:
+        # 작업 횟수가 500을 초과하면 -1을 반환
+        if count >= 500:
+            return -1
+        # 입력된 수가 짝수라면 2로 나누고, 홀수라면 3을 곱하고 1을 더함
+        if num % 2 == 0:
             num = num / 2
         else:
             num = num * 3 + 1
-    # 작업 횟수 증가
-    count += 1
+        # 작업 횟수 증가
+        count += 1
 
-# 1이 될 때까지의 작업 횟수 반환
-return count
-",Hong-bjj
-PYTHON,문자열 출력하기,구현/,"str = input()
+    # 1이 될 때까지의 작업 횟수 반환
+    return count",Hong-bjj
+PYTHON,문자열 출력하기,구현/입출력,"str = input()
 print(str) 
 ",Hong-bjj
-CPP,연결 요소의 개수,그래프 이론 / 그래프 탐색 / 너비 우선 탐색 / 깊이 우선 탐색 /,"#include <bits/stdc++.h>
+CPP,연결 요소의 개수,그래프 이론 / 그래프 탐색 / 깊이 우선 탐색 /,"#include <bits/stdc++.h>
 using namespace std;
 
 vector<vector<int>> adj;
@@ -2251,7 +2105,7 @@ int main() {
 
 	return 0;
 }",justashow
-CPP,"1,2,3 더하기",DP/,"#include <bits/stdc++.h>
+CPP,"1,2,3 더하기",다이나믹 프로그래밍/,"#include <bits/stdc++.h>
 using namespace std;
 
 int dp[11];
@@ -2318,7 +2172,7 @@ int main() {
 
 	return 0;
 }",justashow
-CPP,계단 오르기,DP/,"#include <bits/stdc++.h>
+CPP,계단 오르기,다이나믹 프로그래밍/,"#include <bits/stdc++.h>
 using namespace std;
 
 int a[301];
@@ -2401,9 +2255,7 @@ void bfs(int x, int y) {
 				}
 			}
 		}
-
 	}
-
 }
 
 int main() {
@@ -2433,7 +2285,7 @@ int main() {
 		
 	return 0;
 }",justashow
-CPP,유기농 배추,그래프 이론/ 그래프 탐색 / 너비 우선 탐색 / 깊이 우선 탐색/,"#include <bits/stdc++.h>
+CPP,유기농 배추,그래프 이론/ 그래프 탐색 / 깊이 우선 탐색/,"#include <bits/stdc++.h>
 using namespace std;
 
 int t, m, n, k, x, y;
@@ -2480,7 +2332,7 @@ int main() {
 		
 	return 0;
 }",justashow
-CPP,포토주 시식,DP/,"#include <bits/stdc++.h>
+CPP,포도주 시식,다이나믹 프로그래밍/,"#include <bits/stdc++.h>
 using namespace std;
 
 int dp[10010];
@@ -2504,7 +2356,7 @@ int main() {
 
 	return 0;
 }",justashow
-CPP,2Xn 타일링 2,자료 구조 / 세그먼트 트리 / 분할 정복/,"#include <bits/stdc++.h>
+CPP,2xn 타일링 2,다이나믹 프로그래밍/자료 구조 / 세그먼트 트리 / 분할 정복/,"#include <bits/stdc++.h>
 using namespace std;
 
 int dp[1010];
@@ -2525,7 +2377,7 @@ int main() {
 
 	return 0;
 }",justashow
-CPP,요격 시스템,자료구조/ 정렬/,"#include <bits/stdc++.h>
+CPP,요격 시스템,정렬/탐색,"#include <bits/stdc++.h>
 using namespace std;
 
 int solution(vector<vector<int>> targets) {
@@ -2599,12 +2451,11 @@ int main() {
 
 	return 0;
 }",justashow
-CPP,부족한 금액 계산하기,연산/,"#include <bits/stdc++.h>
+CPP,부족한 금액 계산하기,구현/,"#include <bits/stdc++.h>
 
 using namespace std;
 
-long long solution(int price, int money, int count)
-{
+long long solution(int price, int money, int count) {
     long long answer = 0;
 
     for (int i = 1; i <= count; i++) {
@@ -2616,7 +2467,7 @@ long long solution(int price, int money, int count)
     
     return answer;
 }",justashow
-CPP,나머지가 1이 되는 수 찾기,연산/,"#include <bits/stdc++.h>
+CPP,나머지가 1이 되는 수 찾기,구현/,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2633,7 +2484,7 @@ int solution(int n) {
     
     return answer;
 }",justashow
-CPP,숫자 문자열과 영단어,연산/,"#include <bits/stdc++.h>
+CPP,숫자 문자열과 영단어,구현/문자열 처리,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2659,7 +2510,7 @@ int solution(string s) {
     
     return answer;
 }",justashow
-CPP,숫자 작꿍,배열/구현/,"#include <bits/stdc++.h>
+CPP,숫자 짝꿍,구현/배열,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2689,7 +2540,7 @@ string solution(string X, string Y) {
     
     return answer;
 }",justashow
-CPP,성격 유형 검사하기,집합과 맵/,"#include <bits/stdc++.h>
+CPP,성격 유형 검사하기,구현/맵,"#include <bits/stdc++.h>
 using namespace std;
 
 map<char, int> mp;
@@ -2713,13 +2564,13 @@ string solution(vector<string> survey, vector<int> choices) {
     
     return answer;
 }",justashow
-CPP,로또의 최고 순위와 최저 순위,배열/,"#include <bits/stdc++.h>
+CPP,로또의 최고 순위와 최저 순위,구현/배열,"#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> solution(vector<int> lottos, vector<int> win_nums) {
     vector<int> answer;
     int win[46];
-		int rank[] = {6, 6, 5, 4, 3, 2, 1};
+    int rank[] = {6, 6, 5, 4, 3, 2, 1};
     int cnt = 0, cnt_zero = 0;
     for (int i = 0; i < win_nums.size(); i++) {
         win[win_nums[i]] = 1;
@@ -2739,7 +2590,7 @@ vector<int> solution(vector<int> lottos, vector<int> win_nums) {
 
     return answer;
 }",justashow
-CPP,음양 더하기,연산/,"#include <bits/stdc++.h>
+CPP,음양 더하기,구현/배열,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2752,7 +2603,7 @@ int solution(vector<int> absolutes, vector<bool> signs) {
     
     return answer;
 }",justashow
-CPP,신고 결과 받기,자료구조/ 정렬/,"#include <bits/stdc++.h>
+CPP,신고 결과 받기,구현/맵,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2782,7 +2633,7 @@ vector<int> solution(vector<string> id_list, vector<string> report, int k) {
     
     return answer;
 }",justashow
-CPP,약수의 개수와 덧셈,연산/,"#include <bits/stdc++.h>
+CPP,약수의 개수와 덧셈,구현,"#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -2872,7 +2723,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,크로아티아 알파벳,구현/문자열/,"#include <iostream>
+CPP,크로아티아 알파벳,구현/문자열 처리,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -2952,7 +2803,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,그룹 단어 체커,구현/문자열/,"#include <iostream>
+CPP,그룹 단어 체커,구현/문자열 처리/,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -3296,7 +3147,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,문자열,문자열/ 브루트포스/,"#include <iostream>
+CPP,문자열,문자열 처리/ 브루트포스/,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -3346,7 +3197,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,LCS 2,DP/,"#include <iostream>
+CPP,LCS 2,다이나믹 프로그래밍/,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -3403,7 +3254,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,도시 분할 계획,그래프이론/ 최소 스패닝 트리/,"#include <iostream>
+CPP,도시 분할 계획,그래프 이론/ 최소 스패닝 트리/,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -3863,7 +3714,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,카드,구현/자료 구조/시뮬레이션/덱/,"#include <iostream>
+CPP,카드,자료구조/정렬/해시,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -3945,7 +3796,7 @@ int main()
 
 	return 0;
 }",dbgus1006
-CPP,벽 부수고 이동하기 4,그래프 이론/그래프 탐색/너비 우선 탐색/깊이 우선 탐색/,"#include <iostream>
+CPP,벽 부수고 이동하기 4,그래프 이론/그래프 탐색/너비 우선 탐색,"#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -4034,15 +3885,14 @@ int main()
 
 	return 0;
 }",dbgus1006
-JS,날짜 비교하기,구현/,"function solution(date1, date2) {
+JS,날짜 비교하기,구현/날짜 처리,"function solution(date1, date2) {
     var answer = 0;
 
     // 날짜 객체 변환
     
     var day1 = new Date(date1[0], date1[1] - 1, date1[2]);
     var day2 = new Date(date2[0], date2[1] - 1, date2[2]);
-    console.log(day1)
-    
+        
     if(day2 > day1){
         answer = 1;
     } else {
@@ -4051,7 +3901,7 @@ JS,날짜 비교하기,구현/,"function solution(date1, date2) {
 
     return answer;
     
-}",병태
+}",BYEONGTAEMOON
 JS,카운트 다운,구현/,"function solution(start, end_num) {
     var answer = [];
     while(start >= end_num) {
@@ -4059,12 +3909,11 @@ JS,카운트 다운,구현/,"function solution(start, end_num) {
         start--
     }
     return answer;
-}",병태
-JS,세균 증식,연산/,"function solution(n, t) {
-    var answer = 0;
+}",BYEONGTAEMOON
+JS,세균 증식,구현/수학,"function solution(n, t) {
     return n * (2 ** t);
-}",병태
-JS,주사위의 개수,연산/구현/,"function solution(box, n) {
+}",BYEONGTAEMOON
+JS,주사위의 개수,구현/수학,"function solution(box, n) {
     // 상자의 가로, 세로, 높이 주사위의 개수 계산
     let a = Math.floor(box[0] / n);
     let b = Math.floor(box[1] / n);
@@ -4072,8 +3921,8 @@ JS,주사위의 개수,연산/구현/,"function solution(box, n) {
 
     // 상자에 들어갈 수 있는 주사위의 개수를 모두 곱한 최대 개수 계산
     return a * b * c;
-}",병태
-JS,개미군단,연산/,"function solution(hp) {
+}",BYEONGTAEMOON
+JS,개미군단,그리디/구현/수학,"function solution(hp) {
     // ant1 장군개미 ant2 병정개미 ant3일개미
     
     const ant1 = Math.floor(hp / 5);
@@ -4087,8 +3936,8 @@ JS,개미군단,연산/,"function solution(hp) {
     const ant3 = hp;
     
     return ant1 + ant2 + ant3;
-}",병태
-JS,인덱스 바꾸기,구현/,"function solution(my_string, num1, num2) {
+}",BYEONGTAEMOON
+JS,인덱스 바꾸기,구현/문자열 처리,"function solution(my_string, num1, num2) {
     // 문자열 자르기
     var adele = my_string.split('');
     
@@ -4101,8 +3950,8 @@ JS,인덱스 바꾸기,구현/,"function solution(my_string, num1, num2) {
     var answer = adele.join('');
     
     return answer;
-}",병태
-JS,x 사이의 개수,연산/,"function solution(myString) {
+}",BYEONGTAEMOON
+JS,x 사이의 개수,구현/문자열 처리,"function solution(myString) {
      // 결과 값 담는 곳
     const lengths = [];
     // 문자열 특정 x를 자르기
@@ -4113,8 +3962,8 @@ JS,x 사이의 개수,연산/,"function solution(myString) {
     }
     
     return lengths;
-}",병태
-JS,옷가게 할인 받기,연산/,"function solution(price) {
+}",BYEONGTAEMOON
+JS,옷가게 할인 받기,구현/수학,"function solution(price) {
     if (price >= 500000) {
         return Math.floor(price * 0.8);
     }
@@ -4125,31 +3974,25 @@ JS,옷가게 할인 받기,연산/,"function solution(price) {
         return Math.floor(price * 0.95);
     }
     else return price;   
-}",병태
-JS,몫 구하기,연산/,"function solution(num1, num2) {
+}",BYEONGTAEMOON
+JS,몫 구하기,구현,"function solution(num1, num2) {
     var answer = ~~(num1 / num2);
     return answer;
-}
-```",병태
-JS,나이 출력,연산/,"function solution(age) {
-    var answer = 23;
-    return 2023 - age ;
-}",병태
-JS,숫자 비교하기,연산/,"function solution(num1, num2) {
+}",BYEONGTAEMOON
+JS,나이 출력,구현,"function solution(age) {
+    return 2023 - age;
+}",BYEONGTAEMOON
+JS,숫자 비교하기,구현/조건문,"function solution(num1, num2) {
     return (num1 === num2 ? 1 : - 1);
-}",병태
-JS,대문자로 바꾸기,구현/,"function solution(myString) {
+}",BYEONGTAEMOON
+JS,대문자로 바꾸기,구현/문자열 처리,"function solution(myString) {
     var answer = """";
     for (let i = 0; i < myString.length; i++) {
-        // toUpperCase 대문자 toLowerCase 소문자 메소드
-        answer += myString.toUpperCase();
+        answer += myString[i].toUpperCase();
     }
     return answer;
-}
-
-
-// return myString.toUpperCase()",병태
-JS,ad 제거하기,구현/,"function solution(strArr) {
+}",BYEONGTAEMOON
+JS,ad 제거하기,구현/문자열 처리,"function solution(strArr) {
     var answer = [];
     for (var i = 0; i < strArr.length; i++ ) {
         if (!strArr[i].includes(""ad"")) {
@@ -4157,19 +4000,21 @@ JS,ad 제거하기,구현/,"function solution(strArr) {
         }
     }
     return answer;
-}",병태
-JAVA,두 개 뽑아서 더하기,배열/연산/,"import java.util.*;
+}",BYEONGTAEMOON
+JAVA,두 개 뽑아서 더하기,구현/베열,"import java.util.*;
 class Solution {
     public int[] solution(int[] numbers) {
         ArrayList<Integer> array = new ArrayList<>();
+	//정수 배열 생성
         for(int i =0 ; i<numbers.length ; i++){
             for(int j =i+1; j<numbers.length ; j++){
                 int sum = numbers[i]+numbers[j];
-//                System.out.print(sum +"" "");
-                if(array.contains(sum)){
+                if(array.contains(sum)){ 
+		//배열안에 sum값이 포함되어있는 경우
                     continue;
                 }
                 else{
+		//포함되지 않은 경우
                     array.add(sum);
                 }
             }
@@ -4183,7 +4028,7 @@ class Solution {
         return answer;
     }
 }",jhlee343
-JAVA,캐시,배열/LRU/,"import java.util.*;
+JAVA,캐시,구현/배열/LRU/,"import java.util.*;
 class Solution {
     public int solution(int cacheSize, String[] cities) {
         int answer = 0;
@@ -4192,25 +4037,28 @@ class Solution {
         for(String city : cities){
             //현재 배열크기 확인
             city = city.toUpperCase();
-            if(cacheSize==0){
+            if(cacheSize==0){ 
+		//캐시에 도시가 없다면
                 answer = 5*cities.length;
                 return answer;
             }
             
             for(int i =0 ; i<cities.length; i++){    
-                //캐시에 도시가 있다면
+                //캐시에 일치하는 도시가 있다면
                 if(cache.contains(city)){
                     cache.remove(city);
                     cache.add(city);
                     answer+=1;   
                     break;
                 }
-                //캐시에 도시가 없다면
+                //캐시에 일치하는 도시가 없다면
                 else{
                     //캐시가 이미 다 차있는 경우
                     if(cache.size()==cacheSize){
+			//캐시 가장 앞자리 삭제
                         cache.remove(0);
                     }
+		    // 현재 호출한 도시를 캐시의 가장 마지막에 추가
                     cache.add(city);
                     answer+=5;
                     break;
@@ -4219,34 +4067,37 @@ class Solution {
                 }
             }
         return answer;
-        }
-    }
+      }
+}
 
 /* 
 LRU : 맨 앞에 가장 최근에 쓰인 작업, 뒤에는 가장 오랫동안 쓰이지 않은 작업
 cache hit :  해야할 작업이 캐시에 없는 상태
 cache miss : 캐시에 있는 작업을 CPU가 호출하는 경우
-5 5 5 1 1 1 1 1 1 
 */",jhlee343
-JAVA,푸드 파이트 대회,문자열/,"class Solution {
+JAVA,푸드 파이트 대회,구현/문자열 처리,"class Solution {
     public String solution(int[] food) {
         String answer = """";
         for(int i = 1 ; i<food.length ; i++){
+	//양쪽에서 진행되므로 반절로 잘라서 수행
             int count = food[i]/2;
             for(int j =0 ; j<count ; j++){
                 answer+=i;
             }
         }
         StringBuilder sb = new StringBuilder(answer);
+	//반대쪽의 경우
         String reverseSB = sb.reverse().toString();
         answer=answer+0+reverseSB;
+
         System.out.println(answer);
         return answer;
     }
 }",jhlee343
-JAVA,모의고사,배열/구현/,"import java.util.*;
+JAVA,모의고사,구현/배열,"import java.util.*;
 class Solution {
     public int[] solution(int[] answers) {
+	//문제에 나와있는 정답 패턴
         int pattern_one[] = {1,2,3,4,5};
         int pattern_two[] = {2,1,2,3,2,4,2,5};
         int pattern_three[] = {3,3,1,1,2,2,4,4,5,5};
@@ -4254,6 +4105,7 @@ class Solution {
         
         ArrayList<Integer> arr = new ArrayList<>();
         for(int i =0 ; i<answers.length ; i++){
+		//answer 배열안의 원소 순서에 맞춰서 pattern을 반복
                 if(pattern_one[i%(pattern_one.length)]==answers[i]){
                     count[0]+=1;
                 }
@@ -4265,7 +4117,10 @@ class Solution {
                     count[2]+=1;
                 }
         }
+
         int max = Math.max(count[0],Math.max(count[1],count[2]));
+	//패턴별로 얻은 정답개수 중 Max 값 찾기
+
         for(int i=0 ; i<count.length ;i++){
             if(count[i]==max){
                 arr.add(i+1);
@@ -4278,7 +4133,7 @@ class Solution {
         return answer;
     }
 }",jhlee343
-JAVA,덧칠하기,연산/구현/,"import java.util.*;
+JAVA,덧칠하기,구현,"import java.util.*;
 class Solution {
     public int solution(int n, int m, int[] section) {
         /*
@@ -4297,15 +4152,20 @@ class Solution {
         return answer;
     }
 }",jhlee343
-JAVA,완주하지 못한 선수,집합과 맵/,"import java.util.*;
+JAVA,완주하지 못한 선수,구현/맵,"import java.util.*;
 class Solution {
     public String solution(String[] participant, String[] completion) {
-        String answer = """";
+	//전체 참가자 중 한명만 탈락한다 
+       String answer = """";
         HashMap<String,Integer> map = new HashMap<>();
         for(String p : participant){
+	/*전체 참가자를 HashMap에 입력
+	getOrDefault()메소드를 활용하여 동명이인의 경우를 구분하기 위해 value값을 주며 구분 */
             map.put(p,map.getOrDefault(p,0)+1);
+
         }
         for(String c : completion){
+	//완주한 참가자는 hashmap에서 꺼낸다
             map.put(c,map.get(c)-1);
         }
         for(String k : map.keySet()){
@@ -4316,51 +4176,45 @@ class Solution {
         return answer;
     }
 }",jhlee343
-JAVA,숫자 문자열과 영단어,배열/구현/,"class Solution {
+JAVA,숫자 문자열과 영단어,구현/문자열 처리,"class Solution {
     public int solution(String s) {
         int answer = 0;
         String num[]= {""zero"",""one"",""two"",""three"",""four"",""five"",""six"",""seven"",""eight"",""nine""};
+	//숫자에 대한 문자값을 num[]배열에 입력
         for(int i =0 ; i<num.length ;i++){
             s= s.replace(num[i],Integer.toString(i));
+	//num배열의 자리에 숫자값을 String 타입으로 대체
         }
         answer = Integer.parseInt(s);
         return answer;
     }
 }",jhlee343
-JAVA,크레인 인형뽑기 게임,스택/큐/덱/,"import java.util.*;
+JAVA,크레인 인형뽑기 게임,스택/큐/배열,"import java.util.*;
 
 class Solution {
     public int solution(int[][] board, int[] moves) {
         int answer = 0;
         Stack <Integer> stack = new Stack<>();
-        /*배열에서 확인
-        for(int i =0 ; i<board.length ;i++){
-            for(int j =0 ; j<board[0].length ;j++){
-                System.out.print(board[i][j]+"" "");
-            }
-            System.out.println("" "");
-        }
-        	0 0 0 0 0  
-            0 0 1 0 3  
-            0 2 5 0 1  
-            4 2 4 4 2  
-            3 5 1 3 1 
-        */
+
         for(int i =0 ; i< moves.length ; i++){
-            int y_axis = moves[i]-1; // moves[i]에서 1을 빼줘야지 배열안에서 맞춰 들어갈수 있음
+            int y_axis = moves[i]-1; 
+	// moves[i]-1을 통해 array length 에러 방지
             for(int j = 0 ; j<board[0].length; j++){
-                if(board[j][y_axis]!=0){//
+                if(board[j][y_axis]!=0){
                     int obj = board[j][y_axis];
                     board[j][y_axis]=0;
                     if(stack.isEmpty()){
+			//stack이 0인 경우
                         stack.push(obj);
                     }
                     else{
+			//스택안에 마지막 값이 뽑은 obj값과 같은 경우
                         if(obj == stack.peek()){
                             stack.pop();
                             answer+=2;
                         }
                         else{
+			//obj 값과 같지 않은 경우
                             stack.push(obj);
                         }
                     }
@@ -4370,19 +4224,10 @@ class Solution {
             }
         }
         
-        // /*	4 3 1 1 3 2  stack 사용으로 구현도 해볼것 */
-        // for(int i =1 ; i<list.size() ; i++){
-        //         System.out.print(list.get(i-1)+"" "");
-        //     if(list.get(i-1)==list.get(i)){
-        //         list.remove(i-1);
-        //         list.remove(i);
-        //         answer++;
-        //     }
-        //     }
         return answer;
     }
 }",jhlee343
-JAVA,부족한 금액 계산하기,연산/,"class Solution {
+JAVA,부족한 금액 계산하기,구현,"class Solution {
     public long solution(int price, int money, int count) {
         long answer = -1;
         
@@ -4404,15 +4249,17 @@ JAVA,부족한 금액 계산하기,연산/,"class Solution {
         return answer;
     }
 }",jhlee343
-JAVA,가장 가까운 같은 글자,연산/,"class Solution {
+JAVA,가장 가까운 같은 글자,구현/배열,"class Solution {
     public int[] solution(String s) {
         //string s의 길이가 answer의 길이와 같음
         int[] answer = new int[s.length()];
         String[] arr = new String[s.length()];
         arr = s.split("""");
+	//string s의 값을 하나씩 찢어서 arr배열에 넣음
         for(int i =0 ; i<s.length(); i++){
             answer[i] = -1;
             for(int j = i-1 ; j>0 ; j--){
+		//arr배열을 돌면서 같은 글자를 찾는 경우
                if(arr[i].equals(arr[j])){
                    answer[i] = i-j;
                    break;
@@ -4421,70 +4268,65 @@ JAVA,가장 가까운 같은 글자,연산/,"class Solution {
         }
         return answer;
     }
-}
-```",jhlee343
-JAVA,이진변환 반복하기,연산/,"class Solution {
+}",jhlee343
+JAVA,이진변환 반복하기,구현/문자열 처리,"class Solution {
     public int[] solution(String s) {
         int[] answer = new int[2];
+	/*answer[0]-2진변환 반복 횟수 answer[1]-제거된 0의 개수
+	값에서 0을 제거하고 남은 1의 개수를 이진수로 변환했을때의 값과 같음*/
+
         int count_zero = 0;
-        //delete '0' using replaceAll
+
         while(s.length() > 1){
             int count_one = 0;
             for(int i =0 ; i<s.length() ; i++){
+		//0의 개수 count
                 if(s.charAt(i)=='0'){
                     answer[1] +=1;
                 }
                 else{
-                    count_one +=1 ;
+                    count_one +=1 ;    
                 }
             }
             s = Integer.toBinaryString(count_one);
+	   //1의 개수를 이진 변환하여 s값을 변경
             answer[0] +=1;
         }
         return answer;
     }
 }",jhlee343
-JAVA,명예의 전당(1),배열/,"import java.util.*;
-class Solution {
-    public int[] solution(int k, int[] score) {
-        int[] answer = new int[score.length];
-        int k_ary[] = new int[k];
-        for(int i =0 ; i<k ; i++){
-            k_ary[i] = score[i];
-            answer[i]=k_ary[i];
-        }
-        Arrays.sort(k_ary);
-        for(int i =0 ;i<k ; i++){
-           System.out.println(k_ary[i]);
-        }
+JAVA,명예의 전당(1),배열/정렬,"import java.util.*
 
-        for(int i=k ; i<score.length; i++){
-            if(score[i]>=k_ary[0]){
-                k_ary[k]=score[0];
-                Arrays.sort(k_ary);
+class Solution {
+    public int[] solution(int recent, int[] score) {
+        int[] answer = new int[score.length];
+        List<Integer> rank = new ArrayList<>();
+        // 순위를 담을 List 선언
+
+        for (int i = 0; i < score.length; i++) {
+            rank.add(score[i]);
+            
+	int size = rank.size();
+            // rank 크기가 recent보다 크면 가장 작은 값 삭제
+            if (size >= recent) {
+                rank.remove(Collections.min(rank));
             }
+            
+            // 가장 작은 값 answer에 담기
+            answer[i] = Collections.min(rank);
         }
         return answer;
     }
 }",jhlee343
-JAVA,멀리뛰기,DP/,"class Solution {
+JAVA,멀리뛰기,다이나믹 프로그래밍/,"class Solution {
     public long solution(int n) {
+	/*
+	f(n) = f(n-1)+f(n-2) 피보나치 수열 발생
+	dp배열 사용하기 (재귀호출의 경우 시간초과 발생)
+	*/
+
         long answer = 0;
         int sum =n;
-        //n값이 커지는게 문제같은데...
-        /*for(int i =0; i<=n ; i++){
-            for(int j = n ; j>=0 ; j--){
-                int total = 1*i + 2*j;
-                if(sum == total){
-                    if(i==0 || j==0){
-                        answer++;
-                    }else{
-                        answer += i+j;
-                    }
-                }
-            }
-        }
-        */
         int dp[] = new int[2001];
         dp[1] = 1;
         dp[2] = 2;
@@ -4492,7 +4334,7 @@ JAVA,멀리뛰기,DP/,"class Solution {
             dp[i] = (dp[i-1]+dp[i-2])%1234567;
         }
         answer = dp[n]%1234567;
-
+        
         return answer;
     }
 }",jhlee343
